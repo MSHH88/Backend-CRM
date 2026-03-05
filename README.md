@@ -32,8 +32,23 @@
 | Branch | Purpose | Contents |
 |--------|---------|----------|
 | `main` | Primary development branch | This README (project plan & status) |
-| `Backend` | Phase 1 backend code (from previous agent) | Node.js/Express app, middleware, routes, logger |
-| `Previous-Session-files` | All planning docs (30+ files) | Architecture docs, feature specs, gap analysis, data collection guides |
+| `Backend` | Phase 1 CURIA platform code (from previous agent) | Node.js/Express app, middleware, routes, logger |
+| `Previous-Session-files` | All planning docs (33 files) | Architecture docs, feature specs, gap analysis, data collection guides |
+
+### Related Pull Requests
+
+| PR | Branch | Status | What It Contains |
+|----|--------|--------|------------------|
+| #1 | `copilot/update-backend-data-quality` | Closed (not merged) | Complete pricing engine + manufacturer data (30 files) |
+| #2 | `copilot/analyze-previous-sessions` | Open | README analysis of project state |
+| #3 | `copilot/analyze-project-phase-1` | Open | This comprehensive analysis |
+
+### Related Repositories
+
+| Repo | Purpose | Status |
+|------|---------|--------|
+| **Backend-CRM** (this repo) | Backend server, CRM, pricing engine, API | 🔨 In Progress |
+| **frontend-glass-configurator** | Frontend: homepage, configurator UI, glassmorphism design system | Phase 1 design done |
 
 ---
 
@@ -64,13 +79,58 @@ Lives on the `Backend` branch:
 - [ ] Step 1.9: Basic route structure (routes/index.js exists — 90KB, needs review)
 - [ ] Step 1.10: Authentication setup (middleware/auth.js exists but not integrated)
 
+### Frontend Design Assets (in `frontend-glass-configurator` repo)
+- Homepage V1 design with glassmorphism effect (complete HTML prototype)
+- Redesign CSS (16KB) with glassmorphism containers, responsive breakpoints
+- Implementation guide for WordPress/Elementor integration
+- Quick reference (color palette, typography, spacing, CSS classes)
+- Glassmorphism icon system (CSS + HTML + JS)
+- Logo and branding assets (FenTuRo logo, style guide PDF)
+- Design system: Inter font, glass colors (#E7F2E6, #E1F4F2), 6-level spacing scale
+
 ### Planning Documentation (COMPLETE ✅)
-Lives on the `Previous-Session-files` branch (30+ documents):
+Lives on the `Previous-Session-files` branch (33 documents):
 - Architecture, pricing formulas, database schema proposals
 - CRM role system (6-tier with permission matrix)
 - Feature decisions (97+ features across 11 categories)
 - Gap analysis, security architecture, lessons learned
 - Frontend design system (colors, typography, header specs)
+
+### Pricing Engine Prototype (PR #1 — Closed, Not Merged)
+A separate pricing engine was built in PR #1 (30 files, fully tested). This code is available in the PR diff and can be cherry-picked. Key assets:
+
+**Source Code (`src/`):**
+| File | Purpose |
+|------|---------|
+| `src/app.js` | Express app (CORS, body-parser, routes) |
+| `src/server.js` | Server entry point (dotenv, port binding) |
+| `src/engine/priceCalculator.js` | 6-step price calculation engine |
+| `src/engine/surchargeCalculator.js` | Surcharge resolution across 9 categories |
+| `src/data/basePrices.js` | 21×21 price matrix (400–2400mm, geometric-mean interpolation) |
+| `src/data/profileMultipliers.js` | 6 Iglo profiles with multipliers |
+| `src/data/surcharges.js` | All surcharge tables (colors, glass, sound, security, handles, sprossen, V-Perfect) |
+| `src/routes/berechnen.js` | POST /ajax/berechnen/ → HTML response |
+| `src/routes/warenkorb.js` | POST /ajax/addWarenkorb/ → JSON response |
+| `src/routes/options.js` | GET /ajax/getOptions/ → JSON catalog |
+| `src/routes/index.js` | Route wiring + GET /health |
+| `src/utils/responseFormatter.js` | HTML and JSON formatters with XSS escaping |
+| `src/db/schema.sql` | PostgreSQL schema (base_prices, multipliers, surcharges, cart_items) |
+| `src/db/connection.js` | PostgreSQL pool connection |
+
+**Tests (passing):**
+| File | Coverage |
+|------|----------|
+| `tests/priceCalculator.test.js` | Base price lookup, profile multipliers, surcharges, full calculation (1000×1000 p1 = €295.44) |
+| `tests/api.test.js` | All 4 endpoints (berechnen, warenkorb, getOptions, health), error cases |
+
+**Manufacturer Price Data:**
+| Directory | Manufacturer | Contents |
+|-----------|-------------|----------|
+| `Gealen-Kunstoff-PM/` | Gealan PVC | Price matrix CSV, surcharges CSV, complete JSON, extraction scripts, test API |
+| `Holz-Fenster-PM/` | Holz (Wood) | Price matrix CSV, surcharges CSV/JSON, complete JSON, extraction summary |
+| `Balkon-Alu-PM/` | Aluminium Balkontür | Price matrix CSV, surcharges CSV, complete JSON |
+
+> **Important:** PR #1 was closed without merging. The code needs to be extracted from the PR diff and integrated into the main codebase. The pricing engine represents the bulk of Phase 2 work already done.
 
 ---
 
@@ -92,14 +152,21 @@ Lives on the `Previous-Session-files` branch (30+ documents):
 ### Phase 2: Pricing Engine & Configurator — Weeks 5–8
 **Goal:** Working price calculator matching live site ±€0.02
 
+> **Note:** PR #1 already built a working Drutex pricing engine with tests. Phase 2 work should integrate that code and extend it to other manufacturers.
+
 | Step | Description | Status |
 |------|-------------|--------|
-| Import base price matrix | CSV → Database | ⬜ TODO |
-| Profile multipliers | Apply per-profile pricing | ⬜ TODO |
-| Surcharge calculator | Colors, glass, handles, hardware | ⬜ TODO |
+| Import base price matrix | CSV → Database | ✅ Done in PR #1 (in-memory), DB schema ready |
+| Profile multipliers | Apply per-profile pricing | ✅ Done in PR #1 (6 Iglo profiles) |
+| Surcharge calculator | Colors, glass, handles, hardware | ✅ Done in PR #1 (9 categories, ~60 options) |
+| POST /berechnen | Price calculation endpoint (HTML response) | ✅ Done in PR #1 (tested) |
+| POST /addWarenkorb | Cart item endpoint (JSON response) | ✅ Done in PR #1 (tested) |
+| GET /getOptions | Options catalog endpoint (JSON response) | ✅ Done in PR #1 (tested) |
+| Gealan PVC data | Import extracted price data | 🔶 Data extracted, needs integration |
+| Holz data | Import extracted price data | 🔶 Data extracted, needs integration |
+| Alu Balkontür data | Import extracted price data | 🔶 Data extracted, needs integration |
 | Margin system | Global, category, product-level margins | ⬜ TODO |
 | Discount engine | Volume, coupon, time-limited (default 0%) | ⬜ TODO |
-| POST /berechnen | Price calculation endpoint (HTML response) | ⬜ TODO |
 | Configuration API | Validate options, save/load configs | ⬜ TODO |
 | Sharing URLs | Encode config in URL hash | ⬜ TODO |
 
@@ -163,14 +230,79 @@ Lives on the `Previous-Session-files` branch (30+ documents):
 
 ## How to Continue Development
 
-### Immediate Next Step: Merge Backend Code to Main
-Before new development begins, the existing Backend branch code should be reviewed, cleaned up (remove node_modules, add proper .gitignore), and merged to main as the starting point.
+### Recommended Next Steps (In Order)
+
+**Step A: Consolidate Code on Main Branch**
+1. Add proper `.gitignore` (node_modules/, .env, dist/, *.log, logs/)
+2. Clean up Backend branch code (remove committed node_modules)
+3. Merge the CURIA platform foundation (app.js, config, middleware, utils) from `Backend` branch
+4. Cherry-pick the pricing engine code from PR #1 diff into the merged codebase
+5. Reconcile the two app.js files (Backend branch has the CURIA platform with security/auth; PR #1 has the simpler pricing engine)
+
+**Step B: Wire Up Existing Middleware (Steps 1.8–1.10)**
+1. Integrate `security.js` into the Express app middleware chain
+2. Split the 90KB `routes/index.js` into separate route files (auth, users, products, configurator)
+3. Wire `auth.js` middleware into protected routes
+4. Create auth routes (login, register, logout, refresh, me)
+
+**Step C: Database Schema (Week 2)**
+1. Set up PostgreSQL (or use SQLite for dev)
+2. Run the migration SQL from `Backend/src/config/migrations.js`
+3. Seed the price data (base prices, multipliers, surcharges) from PR #1's data files
+4. Create User and Role models
+
+**Step D: Tests**
+1. Port the passing tests from PR #1 (priceCalculator.test.js, api.test.js)
+2. Add tests for auth middleware and security middleware
+3. Add integration tests for database operations
+
+### Two Codebases to Reconcile
+
+The `Backend` branch and PR #1 each built different parts of the system:
+
+| Aspect | Backend Branch (CURIA Platform) | PR #1 (Pricing Engine) |
+|--------|-------------------------------|----------------------|
+| **package.json** | `curia-backend` — 16 deps (helmet, jwt, winston, etc.) | `fentuaro-konfigurator-engine` — 5 deps (express, pg, cors, etc.) |
+| **app.js** | Full security middleware, Winston logging, graceful shutdown | Minimal Express + CORS + body-parser |
+| **Middleware** | auth.js (JWT), security.js (XSS, HPP), errorHandler.js | None (inline error handling) |
+| **Routes** | Single 90KB index.js (all routes in one file) | 4 clean route files (berechnen, warenkorb, options, health) |
+| **Pricing** | Not implemented | Complete (6-step formula, surcharges, tests) |
+| **Database** | Connection pool + migration SQL | Schema SQL + connection (simpler) |
+| **Tests** | None | 2 test files (329 lines, all passing) |
+| **Logging** | Winston (40KB, comprehensive) | console.log only |
+
+**Recommended merge strategy:** Use the Backend branch as the foundation (it has proper security, auth, logging) and port the pricing engine from PR #1 into it as a module.
 
 ### Development Approach
 - **Step by step** — one task at a time, test before moving on
 - **Quality over speed** — never do too much at once
 - **This README is the plan** — update checklist items as work progresses
 - **Each step gets its own commit** — small, incremental, verifiable changes
+
+---
+
+## Key Technical Decisions (From Previous Sessions)
+
+| Decision | Choice | Notes |
+|----------|--------|-------|
+| Runtime | Node.js 18+ | |
+| Framework | Express.js | |
+| Database | PostgreSQL | via `pg` driver |
+| Auth | JWT (30 min expiry) | bcrypt for passwords |
+| Logging | Winston | Daily rotate files |
+| Security | Helmet, CORS, rate-limit, HPP, XSS-clean, mongo-sanitize | |
+| Testing | Jest + Supertest | |
+| API Format | REST, JSON responses | Configurator endpoint returns HTML |
+| Platform Name | CURIA (white-label SaaS) | FenTuRo is first client |
+
+### 6-Tier Role Hierarchy
+
+1. **CREATOR** — Platform master (invisible to clients)
+2. **CREATOR_STAFF** — Platform admins
+3. **CEO** — Business owner/client
+4. **OPERATIONS_MANAGER** — Senior staff
+5. **WAREHOUSE_STAFF** — Inventory/shipping
+6. **SALES_STAFF** — Quotes/customers
 
 ---
 
