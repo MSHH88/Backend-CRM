@@ -73,7 +73,7 @@ function formatHTML(result) {
   </div>
   <div class="preis-details">
     <p class="produkt-name">${escapeHtml(result.produktName)}</p>
-    <p class="dimensionen">Ma&szlig;e: ${escapeHtml(result.dimensionen)}</p>
+    <p class="dimensionen">Maße: ${escapeHtml(result.dimensionen)}</p>
     <table class="aufschlaege">
       <thead>
         <tr>

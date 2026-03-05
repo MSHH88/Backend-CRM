@@ -2,7 +2,7 @@
 
 const express    = require('express');
 const { calculatePrice } = require('../engine/priceCalculator');
-const { formatHTML }     = require('../utils/responseFormatter');
+const { formatHTML, escapeHtml } = require('../utils/responseFormatter');
 
 const router = express.Router();
 
@@ -30,7 +30,7 @@ router.post('/', (req, res) => {
     const html   = formatHTML(result);
     res.status(200).send(html);
   } catch (calcErr) {
-    return res.status(400).send(`<p class="error">Berechnungsfehler: ${calcErr.message}</p>`);
+    return res.status(400).send(`<p class="error">Berechnungsfehler: ${escapeHtml(calcErr.message)}</p>`);
   }
 });
 

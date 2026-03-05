@@ -18,6 +18,19 @@ CREATE TABLE IF NOT EXISTS fenster_base_prices (
 CREATE INDEX IF NOT EXISTS idx_base_prices_lookup
     ON fenster_base_prices (manufacturer_id, profile_id, width_mm, height_mm);
 
+-- Trigger function to keep updated_at current
+CREATE OR REPLACE FUNCTION set_updated_at()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.updated_at = NOW();
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE TRIGGER trg_base_prices_updated_at
+    BEFORE UPDATE ON fenster_base_prices
+    FOR EACH ROW EXECUTE FUNCTION set_updated_at();
+
 -- ── Profile multipliers ───────────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS profile_multipliers (
     id           SERIAL PRIMARY KEY,
@@ -94,3 +107,7 @@ CREATE INDEX IF NOT EXISTS idx_cart_items_session
 
 CREATE INDEX IF NOT EXISTS idx_cart_items_created
     ON cart_items (created_at);
+
+CREATE OR REPLACE TRIGGER trg_cart_items_updated_at
+    BEFORE UPDATE ON cart_items
+    FOR EACH ROW EXECUTE FUNCTION set_updated_at();
