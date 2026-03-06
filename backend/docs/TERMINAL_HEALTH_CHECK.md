@@ -1,12 +1,20 @@
-# How to Test the Backend
+# How to Test the Backend — Step-by-Step
 
-Open **Terminal** on your Mac. Paste each block one at a time.
+> **What is this?** This guide tells you exactly what to type in your Mac Terminal app.
+> Every grey code block below is something you **copy and paste into Terminal**, then press **Enter**.
+> You do NOT need to understand what the commands do — just paste them.
 
 ---
 
-## 1. Download all files
+## Step 1 → Get the latest files
 
-Paste this in Terminal. It deletes your old files and downloads all new ones:
+> **What this does:** It goes into your backend folder, deletes the old `src/` and `tests/` folders,
+> then downloads fresh copies of ALL files from GitHub. You do not need to delete or download
+> individual files yourself — this one block does everything automatically.
+
+**Open Terminal** on your Mac (search for "Terminal" in Spotlight).
+
+Copy the entire block below and paste it into Terminal, then press **Enter**:
 
 ```bash
 cd ~/Desktop/curia/backend && \
@@ -42,54 +50,65 @@ curl -fsSL "$BASE/.eslintrc.js"   -o .eslintrc.js && \
 curl -fsSL "$BASE/.env.example"   -o .env.example && \
 curl -fsSL "$BASE/.gitignore"     -o .gitignore && \
 npm install && \
-echo "" && echo "✅ Done"
+echo "" && echo "✅ All files downloaded and installed"
 ```
 
-You should see `✅ Done` at the end.
+**✅ Wait until you see:** `✅ All files downloaded and installed`
+
+> If you see errors instead, make sure the GitHub repo is set to **Public** in its settings.
 
 ---
 
-## 2. Run tests
+## Step 2 → Run the tests
 
-Paste this in Terminal:
+> **What this does:** It runs the automated tests to check that all the code works correctly.
+
+Copy and paste this into **the same Terminal window**:
 
 ```bash
 cd ~/Desktop/curia/backend && npm test
 ```
 
-You should see:
+**✅ What you should see at the bottom:**
 
 ```
 Tests:       95 passed, 95 total
 ```
 
-Ignore "Force exiting Jest" — that is normal.
+> The message "Force exiting Jest" may appear — **that is normal, ignore it.**
 
-📋 **Copy the last 10 lines and paste them back to me.**
+📋 **Copy the last 10 lines from Terminal and send them to me.**
 
 ---
 
-## 3. Start the server
+## Step 3 → Start the server
 
-Paste this in Terminal:
+> **What this does:** It starts the backend server on your computer so you can test the API.
+
+Copy and paste this into **the same Terminal window**:
 
 ```bash
 cd ~/Desktop/curia/backend && npm start
 ```
 
-You should see:
+**✅ What you should see:**
 
 ```
 🚀 CURIA Backend Server Started
 ```
 
-**Do NOT close this terminal window.** Leave it running.
+⚠️ **IMPORTANT: Do NOT close this Terminal window. Leave the server running.**
 
 ---
 
-## 4. Test the endpoints
+## Step 4 → Test the endpoints
 
-Open a **new terminal tab** (press **Cmd+T**). Paste this:
+> **What this does:** It sends test requests to the running server to make sure all the
+> API endpoints respond correctly.
+
+Open a **second Terminal tab** by pressing **Cmd + T** (the server keeps running in the first tab).
+
+Copy and paste this into **the new tab**:
 
 ```bash
 curl http://localhost:3001/health && echo "" && \
@@ -100,8 +119,22 @@ curl -X POST "http://localhost:3001/ajax/berechnen/?format=json" \
 curl http://localhost:3001/ajax/getOptions/
 ```
 
-You should see **4 lines** that all start with `{` — they are JSON data.
+**✅ What you should see:** 4 lines of JSON data (text starting with `{`).
 
-📋 **Copy all the output and paste it back to me.**
+📋 **Copy all the output and send it to me.**
 
-Then go back to the server tab and press **Ctrl+C** to stop it.
+When you are done, go back to the **first tab** (the server) and press **Ctrl + C** to stop it.
+
+---
+
+## Quick Reference
+
+| What do I do?                      | Answer                                                                 |
+|------------------------------------|------------------------------------------------------------------------|
+| Do I need to delete files myself?  | **No.** Step 1 deletes and re-downloads everything automatically.      |
+| Where do I paste the code blocks?  | In the **Terminal** app on your Mac.                                   |
+| Do I paste the whole grey block?   | **Yes.** Copy the entire block including all lines and paste it once.  |
+| What if I already ran Step 1 before? | Run it again — it always downloads the latest versions.              |
+| What is `npm test`?               | A command that checks if the code works. You just paste it.            |
+| What is `npm start`?              | A command that starts the server. You just paste it.                   |
+| Why do I need two Terminal tabs?   | One runs the server (Step 3), the other sends test requests (Step 4).  |
