@@ -13,7 +13,7 @@ cd ~/Desktop/curia/backend && npm test
 **You should see:**
 ```
 Test Suites: 3 passed, 3 total
-Tests:       93 passed, 93 total
+Tests:       95 passed, 95 total
 ```
 
 > The "Force exiting Jest" message at the end is **normal** — ignore it.
@@ -47,20 +47,17 @@ Press **Cmd+T** to open a new tab.
 ```bash
 curl http://localhost:3001/health && echo "" && \
 curl http://localhost:3001/api/v1 && echo "" && \
-curl -X POST http://localhost:3001/ajax/berechnen/ \
+curl -X POST "http://localhost:3001/ajax/berechnen/?format=json" \
   -H "Content-Type: application/x-www-form-urlencoded" \
   -d 'tmp_obj={"breite":1000,"hoehe":1200,"profil":"p1","verglasung":"g1","aussenfarbe":"fs1_01","innenfarbe":"fi1_01","schallschutz":"ss1","sicherheitsverglasung":"sv0","griff":"gr1","sicherheit":"si1","sprossen":"sp0","vperfect":"vp0"}' && echo "" && \
 curl http://localhost:3001/ajax/getOptions/
 ```
 
-**You should see (4 responses):**
+**You should see (4 JSON responses):**
 1. `{"status":"ok", ...}` — health check ✅
 2. `{"name":"CURIA API", ...}` — API info ✅
-3. **HTML** starting with `<div class="kalkulation-ergebnis">` containing a price like `336,75 EUR` — price calculation ✅
+3. `{"success":true,"item":{"produktName":"Drutex ...","angebotspreis":336.75,...}}` — price calculation ✅
 4. `{"success":true,"options":{...}}` — all product options ✅
-
-> ⚠️ Response #3 is **HTML, not JSON**. It will look like raw HTML tags in your terminal.
-> When you paste the output into GitHub/chat, the HTML may become **invisible** — that's normal.
 
 📋 **Paste the output back to me.**
 
@@ -183,7 +180,7 @@ After updating, run **Step 1** again to verify tests pass.
 | `src/utils/` | Logger, response formatter | 2 files |
 | `src/app.js` | Express app setup | 1 file |
 | `src/server.js` | Server entry point | 1 file |
-| `tests/` | Jest test suites (93 tests total) | 3 files |
+| `tests/` | Jest test suites (95 tests total) | 3 files |
 | `package.json` | Dependencies and scripts | config |
 | `.eslintrc.js` | ESLint code quality rules | config |
 | `.env.example` | Environment variable template | config |
@@ -211,7 +208,7 @@ After updating, run **Step 1** again to verify tests pass.
 | What | Status |
 |------|--------|
 | Phase 1 backend | ✅ DONE |
-| 93 tests | ✅ Passing |
+| 95 tests | ✅ Passing |
 | Server on port 3001 | ✅ Working |
 | Auth system | ✅ In-memory |
 | Security middleware | ✅ Working |

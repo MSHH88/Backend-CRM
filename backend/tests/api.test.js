@@ -169,6 +169,30 @@ describe('Legacy /ajax/ routes', () => {
     expect(res.status).toBe(200);
     expect(res.body.success).toBe(true);
   });
+
+  test('POST /ajax/berechnen/?format=json returns JSON', async () => {
+    const res = await request(app)
+      .post('/ajax/berechnen/?format=json')
+      .type('form')
+      .send({ tmp_obj: VALID_CONFIG });
+
+    expect(res.status).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(res.body.item).toBeDefined();
+    expect(res.body.item.angebotspreis).toBeGreaterThan(0);
+  });
+
+  test('POST /api/v1/berechnen/ with Accept: application/json returns JSON', async () => {
+    const res = await request(app)
+      .post('/api/v1/berechnen/')
+      .set('Accept', 'application/json')
+      .type('form')
+      .send({ tmp_obj: VALID_CONFIG });
+
+    expect(res.status).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(res.body.item.produktName).toContain('Iglo 5 Classic');
+  });
 });
 
 // ── POST /api/v1/warenkorb/ ──────────────────────────────────────────────────

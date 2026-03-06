@@ -10,7 +10,7 @@
 
 const express    = require('express');
 const { calculatePrice } = require('../engine/priceCalculator');
-const { formatHTML, escapeHtml } = require('../utils/responseFormatter');
+const { formatHTML, formatJSON, escapeHtml } = require('../utils/responseFormatter');
 
 const router = express.Router();
 
@@ -20,9 +20,13 @@ const router = express.Router();
  *   1. application/x-www-form-urlencoded with `tmp_obj` (JSON string)  — legacy
  *   2. application/json with the config object directly                — modern
  *   3. application/json with `tmp_obj` (JSON string) in the body       — hybrid
- * Returns an HTML fragment with the calculated price.
+ * Returns an HTML fragment by default, or JSON when `?format=json` is
+ * specified or the `Accept` header prefers `application/json`.
  */
 router.post('/', (req, res) => {
+  const wantJSON = req.query.format === 'json'
+    || (req.headers.accept && req.headers.accept.includes('application/json'));
+
   let objKonfig;
 
   if (req.body && req.body.tmp_obj) {
@@ -31,12 +35,18 @@ router.post('/', (req, res) => {
     try {
       objKonfig = typeof raw === 'string' ? JSON.parse(raw) : raw;
     } catch (parseErr) {
+      if (wantJSON) {
+        return res.status(400).json({ success: false, error: 'tmp_obj ist kein gültiges JSON.' });
+      }
       return res.status(400).send('<p class="error">Fehler: tmp_obj ist kein gültiges JSON.</p>');
     }
   } else if (req.body && req.body.breite && req.body.hoehe) {
     // Modern format: config object sent directly as JSON body
     objKonfig = req.body;
   } else {
+    if (wantJSON) {
+      return res.status(400).json({ success: false, error: 'Anfrage enthält keine gültigen Konfigurationsdaten (tmp_obj oder breite/hoehe erforderlich).' });
+    }
     return res.status(400).send('<p class="error">Fehler: Anfrage enthält keine gültigen Konfigurationsdaten (tmp_obj oder breite/hoehe erforderlich).</p>');
   }
 
@@ -52,9 +62,17 @@ router.post('/', (req, res) => {
     }
 
     const result = calculatePrice(objKonfig, pricingOptions);
-    const html   = formatHTML(result);
+
+    if (wantJSON) {
+      return res.status(200).json(formatJSON(result, objKonfig));
+    }
+
+    const html = formatHTML(result);
     res.status(200).send(html);
   } catch (calcErr) {
+    if (wantJSON) {
+      return res.status(400).json({ success: false, error: calcErr.message });
+    }
     return res.status(400).send(`<p class="error">Berechnungsfehler: ${escapeHtml(calcErr.message)}</p>`);
   }
 });
