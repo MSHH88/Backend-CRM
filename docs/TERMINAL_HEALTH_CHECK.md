@@ -67,6 +67,8 @@ ls ~/Desktop/curia/backend/tests/api.test.js 2>/dev/null && echo "✅ tests/ exi
 
 ## Step 7 — Download test files (only if Step 6 said missing)
 
+> ⚠️ If git asks for a username/password, enter your GitHub username and a Personal Access Token (not your GitHub password). See [GitHub docs](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens) if needed.
+
 ```bash
 cd ~/Desktop && git clone -b copilot/analyze-project-phase-1 --depth 1 https://github.com/MSHH88/Backend-CRM.git curia-temp
 ```
@@ -209,7 +211,7 @@ Just the last 5-10 lines is enough.
 
 | Error | Fix |
 |-------|-----|
-| `No tests found, exiting with code 1` | tests/ folder missing — run Steps 6-7 to download it |
+| `No tests found, exiting with code 1` | tests/ folder missing — run Step 7 to download it |
 | `ENOENT ... package.json` | Run `cd ~/Desktop/curia/backend` first |
 | `Failed to connect to localhost port 3001` | Server not running — go to Step 9 first |
 | `command not found: node` | Install from https://nodejs.org |
