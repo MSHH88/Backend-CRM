@@ -22,6 +22,7 @@ require('dotenv').config();
 
 const express     = require('express');
 const compression = require('compression');
+const rateLimit   = require('express-rate-limit');
 
 // ── Security middleware (Step 1.8) ──────────────────────────────────────────
 const { applySecurity }  = require('./middleware/security');
@@ -84,8 +85,9 @@ if (process.env.NODE_ENV !== 'production') {
 // ROUTES
 // =============================================================================
 
-// ── Health check (includes DB status) ─────────────────────────────────────────
-app.get('/health', async (_req, res) => {
+// ── Health check (includes DB status, rate-limited) ──────────────────────────
+const healthLimiter = rateLimit({ windowMs: 60 * 1000, max: 30, standardHeaders: true, legacyHeaders: false });
+app.get('/health', healthLimiter, async (_req, res) => {
   let dbStatus = 'not_configured';
 
   // Only check DB if credentials are set
