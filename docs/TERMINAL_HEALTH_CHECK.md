@@ -1,16 +1,41 @@
 # Terminal Health Check Commands
 
-Run these commands in order from your project root (`Backend-CRM/`) to verify everything is working.
+Run these commands **in order** from your terminal on your MacBook.
+
+> ⚠️ **IMPORTANT:** Every command below assumes you are inside the `curia` folder.
+> If you get `ENOENT: no such file or directory ... package.json` it means you are
+> NOT inside `curia`. Run `cd ~/curia` first.
+
+---
+
+## 0. Navigate Into Your Project Folder
+
+```bash
+cd ~/curia
+```
+
+**Expected:** No output (silence = success). You are now inside the project.
+
+To double-check you're in the right place:
+
+```bash
+pwd && ls package.json
+```
+
+**Expected:**
+```
+/Users/neilapacesaite/curia
+package.json
+```
+
+If you see `No such file or directory`, you are in the wrong folder.
 
 ---
 
 ## 1. Prerequisites Check
 
 ```bash
-# Check Node.js version (need >= 18.0.0)
 node -v
-
-# Check npm version
 npm -v
 ```
 
@@ -21,7 +46,7 @@ npm -v
 ## 2. Install Dependencies
 
 ```bash
-npm install
+cd ~/curia && npm install
 ```
 
 **Expected:** No errors, 0 vulnerabilities (or only low-severity ones)
@@ -31,7 +56,7 @@ npm install
 ## 3. Run All Tests (57 tests, 3 suites)
 
 ```bash
-npm test -- --forceExit
+cd ~/curia && npm test -- --forceExit
 ```
 
 **Expected output (last lines):**
@@ -47,7 +72,7 @@ The `--forceExit` is needed because bcrypt keeps handles open.
 ## 4. Start Server (quick check, then Ctrl+C to stop)
 
 ```bash
-npm start
+cd ~/curia && npm start
 ```
 
 **Expected output:**
@@ -62,11 +87,13 @@ npm start
 ==================================================
 ```
 
-Press `Ctrl+C` to stop after seeing this.
+**Leave this terminal open** — the server must stay running for Step 5.
 
 ---
 
-## 5. Test Endpoints (run in a second terminal while server is running)
+## 5. Test Endpoints (open a SECOND terminal tab — Cmd+T)
+
+Open a **new** terminal tab/window (Cmd+T), then run:
 
 ```bash
 # Health check
@@ -86,11 +113,15 @@ curl http://localhost:3001/ajax/getOptions/
 
 **Expected:** JSON responses with status 200 for each.
 
+> After testing, go back to the first terminal and press `Ctrl+C` to stop the server.
+
 ---
 
 ## 6. File Counts Verification
 
 ```bash
+cd ~/curia
+
 echo "=== Active source code ===" && find src/ -type f | wc -l
 echo "=== Backend reference ===" && find backend/ -type f | wc -l
 echo "=== Drutex datasets ===" && find datasets/ -type f | wc -l
@@ -110,7 +141,7 @@ echo "=== Test files ===" && find tests/ -type f | wc -l
 | `Gealen-Kunstoff-PM/` | 11 | Gealan PVC price matrices, extraction scripts, konfigurators |
 | `Holz-Fenster-PM/` | 5 | Holz (Wood) Fenster price matrix, surcharges, complete data |
 | `Balkon-Alu-PM/` | 3 | Alu Balkontür price matrix, surcharges, complete data |
-| `docs/` | 10 | Planning docs (master plan, security, backend dev, etc.) |
+| `docs/` | 11 | Planning docs (master plan, security, backend dev, etc.) |
 | `tests/` | 3 | Jest test suites (priceCalculator, api, auth) |
 
 ---
@@ -118,29 +149,16 @@ echo "=== Test files ===" && find tests/ -type f | wc -l
 ## 7. Verify Key Source Files Exist
 
 ```bash
-echo "--- Core ---"
-ls src/app.js src/server.js
+cd ~/curia
 
-echo "--- Config ---"
-ls src/config/
-
-echo "--- Engine ---"
-ls src/engine/
-
-echo "--- Data ---"
-ls src/data/
-
-echo "--- Middleware ---"
-ls src/middleware/
-
-echo "--- Routes ---"
-ls src/routes/
-
-echo "--- Database ---"
-ls src/db/
-
-echo "--- Utils ---"
-ls src/utils/
+echo "--- Core ---" && ls src/app.js src/server.js
+echo "--- Config ---" && ls src/config/
+echo "--- Engine ---" && ls src/engine/
+echo "--- Data ---" && ls src/data/
+echo "--- Middleware ---" && ls src/middleware/
+echo "--- Routes ---" && ls src/routes/
+echo "--- Database ---" && ls src/db/
+echo "--- Utils ---" && ls src/utils/
 ```
 
 **Expected:** All files listed without "No such file" errors.
@@ -150,13 +168,10 @@ ls src/utils/
 ## 8. Verify New Datasets Content
 
 ```bash
-# Gealan PVC - should have price matrix, surcharges, extraction scripts
+cd ~/curia
+
 echo "=== Gealan PVC ===" && ls Gealen-Kunstoff-PM/
-
-# Holz Fenster - should have price matrix, surcharges CSV+JSON, complete data
 echo "=== Holz Fenster ===" && ls Holz-Fenster-PM/
-
-# Balkon Alu - should have price matrix, surcharges, complete data
 echo "=== Balkon-Alu ===" && ls Balkon-Alu-PM/
 ```
 
@@ -165,10 +180,22 @@ echo "=== Balkon-Alu ===" && ls Balkon-Alu-PM/
 ## 9. Quick Lint Check
 
 ```bash
-npm run lint
+cd ~/curia && npm run lint
 ```
 
 **Expected:** No errors (warnings are OK).
+
+---
+
+## Troubleshooting
+
+| Error | Cause | Fix |
+|-------|-------|-----|
+| `cd: no such file or directory: Backend-CRM` | Folder is called `curia` on your Mac | Use `cd ~/curia` |
+| `ENOENT: no such file or directory ... package.json` | You're not inside the project folder | Run `cd ~/curia` first |
+| `Failed to connect to localhost port 3001` | Server is not running | Start it first with `cd ~/curia && npm start` in another terminal |
+| `curl: command not found` | curl not installed | Run `brew install curl` or use the browser: `http://localhost:3001/health` |
+| `command not found: node` | Node.js not installed | Install from https://nodejs.org (LTS version) |
 
 ---
 
