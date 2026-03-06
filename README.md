@@ -339,3 +339,156 @@ The `Backend` branch and PR #1 have been merged into a unified codebase on this 
 | = Verkaufspreis | Final selling price |
 
 > **Note:** The current Drutex reference data uses a fixed 40% discount (Angebotspreis = Preisempfehlung × 0.60), but the production system will use admin-configurable margins and discounts as shown above.
+
+---
+
+## Complete Feature Summary (97+ Features Across 11 Categories)
+
+This section ensures all planned features are documented for continuity across development sessions.
+
+### Phase 2: Pricing Engine & Configurator (Weeks 5–8)
+
+**Pricing Engine Features:**
+- Cost price from catalog (Einkaufspreise)
+- Global default margin (admin-configurable, e.g., 70%)
+- Category-level margins (Windows 50%, Doors 40%, etc.)
+- Manufacturer-level margins
+- Product-level margin override (highest priority)
+- Selling price calculation: `(Katalogpreis + Aufschläge) × Margin × (1 - Rabatt)`
+- VAT calculation (19% standard / 7% reduced)
+- B2B VAT exemption via EU VIES API
+- Volume discounts
+- Coupon codes
+
+**Configurator Features:**
+- Window configurator (all Kunststoff manufacturers: Drutex, Gealan, Aluplast, Salamander, Veka)
+- Door configurator (Balkontüren same engine, Haustüren extended)
+- Roller shutter configurator (separate module — different API pattern)
+- Real-time price calculation
+- Configuration sharing URL (encode config in URL hash, e.g., `?config=base64hash`)
+- Saved configurations / Wishlist (logged-in users)
+
+### Phase 3: Order System & Frontend (Weeks 9–14)
+
+**Order System Features:**
+- Cart management (add/remove/update)
+- Cart storage: localStorage for guests + database for logged-in users
+- Guest checkout allowed
+- Optional account creation at checkout
+- Order status tracking
+- Order confirmation emails
+- Invoice generation (text-based PDF with logo)
+- PDF order summary
+- Quote requests (Private customer + Business customer forms)
+- Abandoned cart recovery (email reminders)
+
+**Payment Features:**
+- PayPal integration
+- Credit card via Stripe
+- Invoice payment (Kauf auf Rechnung)
+- Direct debit (Lastschrift)
+- Deposit + Final payment option
+
+**Frontend Features:**
+- Apply V1 glassmorphism design system
+- Connect to backend API (replace iframe)
+- Step-by-step configurator UI
+- Real-time price display
+- Cart page + checkout flow
+- Recently viewed configurations
+
+### Phase 4: CRM & Launch (Weeks 15–24)
+
+**CRM Features:**
+- CREATOR dashboard (all clients, platform revenue, system health)
+- CEO dashboard (sales, profits, bestsellers, order summary, revenue charts)
+- Role system: 6 tiers (CREATOR, CREATOR_STAFF, CEO, OPS_MANAGER, WAREHOUSE, SALES)
+- Order management (list, detail, status updates)
+- Customer management
+- Product management
+- Catalog import/export (CSV/Excel, auto-categorization, German product recognition)
+- Catalog versioning with rollback capability
+- Price change alerts (notify on >10% change)
+- Margin management UI
+- Promotion management (time-limited, scheduled auto start/end)
+- Quote management
+- Lead Generator (CREATOR-only section — hidden from all other roles)
+- Duplicate detection in catalog imports
+- Bulk price updates
+
+**Analytics & Reporting Features:**
+- Google Analytics 4 integration (embedded in CRM + custom calculations via API)
+- Overall sales reports (total sales, revenue, profit)
+- Category sales reports (Windows, Doors, etc.)
+- Profit reports (overall + per category)
+- Sales count analytics
+- Revenue analytics (€)
+- Margin analytics
+- Hot Items ranking (bestsellers)
+- Low Performers identification
+- Trend analysis (compare periods)
+- Monthly/Weekly/Daily reports
+
+**Multi-Language:**
+- German (primary language)
+- English (secondary)
+- Language switcher, all labels + error messages translated
+
+**Themes:**
+- Light mode (default)
+- Dark mode
+- Theme switcher, remembers user preference, auto-detects OS setting
+
+**Security & Launch:**
+- Role-based access control (per-route middleware)
+- GDPR compliance (data retention, right to deletion, data export)
+- SSL/HTTPS everywhere
+- Daily automated backups
+- Security audit + penetration testing
+- Legal documents (AGB, Datenschutz, Widerrufsbelehrung, Impressum)
+
+### Lead Generator Detail
+
+CREATOR-only CRM section for collecting and analyzing lead data:
+- User info (email, name, phone, company)
+- Traffic data (visits, pages viewed, time on site, referral source, device, location)
+- Purchase data (total purchases, total spent, average order value, products purchased)
+- Lead scoring: Cold (0-20 pts), Warm (21-50), Hot (51-100), Customer (100+)
+- Export options: CSV, Excel, Email list (GDPR-compliant, opted-in only)
+
+### Product Module Strategy
+
+| Category | Strategy | Notes |
+|----------|----------|-------|
+| All Kunststoff Fenster | **REUSE** | Same engine, different price tables per manufacturer |
+| Kunststoff-Alu Fenster | **REUSE** | Same engine |
+| Balkontüren (all materials) | **REUSE** | Same engine, different dimension constraints |
+| Nebeneingangstüren | **REUSE** | Same engine |
+| Haustüren | **EXTEND** | Width 23× more impactful than height |
+| PSK Doors | **EXTEND** | Different opening types, larger dimensions |
+| HST Doors | **EXTEND** | Similar to PSK |
+| Rollläden | **SEPARATE** | Server-side session state, individual AJAX calls, 6-line price breakdown |
+
+---
+
+## Datasets & Documentation
+
+### datasets/drutex-kunststoff-fenster/
+Raw reference data files generated from the pricing engine code:
+- `base_prices.csv` — 21×21 price matrix (400–2400mm)
+- `profile_multipliers.json` — 6 Iglo profiles with multipliers
+- `surcharges.json` — All 9 surcharge categories with options and amounts
+
+### docs/
+Key planning documents transferred from Previous-Session-files branch:
+- `MASTER_DEVELOPMENT_PLAN.md` — Complete 24-week guide
+- `BACKEND_DEVELOPMENT_PLAN.md` — Pricing engine data quality assessment
+- `PHASE_1_BACKEND_FOUNDATION.md` — Phase 1 steps breakdown
+- `SECURITY_ARCHITECTURE.md` — Security layers and GDPR
+- `CATALOG_MANAGEMENT_SYSTEM.md` — Import/export specifications
+- `CRM_AND_BACKEND_REQUIREMENTS.md` — Full requirements spec
+- `GAP_ANALYSIS_AND_MISSING_FEATURES.md` — Complete gap analysis
+- `DATA_COLLECTION_GUIDE.md` — How to collect pricing data
+- `LESSONS_LEARNED.md` — Critical mistakes to avoid
+
+> **Note:** The SUBPAGES-FenTuRo repository (referenced in earlier sessions) is no longer accessible. All critical data files from that repo have been consolidated into this repository's `src/data/`, `datasets/`, and `docs/` folders.
