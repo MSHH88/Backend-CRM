@@ -129,12 +129,12 @@ When you are done, go back to the **first tab** (the server) and press **Ctrl + 
 
 ## Quick Reference
 
-| What do I do?                      | Answer                                                                 |
-|------------------------------------|------------------------------------------------------------------------|
-| Do I need to delete files myself?  | **No.** Step 1 deletes and re-downloads everything automatically.      |
-| Where do I paste the code blocks?  | In the **Terminal** app on your Mac.                                   |
-| Do I paste the whole grey block?   | **Yes.** Copy the entire block including all lines and paste it once.  |
-| What if I already ran Step 1 before? | Run it again — it always downloads the latest versions.              |
-| What is `npm test`?               | A command that checks if the code works. You just paste it.            |
-| What is `npm start`?              | A command that starts the server. You just paste it.                   |
-| Why do I need two Terminal tabs?   | One runs the server (Step 3), the other sends test requests (Step 4).  |
+| What do I do? | Answer |
+|---|---|
+| Do I need to delete files myself? | **No.** Step 1 deletes and re-downloads everything automatically. |
+| Where do I paste the code blocks? | In the **Terminal** app on your Mac. |
+| Do I paste the whole grey block? | **Yes.** Copy the entire block including all lines and paste it once. |
+| What if I already ran Step 1 before? | Run it again — it always downloads the latest versions. |
+| What is `npm test`? | A command that checks if the code works. You just paste it. |
+| What is `npm start`? | A command that starts the server. You just paste it. |
+| Why do I need two Terminal tabs? | One runs the server (Step 3), the other sends test requests (Step 4). |
