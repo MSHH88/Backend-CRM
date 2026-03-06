@@ -332,12 +332,12 @@ echo "=== Documentation ===" && find docs/ -type f 2>/dev/null | wc -l
 |--------|-------|----------|
 | `src/` | 20 | Active codebase (Express, pricing engine, auth, middleware) |
 | `tests/` | 3 | Jest test suites (priceCalculator, api, auth) |
+| `docs/` | 11 | Planning docs (master plan, security, backend dev, etc.) |
 | `backend/` | 27 | Reference code from previous sessions (SUBPAGES-FenTuRo) |
 | `datasets/drutex-kunststoff-fenster/` | 23 | Drutex Kunststoff pricing data + extraction tools |
 | `Gealen-Kunstoff-PM/` | 11 | Gealan PVC price matrices, extraction scripts, konfigurators |
 | `Holz-Fenster-PM/` | 5 | Holz (Wood) Fenster price matrix, surcharges, complete data |
 | `Balkon-Alu-PM/` | 3 | Alu Balkontür price matrix, surcharges, complete data |
-| `docs/` | 11 | Planning docs (master plan, security, backend dev, etc.) |
 
 ---
 
@@ -444,7 +444,7 @@ echo "🔲 WHAT WE STILL NEED (Phase 2+):"
 echo "---"
 echo -n "  PostgreSQL:     " && (command -v psql > /dev/null 2>&1 && echo "INSTALLED ($(psql --version 2>/dev/null | head -1))" || echo "NOT INSTALLED — needed for Phase 2")
 echo -n "  pgAdmin:        " && echo "NOT NEEDED until Phase 2 (optional GUI for PostgreSQL)"
-echo -n "  ESLint config:  " && (ls .eslintrc* > /dev/null 2>&1 && echo "YES" || echo "MISSING — npm run lint won't work without it")
+echo -n "  ESLint config:  " && (ls .eslintrc* > /dev/null 2>&1 && echo "YES" || echo "MISSING — npm run lint will not report issues (does not affect functionality)")
 echo -n "  Gealan pricing: " && echo "NOT YET — dataset ready, engine not built"
 echo -n "  Holz pricing:   " && echo "NOT YET — dataset ready, engine not built"
 echo -n "  Alu pricing:    " && echo "NOT YET — dataset ready, engine not built"
@@ -468,7 +468,7 @@ echo "========================================="
 | `curl: command not found` | curl not installed | Run `brew install curl` or use the browser: `http://localhost:3001/health` |
 | `command not found: node` | Node.js not installed | Install from https://nodejs.org (LTS version) |
 | `command not found: git` | Git not installed | Run `xcode-select --install` in Terminal |
-| `npm run lint` shows "no config" | ESLint config file missing | This is a known gap — no `.eslintrc` file exists yet. Does not affect functionality. |
+| `npm run lint` shows "no config" | ESLint config file missing | This is a known gap — no `.eslintrc` file exists yet. Does not affect server or tests. |
 | `EADDRINUSE :::3001` | Port 3001 already in use | Another server is running. Stop it with `kill $(lsof -ti :3001)` then retry |
 
 ### Do I need pgAdmin / PostgreSQL?
@@ -491,7 +491,7 @@ in Phase 2 when we add database persistence.
 
 ## What's NOT Done Yet (Expected)
 
-- 🔲 **ESLint config** — `.eslintrc` file missing, `npm run lint` won't find violations
+- 🔲 **ESLint config** — `.eslintrc` file missing, `npm run lint` will not report issues (does not affect server or tests)
 - 🔲 **PostgreSQL** — not installed/needed yet (Phase 2)
 - 🔲 **Multi-material pricing** — Gealan, Holz, Alu datasets exist but engines not built
 - 🔲 **Frontend** — no frontend exists yet (Phase 3)
