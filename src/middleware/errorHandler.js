@@ -528,7 +528,7 @@ function errorHandler(error, req, res, next) {
   }
   
   // Log the error
-  const logEntry = logError(processedError, req);
+  logError(processedError, req);
   
   // Determine environment
   const isDevelopment = process.env.NODE_ENV === 'development';

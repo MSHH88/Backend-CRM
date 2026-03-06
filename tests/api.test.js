@@ -80,6 +80,36 @@ describe('POST /api/v1/berechnen/', () => {
     expect(res.status).toBe(200);
     expect(res.text).toContain('MwSt');
   });
+
+  test('accepts pricing_options as separate body field with discount', async () => {
+    const pricingOptions = JSON.stringify({ discountRate: 0.40 });
+    const res = await request(app)
+      .post('/api/v1/berechnen/')
+      .type('form')
+      .send({ tmp_obj: VALID_CONFIG, pricing_options: pricingOptions });
+
+    expect(res.status).toBe(200);
+    // With 40% discount on 295.44: angebotspreis = 177.26
+    expect(res.text).toContain('177,26 EUR');
+    expect(res.text).toContain('sparen');
+  });
+
+  test('accepts pricingOptions embedded in tmp_obj JSON', async () => {
+    const configWithPricing = JSON.stringify({
+      breite: 1000, hoehe: 1000, profil: 'p1',
+      verglasung: 'g1', aussenfarbe: 'fs1_01', innenfarbe: 'fi1_01',
+      schallschutz: 'ss1', sicherheitsverglasung: 'sv0',
+      griff: 'gr1', sicherheit: 'si1', sprossen: 'sp0', vperfect: 'vp0',
+      pricingOptions: { discountRate: 0.40 },
+    });
+    const res = await request(app)
+      .post('/api/v1/berechnen/')
+      .type('form')
+      .send({ tmp_obj: configWithPricing });
+
+    expect(res.status).toBe(200);
+    expect(res.text).toContain('177,26 EUR');
+  });
 });
 
 // ── Legacy /ajax/ routes still work ──────────────────────────────────────────
@@ -178,6 +208,41 @@ describe('POST /api/v1/warenkorb/', () => {
 
     expect(res.body.item.quantity).toBe(1);
     expect(res.body.item.quantityDiscount).toBe(0);
+  });
+
+  test('accepts pricing_options with discount via separate field', async () => {
+    const pricingOptions = JSON.stringify({ discountRate: 0.40 });
+    const res = await request(app)
+      .post('/api/v1/warenkorb/')
+      .type('form')
+      .send({ tmp_obj: VALID_CONFIG, pricing_options: pricingOptions });
+
+    expect(res.status).toBe(200);
+    expect(res.body.item.discountRate).toBe(0.40);
+    expect(res.body.item.angebotspreis).toBe(177.26);
+  });
+
+  test('accepts pricingOptions embedded in tmp_obj for quantity + discount', async () => {
+    const configWithPricing = JSON.stringify({
+      breite: 1000, hoehe: 1000, profil: 'p1',
+      verglasung: 'g1', aussenfarbe: 'fs1_01', innenfarbe: 'fi1_01',
+      schallschutz: 'ss1', sicherheitsverglasung: 'sv0',
+      griff: 'gr1', sicherheit: 'si1', sprossen: 'sp0', vperfect: 'vp0',
+      pricingOptions: {
+        productDiscount: 0.30,
+        quantity: 5,
+        quantityTiers: [{ minQuantity: 5, discountPercent: 5 }],
+      },
+    });
+    const res = await request(app)
+      .post('/api/v1/warenkorb/')
+      .type('form')
+      .send({ tmp_obj: configWithPricing });
+
+    expect(res.status).toBe(200);
+    expect(res.body.item.discountRate).toBe(0.30);
+    expect(res.body.item.quantity).toBe(5);
+    expect(res.body.item.quantityDiscount).toBe(0.05);
   });
 });
 

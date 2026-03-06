@@ -26,7 +26,16 @@ router.post('/', (req, res) => {
   }
 
   try {
-    const result   = calculatePrice(objKonfig);
+    // Extract pricingOptions from request body or from within the config object.
+    // The CRM sends these to control discounts, quantity pricing, and VAT.
+    let pricingOptions = {};
+    if (req.body.pricing_options) {
+      try { pricingOptions = JSON.parse(req.body.pricing_options); } catch (_e) { /* ignore */ }
+    } else if (objKonfig.pricingOptions) {
+      pricingOptions = objKonfig.pricingOptions;
+    }
+
+    const result   = calculatePrice(objKonfig, pricingOptions);
     const response = formatJSON(result, objKonfig);
     res.status(200).json(response);
   } catch (calcErr) {

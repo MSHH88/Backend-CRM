@@ -104,7 +104,7 @@ function snapToGrid(mm) {
  * @param {string} [profileId='p1']      - profile base (matrix is always p1-based)
  * @returns {number} base price in EUR (2 dp)
  */
-function getBasePrice(widthMm, heightMm, manufacturerId = 'h1', profileId = 'p1') {
+function getBasePrice(widthMm, heightMm, _manufacturerId = 'h1', _profileId = 'p1') {
   const w = snapToGrid(widthMm);
   const h = snapToGrid(heightMm);
   return basePriceMatrix[w][h];

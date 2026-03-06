@@ -31,15 +31,15 @@ const pool = new Pool({
 });
 
 // Pool event handlers
-pool.on('connect', (client) => {
+pool.on('connect', (_client) => {
   console.log('📗 New database connection established');
 });
 
-pool.on('error', (err, client) => {
+pool.on('error', (err, _client) => {
   console.error('❌ Database pool error:', err.message);
 });
 
-pool.on('remove', (client) => {
+pool.on('remove', (_client) => {
   console.log('📕 Database connection removed from pool');
 });
 

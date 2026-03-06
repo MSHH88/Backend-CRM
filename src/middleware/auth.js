@@ -508,7 +508,7 @@ const hasPermission = (user, permission) => {
   if (permissions.includes(permission)) return true;
   
   // Check wildcard (e.g., 'products:manage' includes 'products:view')
-  const [resource, action] = permission.split(':');
+  const [resource] = permission.split(':');
   if (permissions.includes(`${resource}:manage`)) return true;
   
   return false;
@@ -882,7 +882,7 @@ const generateMFASecret = () => {
  * Verify MFA Token
  * (Placeholder - implement with speakeasy or otplib)
  */
-const verifyMFAToken = (secret, token) => {
+const verifyMFAToken = (_secret, _token) => {
   // TODO: Implement TOTP verification
   // Use library like 'speakeasy' or 'otplib'
   return false;
