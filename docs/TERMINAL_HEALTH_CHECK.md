@@ -59,33 +59,45 @@ ls .env 2>/dev/null && echo "✅ .env exists" || (cp .env.example .env && echo "
 
 ## Step 6 — Check if test files exist
 
+> ⚠️ **`@jest` folders are NOT test files.** If you see folders like `@jest/test-result` or `@jest/test-sequencer` in your project, those are internal Jest packages from `node_modules/`. The **real** test files are `api.test.js`, `auth.test.js`, and `priceCalculator.test.js` inside a `tests/` folder.
+
 ```bash
 ls ~/Desktop/curia/backend/tests/api.test.js 2>/dev/null && echo "✅ tests/ exists — skip to Step 8" || echo "❌ tests/ missing — run Step 7 next"
 ```
 
 ---
 
-## Step 7 — Download test files (only if Step 6 said missing)
+## Step 7 — Download test files manually (only if Step 6 said missing)
 
-> ⚠️ If git asks for a username/password, enter your GitHub username and a Personal Access Token (not your GitHub password). See [GitHub docs](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens) if needed.
+### 7a. Create the `tests` folder
 
-```bash
-cd ~/Desktop && git clone -b copilot/analyze-project-phase-1 --depth 1 https://github.com/MSHH88/Backend-CRM.git curia-temp
+Open Finder → go to `~/Desktop/curia/backend/` → create a **new folder** called exactly:
+
+```
+tests
 ```
 
-Then:
+Or in Terminal:
 
 ```bash
-cp -r ~/Desktop/curia-temp/tests ~/Desktop/curia/backend/tests
+mkdir -p ~/Desktop/curia/backend/tests
 ```
 
-Then:
+### 7b. Download 3 files
 
-```bash
-rm -rf ~/Desktop/curia-temp
-```
+Open each link below in your browser. On the GitHub page, click the **"Raw"** button (located above the file content, on the right). Then **right-click → "Save As..."** (or press **Cmd+S**).
 
-Then check it worked:
+| # | File link (click to open on GitHub) | Save as | Save to folder |
+|---|-------------------------------------|---------|----------------|
+| 1 | [api.test.js](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/tests/api.test.js) | `api.test.js` | `~/Desktop/curia/backend/tests/` |
+| 2 | [auth.test.js](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/tests/auth.test.js) | `auth.test.js` | `~/Desktop/curia/backend/tests/` |
+| 3 | [priceCalculator.test.js](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/tests/priceCalculator.test.js) | `priceCalculator.test.js` | `~/Desktop/curia/backend/tests/` |
+
+> ⚠️ **Save format:** Plain text (`.js`). Make sure your browser does NOT add `.txt` at the end. The file names must end in `.test.js` — that's how Jest finds them.
+
+> 💡 **Tip:** When clicking "Raw", the URL changes to `raw.githubusercontent.com/...`. You can then press **Cmd+S** to save. Make sure the filename is exactly as shown above.
+
+### 7c. Verify the files are in place
 
 ```bash
 ls ~/Desktop/curia/backend/tests/
@@ -95,6 +107,8 @@ ls ~/Desktop/curia/backend/tests/
 ```
 api.test.js		auth.test.js		priceCalculator.test.js
 ```
+
+If you see `api.test.js.txt` instead, rename it: remove the `.txt` part.
 
 ---
 
@@ -211,12 +225,13 @@ Just the last 5-10 lines is enough.
 
 | Error | Fix |
 |-------|-----|
-| `No tests found, exiting with code 1` | tests/ folder missing — run Step 7 to download it |
+| `No tests found, exiting with code 1` | tests/ folder missing — run Step 7 to download the 3 test files |
+| Found `@jest` folders but no tests | Those are internal Jest packages, NOT test files. See Step 6 note. Run Step 7 to get the real test files |
+| Test file saved as `.test.js.txt` | Rename it: remove the `.txt` part so it ends in `.test.js` |
 | `ENOENT ... package.json` | Run `cd ~/Desktop/curia/backend` first |
 | `Failed to connect to localhost port 3001` | Server not running — go to Step 9 first |
 | `command not found: node` | Install from https://nodejs.org |
 | `EADDRINUSE :::3001` | Port in use — find the PID with `lsof -ti :3001` and stop it, then retry |
-| `git clone` asks for password | You need GitHub access — ask your team lead for repo access or a Personal Access Token |
 
 ---
 
