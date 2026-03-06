@@ -13,7 +13,7 @@ cd ~/Desktop/curia/backend && npm test
 **You should see:**
 ```
 Test Suites: 3 passed, 3 total
-Tests:       91 passed, 91 total
+Tests:       93 passed, 93 total
 ```
 
 > The "Force exiting Jest" message at the end is **normal** — ignore it.
@@ -186,7 +186,7 @@ After updating, run **Step 1** again to verify tests pass.
 | `src/utils/` | Logger, response formatter | 2 files |
 | `src/app.js` | Express app setup | 1 file |
 | `src/server.js` | Server entry point | 1 file |
-| `tests/` | Jest test suites (91 tests total) | 3 files |
+| `tests/` | Jest test suites (93 tests total) | 3 files |
 | `package.json` | Dependencies and scripts | config |
 | `.eslintrc.js` | ESLint code quality rules | config |
 | `.env.example` | Environment variable template | config |
@@ -213,7 +213,7 @@ After updating, run **Step 1** again to verify tests pass.
 | What | Status |
 |------|--------|
 | Phase 1 backend | ✅ DONE |
-| 91 tests | ✅ Passing |
+| 93 tests | ✅ Passing |
 | Server on port 3001 | ✅ Working |
 | Auth system | ✅ In-memory |
 | Security middleware | ✅ Working |

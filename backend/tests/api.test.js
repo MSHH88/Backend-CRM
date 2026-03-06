@@ -110,6 +110,36 @@ describe('POST /api/v1/berechnen/', () => {
     expect(res.status).toBe(200);
     expect(res.text).toContain('177,26 EUR');
   });
+
+  test('accepts direct JSON body (modern format)', async () => {
+    const res = await request(app)
+      .post('/api/v1/berechnen/')
+      .send({
+        breite: 1000, hoehe: 1000, profil: 'p1',
+        verglasung: 'g1', aussenfarbe: 'fs1_01', innenfarbe: 'fi1_01',
+        schallschutz: 'ss1', sicherheitsverglasung: 'sv0',
+        griff: 'gr1', sicherheit: 'si1', sprossen: 'sp0', vperfect: 'vp0',
+      });
+
+    expect(res.status).toBe(200);
+    expect(res.text).toContain('kalkulation-ergebnis');
+    expect(res.text).toContain('295,44 EUR');
+  });
+
+  test('accepts direct JSON body with embedded pricingOptions', async () => {
+    const res = await request(app)
+      .post('/api/v1/berechnen/')
+      .send({
+        breite: 1000, hoehe: 1000, profil: 'p1',
+        verglasung: 'g1', aussenfarbe: 'fs1_01', innenfarbe: 'fi1_01',
+        schallschutz: 'ss1', sicherheitsverglasung: 'sv0',
+        griff: 'gr1', sicherheit: 'si1', sprossen: 'sp0', vperfect: 'vp0',
+        pricingOptions: { discountRate: 0.40 },
+      });
+
+    expect(res.status).toBe(200);
+    expect(res.text).toContain('177,26 EUR');
+  });
 });
 
 // ── Legacy /ajax/ routes still work ──────────────────────────────────────────

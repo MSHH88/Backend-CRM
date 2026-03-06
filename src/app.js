@@ -68,7 +68,7 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 // =============================================================================
 // REQUEST LOGGING (simple dev logger)
 // =============================================================================
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'test') {
   app.use((req, res, next) => {
     const start = Date.now();
     res.on('finish', () => {

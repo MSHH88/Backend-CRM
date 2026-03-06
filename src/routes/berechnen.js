@@ -16,21 +16,28 @@ const router = express.Router();
 
 /**
  * POST /ajax/berechnen/
- * Accepts application/x-www-form-urlencoded with `tmp_obj` (JSON string).
+ * Accepts:
+ *   1. application/x-www-form-urlencoded with `tmp_obj` (JSON string)  — legacy
+ *   2. application/json with the config object directly                — modern
+ *   3. application/json with `tmp_obj` (JSON string) in the body       — hybrid
  * Returns an HTML fragment with the calculated price.
  */
 router.post('/', (req, res) => {
-  const raw = req.body && req.body.tmp_obj;
-
-  if (!raw) {
-    return res.status(400).send('<p class="error">Fehler: tmp_obj fehlt in der Anfrage.</p>');
-  }
-
   let objKonfig;
-  try {
-    objKonfig = JSON.parse(raw);
-  } catch (parseErr) {
-    return res.status(400).send('<p class="error">Fehler: tmp_obj ist kein gültiges JSON.</p>');
+
+  if (req.body && req.body.tmp_obj) {
+    // Legacy format: tmp_obj is a JSON string (form-urlencoded or JSON body)
+    const raw = req.body.tmp_obj;
+    try {
+      objKonfig = typeof raw === 'string' ? JSON.parse(raw) : raw;
+    } catch (parseErr) {
+      return res.status(400).send('<p class="error">Fehler: tmp_obj ist kein gültiges JSON.</p>');
+    }
+  } else if (req.body && req.body.breite && req.body.hoehe) {
+    // Modern format: config object sent directly as JSON body
+    objKonfig = req.body;
+  } else {
+    return res.status(400).send('<p class="error">Fehler: tmp_obj fehlt in der Anfrage.</p>');
   }
 
   try {
@@ -38,7 +45,8 @@ router.post('/', (req, res) => {
     // The CRM sends these to control discounts, quantity pricing, and VAT.
     let pricingOptions = {};
     if (req.body.pricing_options) {
-      try { pricingOptions = JSON.parse(req.body.pricing_options); } catch (_e) { /* ignore */ }
+      const po = req.body.pricing_options;
+      try { pricingOptions = typeof po === 'string' ? JSON.parse(po) : po; } catch (_e) { /* ignore */ }
     } else if (objKonfig.pricingOptions) {
       pricingOptions = objKonfig.pricingOptions;
     }
