@@ -4,14 +4,14 @@ Run these commands **in order** from your terminal on your MacBook.
 
 > ⚠️ **IMPORTANT:** Every command below assumes you are inside the `curia` folder.
 > If you get `ENOENT: no such file or directory ... package.json` it means you are
-> NOT inside `curia`. Run `cd ~/curia` first.
+> NOT inside `curia`. Run `cd ~/Desktop/curia` first.
 
 ---
 
 ## 0. Navigate Into Your Project Folder
 
 ```bash
-cd ~/curia
+cd ~/Desktop/curia
 ```
 
 **Expected:** No output (silence = success). You are now inside the project.
@@ -24,7 +24,7 @@ pwd && ls package.json
 
 **Expected:**
 ```
-/Users/neilapacesaite/curia
+/Users/neilapacesaite/Desktop/curia
 package.json
 ```
 
@@ -46,7 +46,7 @@ npm -v
 ## 2. Install Dependencies
 
 ```bash
-cd ~/curia && npm install
+cd ~/Desktop/curia && npm install
 ```
 
 **Expected:** No errors, 0 vulnerabilities (or only low-severity ones)
@@ -56,7 +56,7 @@ cd ~/curia && npm install
 ## 3. Run All Tests (57 tests, 3 suites)
 
 ```bash
-cd ~/curia && npm test -- --forceExit
+cd ~/Desktop/curia && npm test -- --forceExit
 ```
 
 **Expected output (last lines):**
@@ -72,7 +72,7 @@ The `--forceExit` is needed because bcrypt keeps handles open.
 ## 4. Start Server (quick check, then Ctrl+C to stop)
 
 ```bash
-cd ~/curia && npm start
+cd ~/Desktop/curia && npm start
 ```
 
 **Expected output:**
@@ -120,7 +120,7 @@ curl http://localhost:3001/ajax/getOptions/
 ## 6. File Counts Verification
 
 ```bash
-cd ~/curia
+cd ~/Desktop/curia
 
 echo "=== Active source code ===" && find src/ -type f | wc -l
 echo "=== Backend reference ===" && find backend/ -type f | wc -l
@@ -149,7 +149,7 @@ echo "=== Test files ===" && find tests/ -type f | wc -l
 ## 7. Verify Key Source Files Exist
 
 ```bash
-cd ~/curia
+cd ~/Desktop/curia
 
 echo "--- Core ---" && ls src/app.js src/server.js
 echo "--- Config ---" && ls src/config/
@@ -168,7 +168,7 @@ echo "--- Utils ---" && ls src/utils/
 ## 8. Verify New Datasets Content
 
 ```bash
-cd ~/curia
+cd ~/Desktop/curia
 
 echo "=== Gealan PVC ===" && ls Gealen-Kunstoff-PM/
 echo "=== Holz Fenster ===" && ls Holz-Fenster-PM/
@@ -180,7 +180,7 @@ echo "=== Balkon-Alu ===" && ls Balkon-Alu-PM/
 ## 9. Quick Lint Check
 
 ```bash
-cd ~/curia && npm run lint
+cd ~/Desktop/curia && npm run lint
 ```
 
 **Expected:** No errors (warnings are OK).
@@ -191,9 +191,10 @@ cd ~/curia && npm run lint
 
 | Error | Cause | Fix |
 |-------|-------|-----|
-| `cd: no such file or directory: Backend-CRM` | Folder is called `curia` on your Mac | Use `cd ~/curia` |
-| `ENOENT: no such file or directory ... package.json` | You're not inside the project folder | Run `cd ~/curia` first |
-| `Failed to connect to localhost port 3001` | Server is not running | Start it first with `cd ~/curia && npm start` in another terminal |
+| `cd: no such file or directory: Backend-CRM` | Folder is called `curia` on your Desktop | Use `cd ~/Desktop/curia` |
+| `cd: no such file or directory: /Users/.../curia` | You used `~/curia` but the folder is on your Desktop | Use `cd ~/Desktop/curia` |
+| `ENOENT: no such file or directory ... package.json` | You're not inside the project folder | Run `cd ~/Desktop/curia` first |
+| `Failed to connect to localhost port 3001` | Server is not running | Start it first with `cd ~/Desktop/curia && npm start` in another terminal |
 | `curl: command not found` | curl not installed | Run `brew install curl` or use the browser: `http://localhost:3001/health` |
 | `command not found: node` | Node.js not installed | Install from https://nodejs.org (LTS version) |
 
