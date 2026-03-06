@@ -56,20 +56,46 @@ function buildSurchargeRows(items) {
  *   angebotspreis: number,
  *   produktName: string,
  *   dimensionen: string,
- *   surcharges: { items: Array }
+ *   surcharges: { items: Array },
+ *   discountRate: number,
+ *   quantity: number,
+ *   quantityDiscount: number,
+ *   unitPrice: number,
+ *   totalPrice: number,
+ *   vatRate: number,
+ *   vatAmount: number,
+ *   totalWithVat: number
  * }} result
  * @returns {string} HTML string
  */
 function formatHTML(result) {
   const surchargeRows = buildSurchargeRows(result.surcharges.items);
+  const discountPct = ((result.discountRate || 0) * 100).toFixed(0);
+
+  let quantityInfo = '';
+  if (result.quantity > 1) {
+    quantityInfo = `<p class="menge">Menge: ${result.quantity} Stück</p>`;
+    if (result.quantityDiscount > 0) {
+      quantityInfo += `<p class="mengenrabatt">Mengenrabatt: ${(result.quantityDiscount * 100).toFixed(0)}%</p>`;
+    }
+  }
+
+  let vatInfo = '';
+  if (result.vatRate > 0) {
+    vatInfo = `
+    <p class="mwst-info">zzgl. ${(result.vatRate * 100).toFixed(0)}% MwSt: ${formatGermanNumber(result.vatAmount)} EUR</p>
+    <h3 id="totalWithVat">${formatGermanNumber(result.totalWithVat)} EUR inkl. MwSt.</h3>`;
+  }
 
   return `<div class="kalkulation-ergebnis">
   <div class="preis-empfehlung">
     <span id="topStrokePrice">${formatGermanNumber(result.preisempfehlung)} EUR</span>
-    <p class="ersparnis">Sie sparen <strong>${formatGermanNumber(result.ersparnis)} EUR</strong></p>
+    ${result.ersparnis > 0 ? `<p class="ersparnis">Sie sparen <strong>${formatGermanNumber(result.ersparnis)} EUR</strong> (${discountPct}%)</p>` : ''}
   </div>
   <div class="angebots-preis">
     <h2 id="finalPrice">${formatGermanNumber(result.angebotspreis)} EUR</h2>
+    ${quantityInfo}
+    ${vatInfo}
   </div>
   <div class="preis-details">
     <p class="produkt-name">${escapeHtml(result.produktName)}</p>
@@ -92,17 +118,7 @@ function formatHTML(result) {
 /**
  * Format a price calculation result as a JSON-serialisable cart item object.
  *
- * @param {{
- *   grundpreis: number,
- *   profileMultiplier: number,
- *   profileAdjusted: number,
- *   preisempfehlung: number,
- *   ersparnis: number,
- *   angebotspreis: number,
- *   produktName: string,
- *   dimensionen: string,
- *   surcharges: { total: number, items: Array }
- * }} result
+ * @param {object} result - calculation result from priceCalculator
  * @param {object} [objKonfig={}] original configuration for reference
  * @returns {object}
  */
@@ -118,8 +134,16 @@ function formatJSON(result, objKonfig = {}) {
       surchargesTotal:   result.surcharges.total,
       surchargeItems:    result.surcharges.items,
       preisempfehlung:   result.preisempfehlung,
+      discountRate:      result.discountRate,
       ersparnis:         result.ersparnis,
       angebotspreis:     result.angebotspreis,
+      quantity:          result.quantity,
+      quantityDiscount:  result.quantityDiscount,
+      unitPrice:         result.unitPrice,
+      totalPrice:        result.totalPrice,
+      vatRate:           result.vatRate,
+      vatAmount:         result.vatAmount,
+      totalWithVat:      result.totalWithVat,
       konfiguration:     objKonfig,
     },
   };

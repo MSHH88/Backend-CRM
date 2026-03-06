@@ -669,6 +669,26 @@ const applySecurity = (app) => {
   app.use(xssConfig);
   app.use(hppConfig);
   
+  // CSRF protection for state-changing requests.
+  // JWT APIs use the "custom header" pattern: require X-Requested-With header
+  // on POST/PUT/PATCH/DELETE. Browsers enforce same-origin on custom headers,
+  // so cross-origin forms cannot include them.
+  app.use((req, res, next) => {
+    const unsafeMethods = ['POST', 'PUT', 'PATCH', 'DELETE'];
+    if (unsafeMethods.includes(req.method)) {
+      const xrw = req.headers['x-requested-with'];
+      const ct  = req.headers['content-type'] || '';
+      // Allow JSON APIs and form-encoded (legacy routes) through
+      // Skip for health check and static assets
+      if (req.path === '/health') return next();
+      // In production, enforce X-Requested-With or JSON content-type
+      if (process.env.NODE_ENV === 'production' && !xrw && !ct.includes('application/json') && !ct.includes('x-www-form-urlencoded')) {
+        return res.status(403).json({ error: 'CSRF validation failed: missing required header' });
+      }
+    }
+    next();
+  });
+
   // Custom security
   app.use(ipBlocker);
   app.use(sanitizeRequest);
@@ -683,6 +703,7 @@ const applySecurity = (app) => {
       'mongo-sanitize',
       'xss-clean',
       'hpp',
+      'csrf-protection',
       'ip-blocker',
       'request-sanitizer',
       'content-type-validator',

@@ -3,7 +3,7 @@
 const { getBasePrice }    = require('../src/data/basePrices');
 const { getProfileMultiplier } = require('../src/data/profileMultipliers');
 const { getSurcharge }    = require('../src/data/surcharges');
-const { calculatePrice }  = require('../src/engine/priceCalculator');
+const { calculatePrice, resolveDiscountRate, resolveQuantityDiscount }  = require('../src/engine/priceCalculator');
 
 // ── Base price lookup ─────────────────────────────────────────────────────────
 describe('Base price lookup', () => {
@@ -80,6 +80,81 @@ describe('Surcharge lookups', () => {
   });
 });
 
+// ── Discount resolution ───────────────────────────────────────────────────────
+describe('Discount resolution', () => {
+  test('productDiscount takes highest priority', () => {
+    expect(resolveDiscountRate({
+      productDiscount: 0.30,
+      categoryDiscount: 0.20,
+      globalDiscount: 0.10,
+      discountRate: 0.05,
+    })).toBe(0.30);
+  });
+
+  test('categoryDiscount is second priority', () => {
+    expect(resolveDiscountRate({
+      categoryDiscount: 0.25,
+      globalDiscount: 0.10,
+    })).toBe(0.25);
+  });
+
+  test('globalDiscount is third priority', () => {
+    expect(resolveDiscountRate({ globalDiscount: 0.15 })).toBe(0.15);
+  });
+
+  test('discountRate is fallback', () => {
+    expect(resolveDiscountRate({ discountRate: 0.40 })).toBe(0.40);
+  });
+
+  test('defaults to 0 when nothing is set', () => {
+    expect(resolveDiscountRate({})).toBe(0);
+  });
+
+  test('productDiscount of 0 is valid (no discount)', () => {
+    expect(resolveDiscountRate({
+      productDiscount: 0,
+      globalDiscount: 0.10,
+    })).toBe(0);
+  });
+});
+
+// ── Quantity discount ─────────────────────────────────────────────────────────
+describe('Quantity discount', () => {
+  const tiers = [
+    { minQuantity: 5,  discountPercent: 5 },
+    { minQuantity: 10, discountPercent: 7 },
+    { minQuantity: 20, discountPercent: 10 },
+  ];
+
+  test('no discount for quantity below all tiers', () => {
+    expect(resolveQuantityDiscount(3, tiers)).toBe(0);
+  });
+
+  test('5 pieces gets 5% tier', () => {
+    expect(resolveQuantityDiscount(5, tiers)).toBe(0.05);
+  });
+
+  test('7 pieces still gets 5% tier', () => {
+    expect(resolveQuantityDiscount(7, tiers)).toBe(0.05);
+  });
+
+  test('10 pieces gets 7% tier', () => {
+    expect(resolveQuantityDiscount(10, tiers)).toBe(0.07);
+  });
+
+  test('25 pieces gets 10% tier', () => {
+    expect(resolveQuantityDiscount(25, tiers)).toBe(0.10);
+  });
+
+  test('empty tiers returns 0', () => {
+    expect(resolveQuantityDiscount(10, [])).toBe(0);
+  });
+
+  test('quantity 0 returns 0', () => {
+    expect(resolveQuantityDiscount(0, tiers)).toBe(0);
+  });
+});
+
 // ── Full price calculation ────────────────────────────────────────────────────
 describe('Full price calculation', () => {
   const baseConfig = {
@@ -112,14 +187,27 @@ describe('Full price calculation', () => {
     expect(result.preisempfehlung).toBe(295.44);
   });
 
-  test('ersparnis = 40% of preisempfehlung = €118.18', () => {
+  test('default discount is 0 (NOT hardcoded)', () => {
     const result = calculatePrice(baseConfig);
-    expect(result.ersparnis).toBe(118.18);
+    expect(result.discountRate).toBe(0);
+    expect(result.ersparnis).toBe(0);
+    expect(result.angebotspreis).toBe(295.44);
   });
 
-  test('angebotspreis = 60% of preisempfehlung = €177.26', () => {
-    const result = calculatePrice(baseConfig);
+  test('40% discount via pricingOptions', () => {
+    const result = calculatePrice(baseConfig, { discountRate: 0.40 });
+    expect(result.discountRate).toBe(0.40);
+    expect(result.ersparnis).toBe(118.18);
     expect(result.angebotspreis).toBe(177.26);
+  });
+
+  test('product-level discount overrides global', () => {
+    const result = calculatePrice(baseConfig, {
+      productDiscount: 0.30,
+      globalDiscount: 0.10,
+    });
+    expect(result.discountRate).toBe(0.30);
+    expect(result.ersparnis).toBe(Math.round(295.44 * 0.30 * 100) / 100);
   });
 
   test('dimensionen string is formatted correctly', () => {
@@ -161,5 +249,97 @@ describe('Full price calculation', () => {
     const r1 = calculatePrice(baseConfig);
     const r2 = calculatePrice(baseConfig);
     expect(r1).toEqual(r2);
+  });
+});
+
+// ── VAT calculation ───────────────────────────────────────────────────────────
+describe('VAT calculation', () => {
+  const baseConfig = {
+    breite: 1000, hoehe: 1000, profil: 'p1',
+    verglasung: 'g1', aussenfarbe: 'fs1_01', innenfarbe: 'fi1_01',
+    schallschutz: 'ss1', sicherheitsverglasung: 'sv0',
+    griff: 'gr1', sicherheit: 'si1', sprossen: 'sp0', vperfect: 'vp0',
+  };
+
+  test('VAT is included by default (19%)', () => {
+    const result = calculatePrice(baseConfig);
+    expect(result.vatRate).toBe(0.19);
+    expect(result.vatAmount).toBeGreaterThan(0);
+    expect(result.totalWithVat).toBeGreaterThan(result.totalPrice);
+  });
+
+  test('VAT can be disabled', () => {
+    const result = calculatePrice(baseConfig, { showVat: false });
+    expect(result.vatRate).toBe(0);
+    expect(result.vatAmount).toBe(0);
+    expect(result.totalWithVat).toBe(result.totalPrice);
+  });
+
+  test('Custom VAT rate (7%)', () => {
+    const result = calculatePrice(baseConfig, { vatRate: 0.07 });
+    expect(result.vatRate).toBe(0.07);
+    const expectedVat = Math.round(result.totalPrice * 0.07 * 100) / 100;
+    expect(result.vatAmount).toBe(expectedVat);
+  });
+});
+
+// ── Quantity pricing ──────────────────────────────────────────────────────────
+describe('Quantity pricing integration', () => {
+  const baseConfig = {
+    breite: 1000, hoehe: 1000, profil: 'p1',
+    verglasung: 'g1', aussenfarbe: 'fs1_01', innenfarbe: 'fi1_01',
+    schallschutz: 'ss1', sicherheitsverglasung: 'sv0',
+    griff: 'gr1', sicherheit: 'si1', sprossen: 'sp0', vperfect: 'vp0',
+  };
+
+  const tiers = [
+    { minQuantity: 5, discountPercent: 5 },
+    { minQuantity: 10, discountPercent: 7 },
+  ];
+
+  test('single item has no quantity discount', () => {
+    const result = calculatePrice(baseConfig, { quantity: 1, quantityTiers: tiers });
+    expect(result.quantity).toBe(1);
+    expect(result.quantityDiscount).toBe(0);
+    expect(result.unitPrice).toBe(result.angebotspreis);
+    expect(result.totalPrice).toBe(result.unitPrice);
+  });
+
+  test('5 items gets 5% volume discount', () => {
+    const result = calculatePrice(baseConfig, { quantity: 5, quantityTiers: tiers });
+    expect(result.quantity).toBe(5);
+    expect(result.quantityDiscount).toBe(0.05);
+    expect(result.unitPrice).toBe(Math.round(result.angebotspreis * 0.95 * 100) / 100);
+    expect(result.totalPrice).toBe(Math.round(result.unitPrice * 5 * 100) / 100);
+  });
+
+  test('10 items gets 7% volume discount', () => {
+    const result = calculatePrice(baseConfig, { quantity: 10, quantityTiers: tiers });
+    expect(result.quantityDiscount).toBe(0.07);
+  });
+
+  test('quantity tiers disabled (empty array) means no volume discount', () => {
+    const result = calculatePrice(baseConfig, { quantity: 10, quantityTiers: [] });
+    expect(result.quantityDiscount).toBe(0);
+    expect(result.unitPrice).toBe(result.angebotspreis);
+  });
+
+  test('combined: discount + quantity + VAT', () => {
+    const result = calculatePrice(baseConfig, {
+      discountRate: 0.40,
+      quantity: 5,
+      quantityTiers: tiers,
+      showVat: true,
+      vatRate: 0.19,
+    });
+    // 295.44 RRP, 40% discount = 177.26 offer, 5% volume = 168.40 unit
+    expect(result.discountRate).toBe(0.40);
+    expect(result.angebotspreis).toBe(177.26);
+    expect(result.quantityDiscount).toBe(0.05);
+    expect(result.quantity).toBe(5);
+    expect(result.unitPrice).toBe(Math.round(177.26 * 0.95 * 100) / 100);
+    expect(result.totalPrice).toBe(Math.round(result.unitPrice * 5 * 100) / 100);
+    expect(result.vatAmount).toBe(Math.round(result.totalPrice * 0.19 * 100) / 100);
+    expect(result.totalWithVat).toBe(Math.round((result.totalPrice + result.vatAmount) * 100) / 100);
   });
 });
