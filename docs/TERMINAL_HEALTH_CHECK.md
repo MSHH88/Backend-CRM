@@ -54,10 +54,13 @@ curl http://localhost:3001/ajax/getOptions/
 ```
 
 **You should see (4 responses):**
-1. `{"status":"ok", ...}` — health check
-2. `{"name":"CURIA API", ...}` — API info
-3. An HTML price result like `<div class="price-result">...</div>` — price calculation
-4. `{"success":true,"options":{...}}` — all product options
+1. `{"status":"ok", ...}` — health check ✅
+2. `{"name":"CURIA API", ...}` — API info ✅
+3. **HTML** starting with `<div class="kalkulation-ergebnis">` containing a price like `336,75 EUR` — price calculation ✅
+4. `{"success":true,"options":{...}}` — all product options ✅
+
+> ⚠️ Response #3 is **HTML, not JSON**. It will look like raw HTML tags in your terminal.
+> When you paste the output into GitHub/chat, the HTML may become **invisible** — that's normal.
 
 📋 **Paste the output back to me.**
 
