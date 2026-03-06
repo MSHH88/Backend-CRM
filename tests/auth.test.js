@@ -5,8 +5,8 @@ const app     = require('../src/app');
 
 // Reset user store between tests
 beforeEach(() => {
-  const authModule = require('../src/routes/auth');
-  authModule._users.length = 0;
+  const { clearUsers } = require('../src/routes/auth');
+  clearUsers();
 });
 
 const VALID_USER = {

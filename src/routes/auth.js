@@ -31,6 +31,15 @@ const router = express.Router();
 
 // In-memory user store (placeholder until PostgreSQL is connected in Phase 1 Week 2)
 const users = [];
+let nextUserId = 1;
+
+/**
+ * Clear all users (for testing)
+ */
+function clearUsers() {
+  users.length = 0;
+  nextUserId = 1;
+}
 
 /**
  * POST /api/v1/auth/register
@@ -59,7 +68,8 @@ router.post('/register', async (req, res, next) => {
     }
 
     // ── Check for duplicate email ─────────────────────────────────────────
-    const existingUser = users.find((u) => u.email === email.toLowerCase());
+    const normalizedEmail = email.toLowerCase().trim();
+    const existingUser = users.find((u) => u.email === normalizedEmail);
     if (existingUser) {
       throw new ConflictError('A user with this email already exists');
     }
@@ -67,8 +77,8 @@ router.post('/register', async (req, res, next) => {
     // ── Create user ───────────────────────────────────────────────────────
     const hashedPassword = await hashPassword(password);
     const newUser = {
-      id: users.length + 1,
-      email: email.toLowerCase().trim(),
+      id: nextUserId++,
+      email: normalizedEmail,
       passwordHash: hashedPassword,
       firstName: firstName || '',
       lastName: lastName || '',
@@ -218,6 +228,6 @@ router.get('/me', authenticate, (req, res) => {
   });
 });
 
-// Export both the router and the users array (for testing)
+// Export both the router and test helper
 module.exports = router;
-module.exports._users = users;
+module.exports.clearUsers = clearUsers;
