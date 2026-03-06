@@ -1,244 +1,125 @@
-# Terminal Health Check — Step by Step
+# Terminal Health Check — Quick Setup Guide
 
-Copy-paste each command below into your Terminal on your Mac.
-After each step, **paste the output back to me** so I can check it.
-
-> 💡 You do **NOT** need PostgreSQL or pgAdmin. Just Node.js and npm.
+> The repo is **public** — `curl` works directly. Just copy-paste each command.
 
 ---
 
-## Step 1 — Open Terminal and go to your project
+## Step 1 — Delete your old src/ and tests/ folders
+
+Your current files may be corrupted (if `curl` was used when the repo was private). Delete them:
 
 ```bash
-cd ~/Desktop/curia/backend
+cd ~/Desktop/curia/backend && \
+rm -rf src/ tests/ && \
+echo "✅ Old folders deleted"
 ```
 
 ---
 
-## Step 2 — Confirm you are in the right folder
+## Step 2 — Download all source files (21 files)
+
+Copy-paste this **entire block** into Terminal. It downloads every file using `curl`:
 
 ```bash
-pwd && ls package.json
+cd ~/Desktop/curia/backend && \
+mkdir -p src/config src/data src/db src/engine src/middleware src/routes src/utils tests && \
+BASE="https://raw.githubusercontent.com/MSHH88/Backend-CRM/copilot/analyze-project-phase-1/backend" && \
+curl -fsSL "$BASE/src/app.js"                        -o src/app.js && \
+curl -fsSL "$BASE/src/server.js"                     -o src/server.js && \
+curl -fsSL "$BASE/src/config/database.js"            -o src/config/database.js && \
+curl -fsSL "$BASE/src/config/index.js"               -o src/config/index.js && \
+curl -fsSL "$BASE/src/config/migrations.js"          -o src/config/migrations.js && \
+curl -fsSL "$BASE/src/config/swagger.js"             -o src/config/swagger.js && \
+curl -fsSL "$BASE/src/data/basePrices.js"            -o src/data/basePrices.js && \
+curl -fsSL "$BASE/src/data/profileMultipliers.js"    -o src/data/profileMultipliers.js && \
+curl -fsSL "$BASE/src/data/surcharges.js"            -o src/data/surcharges.js && \
+curl -fsSL "$BASE/src/db/schema.sql"                 -o src/db/schema.sql && \
+curl -fsSL "$BASE/src/engine/priceCalculator.js"     -o src/engine/priceCalculator.js && \
+curl -fsSL "$BASE/src/engine/surchargeCalculator.js" -o src/engine/surchargeCalculator.js && \
+curl -fsSL "$BASE/src/middleware/auth.js"             -o src/middleware/auth.js && \
+curl -fsSL "$BASE/src/middleware/errorHandler.js"     -o src/middleware/errorHandler.js && \
+curl -fsSL "$BASE/src/middleware/security.js"         -o src/middleware/security.js && \
+curl -fsSL "$BASE/src/routes/auth.js"                -o src/routes/auth.js && \
+curl -fsSL "$BASE/src/routes/berechnen.js"           -o src/routes/berechnen.js && \
+curl -fsSL "$BASE/src/routes/options.js"             -o src/routes/options.js && \
+curl -fsSL "$BASE/src/routes/warenkorb.js"           -o src/routes/warenkorb.js && \
+curl -fsSL "$BASE/src/utils/logger.js"               -o src/utils/logger.js && \
+curl -fsSL "$BASE/src/utils/responseFormatter.js"    -o src/utils/responseFormatter.js && \
+echo "✅ 21 source files downloaded"
+```
+
+**You should see:** `✅ 21 source files downloaded`
+
+---
+
+## Step 3 — Download test files (3 files)
+
+```bash
+cd ~/Desktop/curia/backend && \
+BASE="https://raw.githubusercontent.com/MSHH88/Backend-CRM/copilot/analyze-project-phase-1/backend" && \
+curl -fsSL "$BASE/tests/api.test.js"             -o tests/api.test.js && \
+curl -fsSL "$BASE/tests/auth.test.js"            -o tests/auth.test.js && \
+curl -fsSL "$BASE/tests/priceCalculator.test.js" -o tests/priceCalculator.test.js && \
+echo "✅ 3 test files downloaded"
+```
+
+---
+
+## Step 4 — Download config files (4 files)
+
+These go in your `backend/` root (replace existing):
+
+```bash
+cd ~/Desktop/curia/backend && \
+BASE="https://raw.githubusercontent.com/MSHH88/Backend-CRM/copilot/analyze-project-phase-1/backend" && \
+curl -fsSL "$BASE/package.json"   -o package.json && \
+curl -fsSL "$BASE/.eslintrc.js"   -o .eslintrc.js && \
+curl -fsSL "$BASE/.env.example"   -o .env.example && \
+curl -fsSL "$BASE/.gitignore"     -o .gitignore && \
+echo "✅ 4 config files downloaded"
+```
+
+---
+
+## Step 5 — Verify file counts
+
+```bash
+cd ~/Desktop/curia/backend && \
+echo "Source files: $(find src/ -type f -not -name '.DS_Store' | wc -l | tr -d ' ')" && \
+echo "Test files:   $(find tests/ -type f -not -name '.DS_Store' | wc -l | tr -d ' ')" && \
+head -1 src/data/basePrices.js
 ```
 
 **You should see:**
 ```
-/Users/neilapacesaite/Desktop/curia/backend
-package.json
+Source files: 21
+Test files:   3
+'use strict';
 ```
+
+> ⚠️ If `head -1` shows `404: Not Found` instead of `'use strict';`, the download failed. Re-run Steps 1 and 2.
 
 ---
 
-## Step 3 — Check Git, Node, npm
+## Step 6 — Install dependencies & create .env
 
 ```bash
-echo "=== Git ===" && git --version && echo "=== Node ===" && node -v && echo "=== npm ===" && npm -v
-```
-
-**You should see:** version numbers for all three, no errors.
-
----
-
-## Step 4 — Install dependencies (skip if already done)
-
-```bash
+cd ~/Desktop/curia/backend && \
+ls .env 2>/dev/null || cp .env.example .env && \
 npm install
 ```
 
-**You should see:** ends with `0 vulnerabilities` or only low-severity.
+**You should see:** ends with `0 vulnerabilities`.
 
 ---
 
-## Step 5 — Make sure .env file exists
-
-```bash
-ls .env 2>/dev/null && echo "✅ .env exists" || (cp .env.example .env && echo "✅ Created .env")
-```
-
----
-
-## Step 5b — Run lint (checks code quality)
-
-```bash
-npm run lint
-```
-
-**You should see:** no output (= 0 errors, 0 warnings). If you get "ESLint couldn't find a configuration file", you are missing `.eslintrc.js` — download it in Step 7d below.
-
----
-
-## Step 6 — Check if test files exist
-
-> ⚠️ **`@jest` folders are NOT test files.** If you see folders like `@jest/test-result` or `@jest/test-sequencer` in your project, those are internal Jest packages from `node_modules/`. The **real** test files are `api.test.js`, `auth.test.js`, and `priceCalculator.test.js` inside a `tests/` folder.
-
-```bash
-ls ~/Desktop/curia/backend/tests/api.test.js 2>/dev/null && echo "✅ tests/ exists — skip to Step 8" || echo "❌ tests/ missing — run Step 7 next"
-```
-
----
-
-## Step 7 — Download test files manually (only if Step 6 said missing)
-
-### 7a. Create the `tests` folder
-
-Open Finder → go to `~/Desktop/curia/backend/` → create a **new folder** called exactly:
-
-```
-tests
-```
-
-Or in Terminal:
-
-```bash
-mkdir -p ~/Desktop/curia/backend/tests
-```
-
-### 7b. Download 3 files
-
-Open each link below in your browser. On the GitHub page, click the **"Raw"** button (located above the file content, on the right). Then **right-click → "Save As..."** (or press **Cmd+S**).
-
-| # | File link (click to open on GitHub) | Save as | Save to folder |
-|---|-------------------------------------|---------|----------------|
-| 1 | [api.test.js](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/tests/api.test.js) | `api.test.js` | `~/Desktop/curia/backend/tests/` |
-| 2 | [auth.test.js](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/tests/auth.test.js) | `auth.test.js` | `~/Desktop/curia/backend/tests/` |
-| 3 | [priceCalculator.test.js](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/tests/priceCalculator.test.js) | `priceCalculator.test.js` | `~/Desktop/curia/backend/tests/` |
-
-> ⚠️ **Save format:** Plain text (`.js`). Make sure your browser does NOT add `.txt` at the end. The file names must end in `.test.js` — that's how Jest finds them.
-
-> 💡 **Tip:** When clicking "Raw", the URL changes to `raw.githubusercontent.com/...`. You can then press **Cmd+S** to save. Make sure the filename is exactly as shown above.
-
-### 7c. Verify the files are in place
-
-```bash
-ls ~/Desktop/curia/backend/tests/
-```
-
-**You should see:**
-```
-api.test.js		auth.test.js		priceCalculator.test.js
-```
-
-If you see `api.test.js.txt` instead, rename it: remove the `.txt` part.
-
-### 7d. Update your `src/` folder (IMPORTANT — your src/ may be outdated)
-
-The tests need files that may not exist in your current `src/` folder yet (like `src/data/`, `src/engine/`, `src/routes/auth.js`). You need to replace your `src/` with the latest version.
-
-> ⛔ **DO NOT use `curl` with `raw.githubusercontent.com`!** This repo is private. `curl` will download "404: Not Found" instead of your actual code, which corrupts your files and causes `npm test` to fail with syntax errors. Use the `git clone` method below instead.
-
-**Easiest approach — ONE command (recommended):**
-
-Copy-paste this entire block into your Terminal. It clones the repo to a temp folder, copies all the files you need, and cleans up:
-
-```bash
-cd /tmp && \
-rm -rf backend-crm-temp && \
-git clone -b copilot/analyze-project-phase-1 https://github.com/MSHH88/Backend-CRM.git backend-crm-temp && \
-mv ~/Desktop/curia/backend/src ~/Desktop/curia/backend/src.backup 2>/dev/null; \
-mv ~/Desktop/curia/backend/tests ~/Desktop/curia/backend/tests.backup 2>/dev/null; \
-cp -R backend-crm-temp/backend/src ~/Desktop/curia/backend/src && \
-cp -R backend-crm-temp/backend/tests ~/Desktop/curia/backend/tests && \
-cp backend-crm-temp/backend/.eslintrc.js ~/Desktop/curia/backend/.eslintrc.js && \
-cp backend-crm-temp/backend/package.json ~/Desktop/curia/backend/package.json && \
-cp backend-crm-temp/backend/.env.example ~/Desktop/curia/backend/.env.example && \
-cp backend-crm-temp/backend/.gitignore ~/Desktop/curia/backend/.gitignore && \
-rm -rf /tmp/backend-crm-temp ~/Desktop/curia/backend/src.backup ~/Desktop/curia/backend/tests.backup && \
-echo "✅ All files updated successfully!"
-```
-
-**You should see:** `✅ All files updated successfully!` at the end.
-
-> 💡 **If git asks for credentials:** Enter your GitHub username and a [Personal Access Token](https://github.com/settings/tokens/new) (not your password). The token needs **`repo`** scope (full control of private repositories). macOS Keychain will remember it after the first time.
-
-> 💡 **If git clone fails**, use the manual browser download method below as a fallback.
-
-<details>
-<summary>📂 Fallback: Manual browser download (click to expand)</summary>
-
-If `git clone` doesn't work, you can download each file manually via your browser:
-
-1. Open the [backend/src/ folder on GitHub](https://github.com/MSHH88/Backend-CRM/tree/copilot/analyze-project-phase-1/backend/src)
-2. **Delete** your current `~/Desktop/curia/backend/src/` folder (move it to Trash first as backup)
-3. **Create a new** `src/` folder in `~/Desktop/curia/backend/`
-4. For each file: click the link → click **"Raw"** → press **Cmd+S** to save to the correct folder
-
-| File | Save to |
-|------|---------|
-| [app.js](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/src/app.js) | `src/` |
-| [server.js](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/src/server.js) | `src/` |
-| [config/database.js](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/src/config/database.js) | `src/config/` |
-| [config/index.js](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/src/config/index.js) | `src/config/` |
-| [config/migrations.js](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/src/config/migrations.js) | `src/config/` |
-| [config/swagger.js](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/src/config/swagger.js) | `src/config/` |
-| [data/basePrices.js](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/src/data/basePrices.js) | `src/data/` |
-| [data/profileMultipliers.js](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/src/data/profileMultipliers.js) | `src/data/` |
-| [data/surcharges.js](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/src/data/surcharges.js) | `src/data/` |
-| [db/schema.sql](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/src/db/schema.sql) | `src/db/` |
-| [engine/priceCalculator.js](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/src/engine/priceCalculator.js) | `src/engine/` |
-| [engine/surchargeCalculator.js](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/src/engine/surchargeCalculator.js) | `src/engine/` |
-| [middleware/auth.js](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/src/middleware/auth.js) | `src/middleware/` |
-| [middleware/errorHandler.js](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/src/middleware/errorHandler.js) | `src/middleware/` |
-| [middleware/security.js](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/src/middleware/security.js) | `src/middleware/` |
-| [routes/auth.js](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/src/routes/auth.js) | `src/routes/` |
-| [routes/berechnen.js](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/src/routes/berechnen.js) | `src/routes/` |
-| [routes/options.js](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/src/routes/options.js) | `src/routes/` |
-| [routes/warenkorb.js](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/src/routes/warenkorb.js) | `src/routes/` |
-| [utils/logger.js](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/src/utils/logger.js) | `src/utils/` |
-| [utils/responseFormatter.js](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/src/utils/responseFormatter.js) | `src/utils/` |
-
-Also download these top-level files:
-
-| File | Save to |
-|------|---------|
-| [package.json](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/package.json) | `~/Desktop/curia/backend/` (replace existing) |
-| [.env.example](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/.env.example) | `~/Desktop/curia/backend/` |
-| [.eslintrc.js](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/.eslintrc.js) | `~/Desktop/curia/backend/` ⚠️ **Required for `npm run lint`** |
-| [.gitignore](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/.gitignore) | `~/Desktop/curia/backend/` |
-
-</details>
-
-### 7e. Verify your updated src/ has 21 files
-
-```bash
-find ~/Desktop/curia/backend/src/ -type f -not -name '.DS_Store' | wc -l
-```
-
-**You should see:** `21`
-
-> ⚠️ **Got 22?** macOS creates hidden `.DS_Store` files in every folder you open in Finder. The old command (`find ... -type f | wc -l`) counts those too. The updated command above filters them out. **22 is fine** — it just means you have one `.DS_Store` in `src/`.
-
-### 7f. About hidden files in backend/
-
-Your `backend/` folder may contain these hidden files — **do NOT delete them**:
-
-| File | Purpose | Action |
-|------|---------|--------|
-| `.env` | Your local environment variables (port, secrets) | ✅ KEEP — needed to run the server |
-| `.env.example` | Template showing which env vars are needed | ✅ KEEP — reference file |
-| `.gitignore` | Tells Git which files to ignore (node_modules, logs, .env) | ✅ KEEP — prevents committing secrets |
-| `.DS_Store` | macOS folder metadata (auto-created) | 🗑️ Safe to delete, but it comes back |
-
-### 7g. Re-run npm install (IMPORTANT!)
-
-The updated `package.json` includes `supertest` which the tests need. You **must** install it:
-
-```bash
-cd ~/Desktop/curia/backend && npm install
-```
-
-**You should see:** ends with `0 vulnerabilities` or low-severity only.
-
-> ⚠️ **If you skip this, Step 8 will fail with:** `Cannot find module 'supertest'`
-
----
-
-## Step 8 — Run all tests
+## Step 7 — Run all tests
 
 ```bash
 cd ~/Desktop/curia/backend && npm test
 ```
 
-**You should see at the end:**
+**You should see:**
 ```
 Test Suites: 3 passed, 3 total
 Tests:       91 passed, 91 total
@@ -248,10 +129,10 @@ Tests:       91 passed, 91 total
 
 ---
 
-## Step 9 — Start the server
+## Step 8 — Start the server
 
 ```bash
-npm start
+cd ~/Desktop/curia/backend && npm start
 ```
 
 **You should see:**
@@ -262,82 +143,44 @@ npm start
 
 ⚠️ **Leave this terminal open! Do NOT close it.**
 
-📋 **Paste what you see back to me.**
-
 ---
 
-## Step 10 — Test the server (open a NEW terminal tab: Cmd+T)
+## Step 9 — Test the server (open a NEW terminal tab: Cmd+T)
 
-Press **Cmd+T** to open a new tab. Then paste these one at a time:
-
-### 10a.
+Press **Cmd+T** to open a new tab. Then paste:
 
 ```bash
-curl http://localhost:3001/health
-```
-
-### 10b.
-
-```bash
-curl http://localhost:3001/api/v1
-```
-
-### 10c.
-
-```bash
-curl -X POST http://localhost:3001/ajax/berechnen/ -H "Content-Type: application/json" -d '{"width":1000,"height":1200,"profile":"iglo5"}'
-```
-
-### 10d.
-
-```bash
+curl http://localhost:3001/health && echo "" && \
+curl http://localhost:3001/api/v1 && echo "" && \
+curl -X POST http://localhost:3001/ajax/berechnen/ -H "Content-Type: application/json" -d '{"width":1000,"height":1200,"profile":"iglo5"}' && echo "" && \
 curl http://localhost:3001/ajax/getOptions/
 ```
 
-📋 **Paste all 4 outputs back to me.**
+📋 **Paste the output back to me.**
 
 Then go back to the first tab and press **Ctrl+C** to stop the server.
 
 ---
 
-## Step 11 — Count your files
+## What's in each folder
 
-```bash
-cd ~/Desktop/curia/backend && echo "Source files:" && find src/ -type f -not -name '.DS_Store' | wc -l
-```
-
-**You should see:** `21`
-
----
-
-## Step 12 — Check key files exist
-
-```bash
-cd ~/Desktop/curia/backend && ls src/app.js src/server.js src/engine/priceCalculator.js src/routes/auth.js src/middleware/security.js
-```
-
-**You should see:** all 5 file names listed, no errors.
-
----
-
-## Step 13 — Full status check
-
-```bash
-cd ~/Desktop/curia/backend && echo "=========================================" && echo " WHAT WE HAVE vs WHAT WE STILL NEED" && echo "=========================================" && echo "" && echo "✅ WHAT WE HAVE (Phase 1 Complete):" && echo "---" && echo -n "  Node.js:        " && node -v && echo -n "  npm:            " && npm -v && echo -n "  package.json:   " && (ls package.json > /dev/null 2>&1 && echo "YES" || echo "NO") && echo -n "  node_modules:   " && (ls node_modules/.package-lock.json > /dev/null 2>&1 && echo "YES" || echo "NO") && echo -n "  .env file:      " && (ls .env > /dev/null 2>&1 && echo "YES" || echo "NO") && echo -n "  Source code:    " && echo "$(find src/ -type f -not -name '.DS_Store' | wc -l | tr -d ' ') files" && echo -n "  Tests:          " && echo "$(find tests/ -type f -not -name '.DS_Store' 2>/dev/null | wc -l | tr -d ' ') files (91 tests)" && echo -n "  Express server: " && (grep -q '"express"' package.json && echo "YES (port 3001)" || echo "NO") && echo -n "  Auth system:    " && (ls src/routes/auth.js > /dev/null 2>&1 && echo "YES" || echo "NO") && echo -n "  Pricing engine: " && (ls src/engine/priceCalculator.js > /dev/null 2>&1 && echo "YES (Drutex only)" || echo "NO") && echo -n "  Surcharges:     " && (ls src/engine/surchargeCalculator.js > /dev/null 2>&1 && echo "DRAFT (Drutex only — Phase 2 will complete)" || echo "NO") && echo -n "  Security:       " && (ls src/middleware/security.js > /dev/null 2>&1 && echo "YES" || echo "NO") && echo "" && echo "🔲 WHAT WE STILL NEED (Phase 2+):" && echo "---" && echo "  Dataset analysis: NOT DONE — Gealan/Holz/Alu data not yet analyzed" && echo "  Surcharges:       DRAFT — Drutex only, other materials need analysis first" && echo "  PostgreSQL:       NOT INSTALLED — needed for Phase 2" && echo "  Gealan pricing:   NOT YET — dataset ready, engine not built" && echo "  Holz pricing:     NOT YET — dataset ready, engine not built" && echo "  Alu pricing:      NOT YET — dataset ready, engine not built" && echo "  Frontend:         NOT YET — Phase 3" && echo "  CRM features:     NOT YET — Phase 4" && echo "" && echo "========================================="
-```
-
-📋 **Paste the full output back to me.**
-
----
-
-## Should I paste terminal output back to you?
-
-**YES!** After each step, paste the output into our chat. This lets me:
-1. Confirm everything works
-2. Spot errors immediately
-3. Tell you what to do next
-
-Just the last 5-10 lines is enough.
+| Folder / File | What it contains | Count |
+|---------------|-----------------|-------|
+| `src/` | All backend source code | 21 files |
+| `src/config/` | Database, Swagger, app config | 4 files |
+| `src/data/` | Pricing data (Drutex base prices, surcharges, multipliers) | 3 files |
+| `src/db/` | PostgreSQL schema (Phase 2) | 1 file |
+| `src/engine/` | Price calculation engine | 2 files |
+| `src/middleware/` | Auth, security, error handling | 3 files |
+| `src/routes/` | API endpoints (berechnen, warenkorb, options, auth) | 4 files |
+| `src/utils/` | Logger, response formatter | 2 files |
+| `src/app.js` | Express app setup | 1 file |
+| `src/server.js` | Server entry point | 1 file |
+| `tests/` | Jest test suites (91 tests total) | 3 files |
+| `package.json` | Dependencies and scripts | config |
+| `.eslintrc.js` | ESLint code quality rules | config |
+| `.env.example` | Environment variable template | config |
+| `.gitignore` | Git ignore rules | config |
 
 ---
 
@@ -345,17 +188,14 @@ Just the last 5-10 lines is enough.
 
 | Error | Fix |
 |-------|-----|
-| `ESLint couldn't find a configuration file` | You are missing `.eslintrc.js` in your backend/ folder. Download it from GitHub (Step 7d) |
-| `Cannot find module 'supertest'` | Run `npm install` — you need to re-install after downloading the new package.json (Step 7g) |
-| `curl` downloads only 14 bytes ("Not Found") | The repo is private — `curl` with `raw.githubusercontent.com` returns "404: Not Found" which **corrupts your files**. Use the `git clone` method in Step 7d instead |
-| `SyntaxError: Missing semicolon. (1:3) 404: Not Found` | A source file was overwritten with "404: Not Found" by a failed `curl` download. Re-run the `git clone` command in Step 7d to restore all files |
-| `No tests found, exiting with code 1` | tests/ folder missing — run Step 7 to download the 3 test files |
-| Found `@jest` folders but no tests | Those are internal Jest packages, NOT test files. See Step 6 note. Run Step 7 to get the real test files |
-| Test file saved as `.test.js.txt` | Rename it: remove the `.txt` part so it ends in `.test.js` |
+| `SyntaxError: Missing semicolon. (1:3) 404: Not Found` | A source file contains "404: Not Found" instead of code. Re-run Steps 1 and 2 |
+| `Cannot find module 'supertest'` | Run `npm install` (Step 6) |
+| `No tests found` | tests/ folder missing — run Step 3 |
+| `ESLint couldn't find a configuration file` | Run Step 4 to download `.eslintrc.js` |
 | `ENOENT ... package.json` | Run `cd ~/Desktop/curia/backend` first |
-| `Failed to connect to localhost port 3001` | Server not running — go to Step 9 first |
+| `Failed to connect to localhost port 3001` | Server not running — start it with Step 8 |
 | `command not found: node` | Install from https://nodejs.org |
-| `EADDRINUSE :::3001` | Port in use — find the PID with `lsof -ti :3001` and stop it, then retry |
+| `EADDRINUSE :::3001` | Port in use — run `lsof -ti :3001` to find the PID, then stop it and retry |
 
 ---
 
@@ -363,7 +203,7 @@ Just the last 5-10 lines is enough.
 
 | What | Status |
 |------|--------|
-| Phase 1 (Steps 1.1-1.10) | ✅ DONE |
+| Phase 1 backend | ✅ DONE |
 | 91 tests | ✅ Passing |
 | Server on port 3001 | ✅ Working |
 | Auth system | ✅ In-memory |
@@ -371,5 +211,5 @@ Just the last 5-10 lines is enough.
 | Pricing engine (Drutex) | ✅ Working |
 | PostgreSQL | 🔲 Phase 2 |
 | Multi-material pricing | 🔲 Datasets ready |
-| Frontend | �� Phase 3 |
+| Frontend | 🔲 Phase 3 |
 | CRM | 🔲 Phase 4 |
