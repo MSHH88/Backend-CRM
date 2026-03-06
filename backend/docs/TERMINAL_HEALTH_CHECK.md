@@ -42,6 +42,14 @@ cd ~/Desktop/curia/backend && npm start
 
 Press **Cmd+T** to open a new tab. Then paste:
 
+The berechnen endpoint expects a `tmp_obj` field containing a JSON config string. Here is a minimal test config:
+
+```json
+{"breite":1000,"hoehe":1200,"profil":"p1","verglasung":"g1","aussenfarbe":"fs1_01","innenfarbe":"fi1_01","schallschutz":"ss1","sicherheitsverglasung":"sv0","griff":"gr1","sicherheit":"si1","sprossen":"sp0","vperfect":"vp0"}
+```
+
+Copy-paste this full block to test all 4 endpoints:
+
 ```bash
 curl http://localhost:3001/health && echo "" && \
 curl http://localhost:3001/api/v1 && echo "" && \
@@ -127,7 +135,7 @@ After updating, run **Step 1** again to verify tests pass.
 | What to DELETE | Why |
 |----------------|-----|
 | `node_modules/` | Only if `npm install` fails. Then run `npm install` again |
-| Nothing else | Your `src/`, `tests/`, config files are all correct and up to date |
+| Nothing else | Keep existing files unless I tell you to update specific ones |
 
 ### Complete file map (28 files → `~/Desktop/curia/backend/`)
 
