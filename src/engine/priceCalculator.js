@@ -1,5 +1,13 @@
 'use strict';
 
+/**
+ * ⚠️  DRAFT — Drutex PVC only.
+ *
+ * Price calculation engine.  Currently handles Drutex base prices,
+ * profile multipliers, and surcharges.  Will be extended in Phase 2
+ * after Gealan/Holz/Alu dataset analysis to support all materials.
+ */
+
 const { getBasePrice }        = require('../data/basePrices');
 const { getProfileMultiplier, getProfileName } = require('../data/profileMultipliers');
 const { calculateSurcharges } = require('./surchargeCalculator');

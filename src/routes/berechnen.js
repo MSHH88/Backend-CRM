@@ -1,5 +1,13 @@
 'use strict';
 
+/**
+ * ⚠️  DRAFT — Drutex PVC only.
+ *
+ * Pricing calculation endpoint.  Currently uses Drutex base prices,
+ * profile multipliers, and surcharges only.  Will be extended in Phase 2
+ * after Gealan/Holz/Alu dataset analysis to support all materials.
+ */
+
 const express    = require('express');
 const { calculatePrice } = require('../engine/priceCalculator');
 const { formatHTML, escapeHtml } = require('../utils/responseFormatter');

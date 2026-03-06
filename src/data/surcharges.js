@@ -1,7 +1,13 @@
 'use strict';
 
 /**
- * Surcharge data for all configurable options.
+ * ⚠️  DRAFT — Drutex PVC only.
+ *
+ * Surcharge data extracted from the Drutex konfigurator.
+ * The full surcharge tables for Gealan, Holz, and Alu have NOT been
+ * analyzed yet — that analysis is scheduled for Phase 2.
+ *
+ * DO NOT add data for other materials until the dataset analysis is complete.
  *
  * Each surcharge entry: { name, amount }  (amount in EUR; may be negative)
  */

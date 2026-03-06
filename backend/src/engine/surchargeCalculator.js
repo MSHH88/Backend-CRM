@@ -1,5 +1,15 @@
 'use strict';
 
+/**
+ * ⚠️  DRAFT — Drutex PVC only.
+ *
+ * This calculator uses placeholder surcharge data extracted from the Drutex
+ * konfigurator.  The full surcharge tables for Gealan, Holz, and Alu have
+ * NOT been analyzed yet — that analysis is scheduled for Phase 2.
+ *
+ * DO NOT extend this file until the dataset analysis is complete.
+ */
+
 const { SURCHARGES, resolveOptionId } = require('../data/surcharges');
 
 /**

@@ -1,5 +1,13 @@
 'use strict';
 
+/**
+ * ⚠️  DRAFT — Drutex PVC only.
+ *
+ * Returns available configurator options (profiles, surcharges).
+ * Currently serves Drutex data only.  Will be extended in Phase 2
+ * after Gealan/Holz/Alu dataset analysis to support all materials.
+ */
+
 const express = require('express');
 const { profileMultipliers }  = require('../data/profileMultipliers');
 const { getAllSurcharges }     = require('../data/surcharges');

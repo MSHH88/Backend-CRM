@@ -1,7 +1,12 @@
 'use strict';
 
 /**
+ * ⚠️  DRAFT — Drutex PVC only.
+ *
  * Profile multipliers for Drutex Kunststoff window profiles.
+ * Will be extended in Phase 2 with Gealan/Holz/Alu profile data
+ * after dataset analysis.
+ *
  * Multiply the base price (p1 = Iglo 5 Classic) by the factor to get
  * the adjusted price for the selected profile.
  */

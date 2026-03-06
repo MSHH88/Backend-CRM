@@ -1,7 +1,11 @@
 'use strict';
 
 /**
+ * ⚠️  DRAFT — Drutex PVC only.
+ *
  * Base price matrix for Drutex Kunststoff windows (Iglo 5 Classic / p1).
+ * Will be extended in Phase 2 with Gealan/Holz/Alu base price matrices
+ * after dataset analysis.
  *
  * Keys are dimensions in mm, stepped at 100 mm intervals from 400 to 2400.
  * Reference points (from spec):
