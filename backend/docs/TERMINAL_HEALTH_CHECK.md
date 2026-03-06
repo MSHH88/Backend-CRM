@@ -124,82 +124,77 @@ If you see `api.test.js.txt` instead, rename it: remove the `.txt` part.
 
 The tests need files that may not exist in your current `src/` folder yet (like `src/data/`, `src/engine/`, `src/routes/auth.js`). You need to replace your `src/` with the latest version.
 
-**Easiest approach — download the whole `src/` folder:**
+> ⛔ **DO NOT use `curl` with `raw.githubusercontent.com`!** This repo is private. `curl` will download "404: Not Found" instead of your actual code, which corrupts your files and causes `npm test` to fail with syntax errors. Use the `git clone` method below instead.
+
+**Easiest approach — ONE command (recommended):**
+
+Copy-paste this entire block into your Terminal. It clones the repo to a temp folder, copies all the files you need, and cleans up:
+
+```bash
+cd /tmp && \
+rm -rf backend-crm-temp && \
+git clone -b copilot/analyze-project-phase-1 https://github.com/MSHH88/Backend-CRM.git backend-crm-temp && \
+rm -rf ~/Desktop/curia/backend/src ~/Desktop/curia/backend/tests && \
+cp -R backend-crm-temp/backend/src ~/Desktop/curia/backend/src && \
+cp -R backend-crm-temp/backend/tests ~/Desktop/curia/backend/tests && \
+cp backend-crm-temp/backend/.eslintrc.js ~/Desktop/curia/backend/.eslintrc.js && \
+cp backend-crm-temp/backend/package.json ~/Desktop/curia/backend/package.json && \
+cp backend-crm-temp/backend/.env.example ~/Desktop/curia/backend/.env.example && \
+cp backend-crm-temp/backend/.gitignore ~/Desktop/curia/backend/.gitignore && \
+rm -rf /tmp/backend-crm-temp && \
+echo "✅ All files updated successfully!"
+```
+
+**You should see:** `✅ All files updated successfully!` at the end.
+
+> 💡 **If git asks for credentials:** Enter your GitHub username and a [Personal Access Token](https://github.com/settings/tokens) (not your password). You only need to do this once — macOS Keychain will remember it.
+
+> 💡 **If git clone fails**, use the manual browser download method below as a fallback.
+
+<details>
+<summary>📂 Fallback: Manual browser download (click to expand)</summary>
+
+If `git clone` doesn't work, you can download each file manually via your browser:
 
 1. Open the [backend/src/ folder on GitHub](https://github.com/MSHH88/Backend-CRM/tree/copilot/analyze-project-phase-1/backend/src)
 2. **Delete** your current `~/Desktop/curia/backend/src/` folder (move it to Trash first as backup)
 3. **Create a new** `src/` folder in `~/Desktop/curia/backend/`
-4. Download each file below — click the link, then click **"Raw"**, then **Cmd+S** to save:
-
-**Folder `src/` (top level):**
+4. For each file: click the link → click **"Raw"** → press **Cmd+S** to save to the correct folder
 
 | File | Save to |
 |------|---------|
-| [app.js](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/src/app.js) | `~/Desktop/curia/backend/src/` |
-| [server.js](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/src/server.js) | `~/Desktop/curia/backend/src/` |
+| [app.js](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/src/app.js) | `src/` |
+| [server.js](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/src/server.js) | `src/` |
+| [config/database.js](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/src/config/database.js) | `src/config/` |
+| [config/index.js](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/src/config/index.js) | `src/config/` |
+| [config/migrations.js](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/src/config/migrations.js) | `src/config/` |
+| [config/swagger.js](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/src/config/swagger.js) | `src/config/` |
+| [data/basePrices.js](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/src/data/basePrices.js) | `src/data/` |
+| [data/profileMultipliers.js](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/src/data/profileMultipliers.js) | `src/data/` |
+| [data/surcharges.js](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/src/data/surcharges.js) | `src/data/` |
+| [db/schema.sql](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/src/db/schema.sql) | `src/db/` |
+| [engine/priceCalculator.js](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/src/engine/priceCalculator.js) | `src/engine/` |
+| [engine/surchargeCalculator.js](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/src/engine/surchargeCalculator.js) | `src/engine/` |
+| [middleware/auth.js](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/src/middleware/auth.js) | `src/middleware/` |
+| [middleware/errorHandler.js](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/src/middleware/errorHandler.js) | `src/middleware/` |
+| [middleware/security.js](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/src/middleware/security.js) | `src/middleware/` |
+| [routes/auth.js](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/src/routes/auth.js) | `src/routes/` |
+| [routes/berechnen.js](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/src/routes/berechnen.js) | `src/routes/` |
+| [routes/options.js](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/src/routes/options.js) | `src/routes/` |
+| [routes/warenkorb.js](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/src/routes/warenkorb.js) | `src/routes/` |
+| [utils/logger.js](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/src/utils/logger.js) | `src/utils/` |
+| [utils/responseFormatter.js](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/src/utils/responseFormatter.js) | `src/utils/` |
 
-**Create folder `src/config/` then save:**
-
-| File | Save to |
-|------|---------|
-| [database.js](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/src/config/database.js) | `~/Desktop/curia/backend/src/config/` |
-| [index.js](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/src/config/index.js) | `~/Desktop/curia/backend/src/config/` |
-| [migrations.js](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/src/config/migrations.js) | `~/Desktop/curia/backend/src/config/` |
-| [swagger.js](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/src/config/swagger.js) | `~/Desktop/curia/backend/src/config/` |
-
-**Create folder `src/data/` then save:**
-
-| File | Save to |
-|------|---------|
-| [basePrices.js](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/src/data/basePrices.js) | `~/Desktop/curia/backend/src/data/` |
-| [profileMultipliers.js](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/src/data/profileMultipliers.js) | `~/Desktop/curia/backend/src/data/` |
-| [surcharges.js](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/src/data/surcharges.js) | `~/Desktop/curia/backend/src/data/` |
-
-**Create folder `src/db/` then save:**
-
-| File | Save to |
-|------|---------|
-| [schema.sql](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/src/db/schema.sql) | `~/Desktop/curia/backend/src/db/` |
-
-**Create folder `src/engine/` then save:**
-
-| File | Save to |
-|------|---------|
-| [priceCalculator.js](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/src/engine/priceCalculator.js) | `~/Desktop/curia/backend/src/engine/` |
-| [surchargeCalculator.js](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/src/engine/surchargeCalculator.js) | `~/Desktop/curia/backend/src/engine/` |
-
-**Create folder `src/middleware/` then save:**
-
-| File | Save to |
-|------|---------|
-| [auth.js](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/src/middleware/auth.js) | `~/Desktop/curia/backend/src/middleware/` |
-| [errorHandler.js](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/src/middleware/errorHandler.js) | `~/Desktop/curia/backend/src/middleware/` |
-| [security.js](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/src/middleware/security.js) | `~/Desktop/curia/backend/src/middleware/` |
-
-**Create folder `src/routes/` then save:**
-
-| File | Save to |
-|------|---------|
-| [auth.js](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/src/routes/auth.js) | `~/Desktop/curia/backend/src/routes/` |
-| [berechnen.js](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/src/routes/berechnen.js) | `~/Desktop/curia/backend/src/routes/` |
-| [options.js](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/src/routes/options.js) | `~/Desktop/curia/backend/src/routes/` |
-| [warenkorb.js](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/src/routes/warenkorb.js) | `~/Desktop/curia/backend/src/routes/` |
-
-**Create folder `src/utils/` then save:**
-
-| File | Save to |
-|------|---------|
-| [logger.js](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/src/utils/logger.js) | `~/Desktop/curia/backend/src/utils/` |
-| [responseFormatter.js](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/src/utils/responseFormatter.js) | `~/Desktop/curia/backend/src/utils/` |
-
-**Also update these top-level files (IMPORTANT — includes ESLint config):**
+Also download these top-level files:
 
 | File | Save to |
 |------|---------|
 | [package.json](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/package.json) | `~/Desktop/curia/backend/` (replace existing) |
-| [.env.example](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/.env.example) | `~/Desktop/curia/backend/` (replace existing) |
+| [.env.example](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/.env.example) | `~/Desktop/curia/backend/` |
 | [.eslintrc.js](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/.eslintrc.js) | `~/Desktop/curia/backend/` ⚠️ **Required for `npm run lint`** |
-| [.gitignore](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/.gitignore) | `~/Desktop/curia/backend/` (replace existing) |
+| [.gitignore](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/.gitignore) | `~/Desktop/curia/backend/` |
+
+</details>
 
 ### 7e. Verify your updated src/ has 21 files
 
@@ -351,7 +346,8 @@ Just the last 5-10 lines is enough.
 |-------|-----|
 | `ESLint couldn't find a configuration file` | You are missing `.eslintrc.js` in your backend/ folder. Download it from GitHub (Step 7d) |
 | `Cannot find module 'supertest'` | Run `npm install` — you need to re-install after downloading the new package.json (Step 7g) |
-| `curl` downloads only 14 bytes ("Not Found") | The repo is private — you cannot use `curl` with raw.githubusercontent.com. Use your browser to download files instead (Step 7d) |
+| `curl` downloads only 14 bytes ("Not Found") | The repo is private — `curl` with `raw.githubusercontent.com` returns "404: Not Found" which **corrupts your files**. Use the `git clone` method in Step 7d instead |
+| `SyntaxError: Missing semicolon. (1:3) 404: Not Found` | A source file was overwritten with "404: Not Found" by a failed `curl` download. Re-run the `git clone` command in Step 7d to restore all files |
 | `No tests found, exiting with code 1` | tests/ folder missing — run Step 7 to download the 3 test files |
 | Found `@jest` folders but no tests | Those are internal Jest packages, NOT test files. See Step 6 note. Run Step 7 to get the real test files |
 | Test file saved as `.test.js.txt` | Rename it: remove the `.txt` part so it ends in `.test.js` |
