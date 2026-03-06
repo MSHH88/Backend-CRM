@@ -24,10 +24,10 @@ const pool = new Pool({
   database: config.database.name,
   user: config.database.user,
   password: config.database.password,
-  max: config.database.poolSize,
+  max: config.database.pool.max,
   idleTimeoutMillis: 30000,
   connectionTimeoutMillis: 10000,
-  ssl: config.isProduction ? { rejectUnauthorized: false } : false
+  ssl: config.server.isProduction ? { rejectUnauthorized: false } : false
 });
 
 // Pool event handlers
