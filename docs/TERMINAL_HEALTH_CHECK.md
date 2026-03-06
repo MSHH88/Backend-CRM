@@ -188,8 +188,6 @@ The tests need files that may not exist in your current `src/` folder yet (like 
 | [package.json](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/package.json) | `~/Desktop/curia/backend/` (replace existing) |
 | [.env.example](https://github.com/MSHH88/Backend-CRM/blob/copilot/analyze-project-phase-1/backend/.env.example) | `~/Desktop/curia/backend/` (replace existing) |
 
-After downloading all files, run `npm install` again (Step 4) to get the new `supertest` dependency.
-
 ### 7e. Verify your updated src/ has 20 files
 
 ```bash
@@ -210,6 +208,18 @@ Your `backend/` folder may contain these hidden files — **do NOT delete them**
 | `.env.example` | Template showing which env vars are needed | ✅ KEEP — reference file |
 | `.gitignore` | Tells Git which files to ignore (node_modules, logs, .env) | ✅ KEEP — prevents committing secrets |
 | `.DS_Store` | macOS folder metadata (auto-created) | 🗑️ Safe to delete, but it comes back |
+
+### 7g. Re-run npm install (IMPORTANT!)
+
+The updated `package.json` includes `supertest` which the tests need. You **must** install it:
+
+```bash
+cd ~/Desktop/curia/backend && npm install
+```
+
+**You should see:** ends with `0 vulnerabilities` or low-severity only.
+
+> ⚠️ **If you skip this, Step 8 will fail with:** `Cannot find module 'supertest'`
 
 ---
 
@@ -326,6 +336,7 @@ Just the last 5-10 lines is enough.
 
 | Error | Fix |
 |-------|-----|
+| `Cannot find module 'supertest'` | Run `npm install` — you need to re-install after downloading the new package.json (Step 7g) |
 | `No tests found, exiting with code 1` | tests/ folder missing — run Step 7 to download the 3 test files |
 | Found `@jest` folders but no tests | Those are internal Jest packages, NOT test files. See Step 6 note. Run Step 7 to get the real test files |
 | Test file saved as `.test.js.txt` | Rename it: remove the `.txt` part so it ends in `.test.js` |
