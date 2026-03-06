@@ -134,20 +134,21 @@ Copy-paste this entire block into your Terminal. It clones the repo to a temp fo
 cd /tmp && \
 rm -rf backend-crm-temp && \
 git clone -b copilot/analyze-project-phase-1 https://github.com/MSHH88/Backend-CRM.git backend-crm-temp && \
-rm -rf ~/Desktop/curia/backend/src ~/Desktop/curia/backend/tests && \
+mv ~/Desktop/curia/backend/src ~/Desktop/curia/backend/src.backup 2>/dev/null; \
+mv ~/Desktop/curia/backend/tests ~/Desktop/curia/backend/tests.backup 2>/dev/null; \
 cp -R backend-crm-temp/backend/src ~/Desktop/curia/backend/src && \
 cp -R backend-crm-temp/backend/tests ~/Desktop/curia/backend/tests && \
 cp backend-crm-temp/backend/.eslintrc.js ~/Desktop/curia/backend/.eslintrc.js && \
 cp backend-crm-temp/backend/package.json ~/Desktop/curia/backend/package.json && \
 cp backend-crm-temp/backend/.env.example ~/Desktop/curia/backend/.env.example && \
 cp backend-crm-temp/backend/.gitignore ~/Desktop/curia/backend/.gitignore && \
-rm -rf /tmp/backend-crm-temp && \
+rm -rf /tmp/backend-crm-temp ~/Desktop/curia/backend/src.backup ~/Desktop/curia/backend/tests.backup && \
 echo "✅ All files updated successfully!"
 ```
 
 **You should see:** `✅ All files updated successfully!` at the end.
 
-> 💡 **If git asks for credentials:** Enter your GitHub username and a [Personal Access Token](https://github.com/settings/tokens) (not your password). You only need to do this once — macOS Keychain will remember it.
+> 💡 **If git asks for credentials:** Enter your GitHub username and a [Personal Access Token](https://github.com/settings/tokens/new) (not your password). The token needs **`repo`** scope (full control of private repositories). macOS Keychain will remember it after the first time.
 
 > 💡 **If git clone fails**, use the manual browser download method below as a fallback.
 
