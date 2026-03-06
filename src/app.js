@@ -8,82 +8,61 @@
  *  - PR #1 (pricing engine routes: berechnen, warenkorb, getOptions)
  *
  * Middleware chain:
- *  1. Helmet (security headers)
- *  2. CORS
+ *  1. Trust proxy
+ *  2. Security (helmet, CORS, rate limiting, XSS, HPP, mongo-sanitize)
  *  3. Compression
- *  4. Rate limiting on /api/ routes
- *  5. Body parsing (JSON + URL-encoded)
- *  6. Request logging (dev mode)
- *  7. Routes
- *  8. 404 handler
- *  9. Global error handler
+ *  4. Body parsing (JSON + URL-encoded)
+ *  5. Request logging (dev mode)
+ *  6. Routes
+ *  7. 404 handler (from errorHandler.js)
+ *  8. Global error handler (from errorHandler.js)
  */
 
 require('dotenv').config();
 
 const express     = require('express');
-const cors        = require('cors');
-const helmet      = require('helmet');
-const rateLimit   = require('express-rate-limit');
 const compression = require('compression');
 
-// ── Pricing engine routes (from PR #1) ──────────────────────────────────────
+// ── Security middleware (Step 1.8) ──────────────────────────────────────────
+const { applySecurity }  = require('./middleware/security');
+
+// ── Error handling middleware (Step 1.8) ─────────────────────────────────────
+const { errorHandler, notFoundHandler } = require('./middleware/errorHandler');
+
+// ── Route files ─────────────────────────────────────────────────────────────
 const berechnenRouter  = require('./routes/berechnen');
 const warenkorbRouter  = require('./routes/warenkorb');
 const optionsRouter    = require('./routes/options');
+const authRouter       = require('./routes/auth');
 
 const app = express();
 
 // =============================================================================
-// SECURITY MIDDLEWARE
+// TRUST PROXY (for reverse proxies like Render / Railway)
 // =============================================================================
+app.set('trust proxy', 1);
 
-app.use(helmet());
+// =============================================================================
+// SECURITY MIDDLEWARE (Step 1.8)
+// Helmet, CORS, rate limiters, XSS-clean, HPP, mongo-sanitize, IP blocker,
+// request sanitization, content-type validation, audit logging
+// =============================================================================
+applySecurity(app);
 
-const corsOptions = {
-  origin: function (origin, callback) {
-    const allowedOrigins = [
-      'http://localhost:3000',
-      'http://localhost:3001',
-      process.env.FRONTEND_URL,
-      process.env.CORS_ORIGIN,
-    ].filter(Boolean);
-
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
-};
-app.use(cors(corsOptions));
-
+// =============================================================================
+// COMPRESSION
+// =============================================================================
 app.use(compression());
-
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 100,
-  message: {
-    error: 'Too many requests, please try again later.',
-    retryAfter: '15 minutes',
-  },
-});
-app.use('/api/', limiter);
 
 // =============================================================================
 // BODY PARSING
 // =============================================================================
-
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // =============================================================================
 // REQUEST LOGGING (simple dev logger)
 // =============================================================================
-
 if (process.env.NODE_ENV !== 'production') {
   app.use((req, res, next) => {
     const start = Date.now();
@@ -96,11 +75,6 @@ if (process.env.NODE_ENV !== 'production') {
     next();
   });
 }
-
-// =============================================================================
-// TRUST PROXY (for reverse proxies like Render / Railway)
-// =============================================================================
-app.set('trust proxy', 1);
 
 // =============================================================================
 // ROUTES
@@ -126,6 +100,7 @@ app.get('/api/v1', (_req, res) => {
     endpoints: {
       health: '/health',
       api: '/api/v1',
+      auth: '/api/v1/auth',
       berechnen: 'POST /ajax/berechnen/',
       warenkorb: 'POST /ajax/addWarenkorb/',
       options: 'GET /ajax/getOptions/',
@@ -138,34 +113,18 @@ app.use('/ajax/berechnen',    berechnenRouter);
 app.use('/ajax/addWarenkorb', warenkorbRouter);
 app.use('/ajax/getOptions',   optionsRouter);
 
-// ── Placeholder routes (Phase 1 Steps 1.8–1.10, Phase 2+) ──────────────────
-// app.use('/api/v1/auth',     require('./routes/auth'));
+// ── Auth routes (Step 1.10) ─────────────────────────────────────────────────
+app.use('/api/v1/auth',       authRouter);
+
+// ── Placeholder routes (Phase 2+) ───────────────────────────────────────────
 // app.use('/api/v1/users',    require('./routes/users'));
 // app.use('/api/v1/products', require('./routes/products'));
 // app.use('/api/v1/orders',   require('./routes/orders'));
 
 // =============================================================================
-// ERROR HANDLING
+// ERROR HANDLING (from errorHandler.js middleware)
 // =============================================================================
-
-// 404 handler
-app.use((_req, res) => {
-  res.status(404).json({
-    error: 'Route nicht gefunden.',
-    statusCode: 404,
-  });
-});
-
-// Global error handler
-// eslint-disable-next-line no-unused-vars
-app.use((err, _req, res, _next) => {
-  console.error('Unhandled error:', err);
-  res.status(err.statusCode || 500).json({
-    error: process.env.NODE_ENV === 'production'
-      ? 'An unexpected error occurred'
-      : err.message,
-    statusCode: err.statusCode || 500,
-  });
-});
+app.use(notFoundHandler);
+app.use(errorHandler);
 
 module.exports = app;
