@@ -12,54 +12,44 @@ Run these commands **in order** from your terminal on your MacBook.
 
 ---
 
-## 0. Clone the Project & Navigate Into It
+## 0. Find Your Project Folder
 
-### If you have NOT cloned the repo yet
+The key is to be **inside the folder that contains `package.json`** before
+running any npm commands. Your setup may be one of two layouts:
 
-Open Terminal (Cmd+Space → type "Terminal" → Enter), then run:
+### Layout A: `package.json` is inside `curia/backend/`
+
+If your local folder looks like `~/Desktop/curia/backend/` and the backend
+subfolder has `package.json`, `src/`, etc., then use:
 
 ```bash
-cd ~/Desktop
-git clone https://github.com/MSHH88/Backend-CRM.git curia
+cd ~/Desktop/curia/backend
+```
+
+Verify:
+
+```bash
+pwd && ls package.json
+```
+
+**Expected:**
+```
+/Users/neilapacesaite/Desktop/curia/backend
+package.json
+```
+
+### Layout B: `package.json` is directly inside `curia/`
+
+If you cloned the full repo so that `package.json` is at the top level of
+`curia/`, then use:
+
+```bash
 cd ~/Desktop/curia
 ```
 
-This clones the repository directly into a folder called `curia` on your Desktop.
-
-### If your `curia` folder already exists but has no `package.json`
-
-This usually means `git clone` created a subfolder inside `curia`. Check:
+Verify:
 
 ```bash
-ls ~/Desktop/curia/package.json
-```
-
-If you see `No such file or directory`, check for a subfolder:
-
-```bash
-ls ~/Desktop/curia/Backend-CRM/package.json
-```
-
-If **that** works, the project is nested one level deep. Fix it by moving
-everything up:
-
-```bash
-# Move repo contents up into curia directly
-mv ~/Desktop/curia/Backend-CRM/{*,.[!.]*} ~/Desktop/curia/ 2>/dev/null
-rmdir ~/Desktop/curia/Backend-CRM
-```
-
-Or, the simpler approach — just delete and re-clone:
-
-```bash
-rm -rf ~/Desktop/curia
-git clone https://github.com/MSHH88/Backend-CRM.git ~/Desktop/curia
-```
-
-### Verify you're in the right place
-
-```bash
-cd ~/Desktop/curia
 pwd && ls package.json
 ```
 
@@ -69,8 +59,37 @@ pwd && ls package.json
 package.json
 ```
 
-If you see `No such file or directory` for `package.json`, go back to the
-clone steps above — something is not right.
+### Not sure which layout you have?
+
+Run this to find out:
+
+```bash
+ls ~/Desktop/curia/package.json 2>/dev/null && echo "Layout B — use: cd ~/Desktop/curia" || \
+ls ~/Desktop/curia/backend/package.json 2>/dev/null && echo "Layout A — use: cd ~/Desktop/curia/backend" || \
+echo "Neither found — you need to clone the repo first"
+```
+
+### If you need to clone the repo fresh
+
+```bash
+rm -rf ~/Desktop/curia
+git clone https://github.com/MSHH88/Backend-CRM.git ~/Desktop/curia
+cd ~/Desktop/curia
+```
+
+---
+
+> 📌 **For the rest of this guide**, replace `PROJECT` with your actual path:
+> - **Layout A:** `PROJECT=~/Desktop/curia/backend`
+> - **Layout B:** `PROJECT=~/Desktop/curia`
+>
+> Set it once and all commands below will work:
+> ```bash
+> # Pick ONE of these — whichever matches your layout:
+> PROJECT=~/Desktop/curia/backend
+> # or
+> PROJECT=~/Desktop/curia
+> ```
 
 ---
 
@@ -88,7 +107,7 @@ npm -v
 ## 2. Install Dependencies
 
 ```bash
-cd ~/Desktop/curia && npm install
+cd $PROJECT && npm install
 ```
 
 **Expected:** No errors, 0 vulnerabilities (or only low-severity ones)
@@ -98,7 +117,7 @@ cd ~/Desktop/curia && npm install
 ## 3. Run All Tests (57 tests, 3 suites)
 
 ```bash
-cd ~/Desktop/curia && npm test -- --forceExit
+cd $PROJECT && npm test -- --forceExit
 ```
 
 **Expected output (last lines):**
@@ -114,7 +133,7 @@ The `--forceExit` is needed because bcrypt keeps handles open.
 ## 4. Start Server (quick check, then Ctrl+C to stop)
 
 ```bash
-cd ~/Desktop/curia && npm start
+cd $PROJECT && npm start
 ```
 
 **Expected output:**
@@ -162,16 +181,25 @@ curl http://localhost:3001/ajax/getOptions/
 ## 6. File Counts Verification
 
 ```bash
-cd ~/Desktop/curia
+cd $PROJECT
 
-echo "=== Active source code ===" && find src/ -type f | wc -l
-echo "=== Backend reference ===" && find backend/ -type f | wc -l
-echo "=== Drutex datasets ===" && find datasets/ -type f | wc -l
-echo "=== Gealan PVC data ===" && find Gealen-Kunstoff-PM/ -type f | wc -l
-echo "=== Holz Fenster data ===" && find Holz-Fenster-PM/ -type f | wc -l
-echo "=== Balkon-Alu data ===" && find Balkon-Alu-PM/ -type f | wc -l
-echo "=== Documentation ===" && find docs/ -type f | wc -l
-echo "=== Test files ===" && find tests/ -type f | wc -l
+echo "=== Source code ===" && find src/ -type f | wc -l
+echo "=== Test files ===" && find tests/ -type f 2>/dev/null | wc -l
+```
+
+> **Note:** Some folders below only exist if you have the full repo clone
+> (Layout B). If you're using Layout A (`curia/backend/`), you'll only have
+> `src/` and possibly `logs/`.
+
+```bash
+# Only if you have the full repo (Layout B):
+cd ~/Desktop/curia
+echo "=== Backend reference ===" && find backend/ -type f 2>/dev/null | wc -l
+echo "=== Drutex datasets ===" && find datasets/ -type f 2>/dev/null | wc -l
+echo "=== Gealan PVC data ===" && find Gealen-Kunstoff-PM/ -type f 2>/dev/null | wc -l
+echo "=== Holz Fenster data ===" && find Holz-Fenster-PM/ -type f 2>/dev/null | wc -l
+echo "=== Balkon-Alu data ===" && find Balkon-Alu-PM/ -type f 2>/dev/null | wc -l
+echo "=== Documentation ===" && find docs/ -type f 2>/dev/null | wc -l
 ```
 
 **Expected counts:**
@@ -191,15 +219,12 @@ echo "=== Test files ===" && find tests/ -type f | wc -l
 ## 7. Verify Key Source Files Exist
 
 ```bash
-cd ~/Desktop/curia
+cd $PROJECT
 
-echo "--- Core ---" && ls src/app.js src/server.js
+echo "--- Core ---" && ls src/app.js src/server.js 2>/dev/null || ls src/app.js 2>/dev/null || echo "Core files not found — check your folder"
 echo "--- Config ---" && ls src/config/
-echo "--- Engine ---" && ls src/engine/
-echo "--- Data ---" && ls src/data/
 echo "--- Middleware ---" && ls src/middleware/
 echo "--- Routes ---" && ls src/routes/
-echo "--- Database ---" && ls src/db/
 echo "--- Utils ---" && ls src/utils/
 ```
 
@@ -207,7 +232,9 @@ echo "--- Utils ---" && ls src/utils/
 
 ---
 
-## 8. Verify New Datasets Content
+## 8. Verify New Datasets Content (Layout B only)
+
+> Skip this step if you're using Layout A (`curia/backend/`).
 
 ```bash
 cd ~/Desktop/curia
@@ -222,7 +249,7 @@ echo "=== Balkon-Alu ===" && ls Balkon-Alu-PM/
 ## 9. Quick Lint Check
 
 ```bash
-cd ~/Desktop/curia && npm run lint
+cd $PROJECT && npm run lint
 ```
 
 **Expected:** No errors (warnings are OK).
@@ -233,10 +260,10 @@ cd ~/Desktop/curia && npm run lint
 
 | Error | Cause | Fix |
 |-------|-------|-----|
-| `ENOENT ... package.json` | `package.json` is not in your current folder | See Step 0 — you likely have a nested `Backend-CRM/` subfolder inside `curia`, or need to clone the repo |
-| `cd: no such file or directory: Backend-CRM` | Folder is called `curia` on your Desktop | Use `cd ~/Desktop/curia` |
+| `ENOENT ... package.json` | `package.json` is not in your current folder | See Step 0 — your `package.json` may be inside `curia/backend/` instead of `curia/`. Run `ls */package.json` to find it |
+| `cd: no such file or directory: Backend-CRM` | Folder is called `curia` on your Desktop | Use `cd ~/Desktop/curia` or `cd ~/Desktop/curia/backend` |
 | `cd: no such file or directory: /Users/.../curia` | You used `~/curia` but the folder is on your Desktop | Use `cd ~/Desktop/curia` |
-| `Failed to connect to localhost port 3001` | Server is not running | Start it first with `cd ~/Desktop/curia && npm start` in another terminal |
+| `Failed to connect to localhost port 3001` | Server is not running | Start it first with `cd $PROJECT && npm start` in another terminal |
 | `curl: command not found` | curl not installed | Run `brew install curl` or use the browser: `http://localhost:3001/health` |
 | `command not found: node` | Node.js not installed | Install from https://nodejs.org (LTS version) |
 | `command not found: git` | Git not installed | Run `xcode-select --install` in Terminal |
