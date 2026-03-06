@@ -66,18 +66,20 @@
 - [x] 36 product comparison results
 - [x] Profile multipliers for Gealan, Aluplast, Salamander, Veka, Schüco
 
-### Backend Code (PARTIAL — Steps 1.1–1.7 of Phase 1 Foundation)
-Lives on the `Backend` branch:
+### Unified Codebase (Step A — COMPLETE ✅)
+Lives on this branch (`copilot/analyze-project-phase-1`):
 - [x] Step 1.1: Project initialized (folder structure, package.json)
-- [x] Step 1.2: Dependencies installed (express, pg, bcryptjs, jwt, helmet, cors, winston, etc.)
-- [x] Step 1.3: Server entry point (app.js with Express, middleware, health check, graceful shutdown)
-- [x] Step 1.4: Environment configuration (config/index.js, .env support)
-- [x] Step 1.5: Database connection setup (config/database.js — PostgreSQL pool)
-- [x] Step 1.6: Error handling middleware (middleware/errorHandler.js)
-- [x] Step 1.7: Logging setup (utils/logger.js — 54+ exports, Winston-based)
-- [ ] Step 1.8: Security middleware (middleware/security.js exists but not integrated)
-- [ ] Step 1.9: Basic route structure (routes/index.js exists — 90KB, needs review)
-- [ ] Step 1.10: Authentication setup (middleware/auth.js exists but not integrated)
+- [x] Step 1.2: Dependencies installed (16 production + 4 dev)
+- [x] Step 1.3: Server entry point (src/server.js + src/app.js with security, middleware, graceful shutdown)
+- [x] Step 1.4: Environment configuration (src/config/index.js, .env.example)
+- [x] Step 1.5: Database connection setup (src/config/database.js — PostgreSQL pool)
+- [x] Step 1.6: Error handling middleware (src/middleware/errorHandler.js — 20+ error classes)
+- [x] Step 1.7: Logging setup (src/utils/logger.js — Winston-based)
+- [x] Pricing engine integrated (src/engine/, src/data/, src/routes/)
+- [x] All 41 tests passing (priceCalculator.test.js + api.test.js)
+- [ ] Step 1.8: Security middleware (src/middleware/security.js exists but not integrated into app.js)
+- [ ] Step 1.9: Basic route structure (split placeholder routes into files)
+- [ ] Step 1.10: Authentication setup (src/middleware/auth.js exists but not integrated)
 
 ### Frontend Design Assets (in `frontend-glass-configurator` repo)
 - Homepage V1 design with glassmorphism effect (complete HTML prototype)
@@ -96,41 +98,40 @@ Lives on the `Previous-Session-files` branch (33 documents):
 - Gap analysis, security architecture, lessons learned
 - Frontend design system (colors, typography, header specs)
 
-### Pricing Engine Prototype (PR #1 — Closed, Not Merged)
-A separate pricing engine was built in PR #1 (30 files, fully tested). This code is available in the PR diff and can be cherry-picked. Key assets:
+### Unified File Structure
 
-**Source Code (`src/`):**
-| File | Purpose |
-|------|---------|
-| `src/app.js` | Express app (CORS, body-parser, routes) |
-| `src/server.js` | Server entry point (dotenv, port binding) |
-| `src/engine/priceCalculator.js` | 6-step price calculation engine |
-| `src/engine/surchargeCalculator.js` | Surcharge resolution across 9 categories |
-| `src/data/basePrices.js` | 21×21 price matrix (400–2400mm, geometric-mean interpolation) |
-| `src/data/profileMultipliers.js` | 6 Iglo profiles with multipliers |
-| `src/data/surcharges.js` | All surcharge tables (colors, glass, sound, security, handles, sprossen, V-Perfect) |
-| `src/routes/berechnen.js` | POST /ajax/berechnen/ → HTML response |
-| `src/routes/warenkorb.js` | POST /ajax/addWarenkorb/ → JSON response |
-| `src/routes/options.js` | GET /ajax/getOptions/ → JSON catalog |
-| `src/routes/index.js` | Route wiring + GET /health |
-| `src/utils/responseFormatter.js` | HTML and JSON formatters with XSS escaping |
-| `src/db/schema.sql` | PostgreSQL schema (base_prices, multipliers, surcharges, cart_items) |
-| `src/db/connection.js` | PostgreSQL pool connection |
-
-**Tests (passing):**
-| File | Coverage |
-|------|----------|
-| `tests/priceCalculator.test.js` | Base price lookup, profile multipliers, surcharges, full calculation (1000×1000 p1 = €295.44) |
-| `tests/api.test.js` | All 4 endpoints (berechnen, warenkorb, getOptions, health), error cases |
-
-**Manufacturer Price Data:**
-| Directory | Manufacturer | Contents |
-|-----------|-------------|----------|
-| `Gealen-Kunstoff-PM/` | Gealan PVC | Price matrix CSV, surcharges CSV, complete JSON, extraction scripts, test API |
-| `Holz-Fenster-PM/` | Holz (Wood) | Price matrix CSV, surcharges CSV/JSON, complete JSON, extraction summary |
-| `Balkon-Alu-PM/` | Aluminium Balkontür | Price matrix CSV, surcharges CSV, complete JSON |
-
-> **Important:** PR #1 was closed without merging. The code needs to be extracted from the PR diff and integrated into the main codebase. The pricing engine represents the bulk of Phase 2 work already done.
+```
+src/
+├── app.js                          # Express app (security + pricing routes)
+├── server.js                       # Entry point (port binding, graceful shutdown)
+├── config/
+│   ├── index.js                    # Centralized config from env vars
+│   ├── database.js                 # PostgreSQL connection pool + CRUD helpers
+│   └── migrations.js               # Database migration SQL
+├── data/
+│   ├── basePrices.js               # 21×21 price matrix (geometric-mean interpolation)
+│   ├── profileMultipliers.js       # 6 Iglo profiles with multipliers
+│   └── surcharges.js               # All surcharge tables (9 categories)
+├── db/
+│   └── schema.sql                  # PostgreSQL schema (tables, indexes, triggers)
+├── engine/
+│   ├── priceCalculator.js          # 6-step price calculation engine
+│   └── surchargeCalculator.js      # Surcharge resolution across 9 categories
+├── middleware/
+│   ├── auth.js                     # JWT authentication (ready for integration)
+│   ├── errorHandler.js             # 20+ error classes, DB error handling
+│   └── security.js                 # XSS, HPP, rate limiting (ready for integration)
+├── routes/
+│   ├── berechnen.js                # POST /ajax/berechnen/ → HTML response
+│   ├── warenkorb.js                # POST /ajax/addWarenkorb/ → JSON response
+│   └── options.js                  # GET /ajax/getOptions/ → JSON catalog
+└── utils/
+    ├── logger.js                   # Winston-based logging system
+    └── responseFormatter.js        # HTML and JSON formatters with XSS escaping
+tests/
+├── priceCalculator.test.js         # Unit tests: base prices, multipliers, surcharges, full calc
+└── api.test.js                     # Integration tests: all endpoints + error cases
+```
 
 ---
 
@@ -201,12 +202,12 @@ A separate pricing engine was built in PR #1 (30 files, fully tested). This code
 ## Identified Gaps & Open Questions
 
 ### Technical Gaps
-1. **Backend branch has `node_modules` committed** — needs .gitignore cleanup
-2. **Routes file is 90KB** — likely auto-generated, needs review/refactoring
-3. **Security middleware exists but not wired into app.js**
-4. **Auth middleware exists but not wired into app.js**
+1. ~~**Backend branch has `node_modules` committed**~~ ✅ Fixed — proper .gitignore in unified codebase
+2. ~~**Routes file is 90KB**~~ ✅ Fixed — clean route files from PR #1 (berechnen, warenkorb, options)
+3. **Security middleware exists but not wired into app.js** — Ready for Step 1.8
+4. **Auth middleware exists but not wired into app.js** — Ready for Step 1.10
 5. **Database migrations exist but not tested against live PostgreSQL**
-6. **No test files exist yet** — Jest is configured but no tests written
+6. ~~**No test files exist yet**~~ ✅ Fixed — 41 tests passing (Jest + Supertest)
 
 ### Data Gaps (Non-Blocking for Development)
 1. **KATALOG** — CEO's actual product catalog with Einkaufspreise (purchase prices) — needed before launch
@@ -232,12 +233,13 @@ A separate pricing engine was built in PR #1 (30 files, fully tested). This code
 
 ### Recommended Next Steps (In Order)
 
-**Step A: Consolidate Code on Main Branch**
-1. Add proper `.gitignore` (node_modules/, .env, dist/, *.log, logs/)
-2. Clean up Backend branch code (remove committed node_modules)
-3. Merge the CURIA platform foundation (app.js, config, middleware, utils) from `Backend` branch
-4. Cherry-pick the pricing engine code from PR #1 diff into the merged codebase
-5. Reconcile the two app.js files (Backend branch has the CURIA platform with security/auth; PR #1 has the simpler pricing engine)
+**Step A: Consolidate Code on Main Branch** ✅ DONE
+1. ✅ Added proper `.gitignore` (node_modules/, .env, dist/, *.log, logs/, coverage/)
+2. ✅ Cleaned up — new branch does not include node_modules or logs
+3. ✅ Merged CURIA platform foundation (config/, middleware/, utils/) from `Backend` branch
+4. ✅ Ported pricing engine from PR #1 (engine/, data/, pricing routes, response formatter, tests)
+5. ✅ Reconciled app.js — Backend branch security middleware + PR #1 pricing routes
+6. ✅ All 41 tests pass, server starts cleanly, 0 npm vulnerabilities
 
 **Step B: Wire Up Existing Middleware (Steps 1.8–1.10)**
 1. Integrate `security.js` into the Express app middleware chain
@@ -256,22 +258,15 @@ A separate pricing engine was built in PR #1 (30 files, fully tested). This code
 2. Add tests for auth middleware and security middleware
 3. Add integration tests for database operations
 
-### Two Codebases to Reconcile
+### ✅ Codebases Reconciled
 
-The `Backend` branch and PR #1 each built different parts of the system:
+The `Backend` branch and PR #1 have been merged into a unified codebase on this branch:
 
-| Aspect | Backend Branch (CURIA Platform) | PR #1 (Pricing Engine) |
-|--------|-------------------------------|----------------------|
-| **package.json** | `curia-backend` — 16 deps (helmet, jwt, winston, etc.) | `fentuaro-konfigurator-engine` — 5 deps (express, pg, cors, etc.) |
-| **app.js** | Full security middleware, Winston logging, graceful shutdown | Minimal Express + CORS + body-parser |
-| **Middleware** | auth.js (JWT), security.js (XSS, HPP), errorHandler.js | None (inline error handling) |
-| **Routes** | Single 90KB index.js (all routes in one file) | 4 clean route files (berechnen, warenkorb, options, health) |
-| **Pricing** | Not implemented | Complete (6-step formula, surcharges, tests) |
-| **Database** | Connection pool + migration SQL | Schema SQL + connection (simpler) |
-| **Tests** | None | 2 test files (329 lines, all passing) |
-| **Logging** | Winston (40KB, comprehensive) | console.log only |
-
-**Recommended merge strategy:** Use the Backend branch as the foundation (it has proper security, auth, logging) and port the pricing engine from PR #1 into it as a module.
+| Source | What Was Taken |
+|--------|---------------|
+| **Backend Branch** | Security middleware, config system, database module, error handler (20+ error classes), Winston logger, auth middleware |
+| **PR #1** | Pricing engine, surcharge calculator, base price matrix, profile multipliers, surcharge data, route handlers, response formatter, tests |
+| **Unified** | New app.js combining Backend security with PR #1 routes, new server.js with graceful shutdown, unified package.json |
 
 ### Development Approach
 - **Step by step** — one task at a time, test before moving on
