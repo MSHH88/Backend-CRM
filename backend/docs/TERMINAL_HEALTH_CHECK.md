@@ -54,7 +54,7 @@ You should see `✅ Done` at the end.
 Paste this in Terminal:
 
 ```bash
-npm test
+cd ~/Desktop/curia/backend && npm test
 ```
 
 You should see:
@@ -74,7 +74,7 @@ Ignore "Force exiting Jest" — that is normal.
 Paste this in Terminal:
 
 ```bash
-npm start
+cd ~/Desktop/curia/backend && npm start
 ```
 
 You should see:
