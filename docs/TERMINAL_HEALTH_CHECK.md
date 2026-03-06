@@ -1,27 +1,87 @@
-# Terminal Health Check — Quick Setup Guide
+# Terminal Health Check — Quick Testing Guide
 
-> The repo is **public** — `curl` works directly. Just copy-paste each command.
+> Repo is **public** — all `curl` commands work directly. Just copy-paste.
 
 ---
 
-## Step 1 — Delete your old src/ and tests/ folders
+## Step 1 — Run all tests
 
-Your current files may be corrupted (if `curl` was used when the repo was private). Delete them:
+```bash
+cd ~/Desktop/curia/backend && npm test
+```
 
+**You should see:**
+```
+Test Suites: 3 passed, 3 total
+Tests:       91 passed, 91 total
+```
+
+> The "Force exiting Jest" message at the end is **normal** — ignore it.
+
+📋 **Paste the last 10 lines back to me.**
+
+---
+
+## Step 2 — Start the server
+
+```bash
+cd ~/Desktop/curia/backend && npm start
+```
+
+**You should see:**
+```
+🚀 CURIA Backend Server Started
+🌐 Server URL: http://localhost:3001
+```
+
+⚠️ **Leave this terminal open! Do NOT close it.**
+
+---
+
+## Step 3 — Test the server (open a NEW terminal tab: Cmd+T)
+
+Press **Cmd+T** to open a new tab. Then paste:
+
+```bash
+curl http://localhost:3001/health && echo "" && \
+curl http://localhost:3001/api/v1 && echo "" && \
+curl -X POST http://localhost:3001/ajax/berechnen/ \
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  -d 'tmp_obj={"breite":1000,"hoehe":1200,"profil":"p1","verglasung":"g1","aussenfarbe":"fs1_01","innenfarbe":"fi1_01","schallschutz":"ss1","sicherheitsverglasung":"sv0","griff":"gr1","sicherheit":"si1","sprossen":"sp0","vperfect":"vp0"}' && echo "" && \
+curl http://localhost:3001/ajax/getOptions/
+```
+
+**You should see (4 responses):**
+1. `{"status":"ok", ...}` — health check
+2. `{"name":"CURIA API", ...}` — API info
+3. An HTML price result like `<div class="price-result">...</div>` — price calculation
+4. `{"success":true,"options":{...}}` — all product options
+
+📋 **Paste the output back to me.**
+
+Then go back to the first tab and press **Ctrl+C** to stop the server.
+
+---
+
+## How to Update Files From GitHub
+
+When I tell you files have changed, use these commands. The repo is public so `curl` works.
+
+**Base URL (copy once):**
+```bash
+BASE="https://raw.githubusercontent.com/MSHH88/Backend-CRM/copilot/analyze-project-phase-1/backend"
+```
+
+**Download a single file** (replace the path as needed):
+```bash
+cd ~/Desktop/curia/backend && \
+curl -fsSL "$BASE/src/engine/priceCalculator.js" -o src/engine/priceCalculator.js
+```
+
+**Download everything fresh** (nuclear option — deletes and redownloads all):
 ```bash
 cd ~/Desktop/curia/backend && \
 rm -rf src/ tests/ && \
-echo "✅ Old folders deleted"
-```
-
----
-
-## Step 2 — Download all source files (21 files)
-
-Copy-paste this **entire block** into Terminal. It downloads every file using `curl`:
-
-```bash
-cd ~/Desktop/curia/backend && \
 mkdir -p src/config src/data src/db src/engine src/middleware src/routes src/utils tests && \
 BASE="https://raw.githubusercontent.com/MSHH88/Backend-CRM/copilot/analyze-project-phase-1/backend" && \
 curl -fsSL "$BASE/src/app.js"                        -o src/app.js && \
@@ -45,120 +105,62 @@ curl -fsSL "$BASE/src/routes/options.js"             -o src/routes/options.js &&
 curl -fsSL "$BASE/src/routes/warenkorb.js"           -o src/routes/warenkorb.js && \
 curl -fsSL "$BASE/src/utils/logger.js"               -o src/utils/logger.js && \
 curl -fsSL "$BASE/src/utils/responseFormatter.js"    -o src/utils/responseFormatter.js && \
-echo "✅ 21 source files downloaded"
-```
-
-**You should see:** `✅ 21 source files downloaded`
-
----
-
-## Step 3 — Download test files (3 files)
-
-```bash
-cd ~/Desktop/curia/backend && \
-BASE="https://raw.githubusercontent.com/MSHH88/Backend-CRM/copilot/analyze-project-phase-1/backend" && \
 curl -fsSL "$BASE/tests/api.test.js"             -o tests/api.test.js && \
 curl -fsSL "$BASE/tests/auth.test.js"            -o tests/auth.test.js && \
 curl -fsSL "$BASE/tests/priceCalculator.test.js" -o tests/priceCalculator.test.js && \
-echo "✅ 3 test files downloaded"
-```
-
----
-
-## Step 4 — Download config files (4 files)
-
-These go in your `backend/` root (replace existing):
-
-```bash
-cd ~/Desktop/curia/backend && \
-BASE="https://raw.githubusercontent.com/MSHH88/Backend-CRM/copilot/analyze-project-phase-1/backend" && \
 curl -fsSL "$BASE/package.json"   -o package.json && \
 curl -fsSL "$BASE/.eslintrc.js"   -o .eslintrc.js && \
 curl -fsSL "$BASE/.env.example"   -o .env.example && \
 curl -fsSL "$BASE/.gitignore"     -o .gitignore && \
-echo "✅ 4 config files downloaded"
+npm install && \
+echo "✅ All 28 files downloaded + dependencies installed"
 ```
+
+After updating, run **Step 1** again to verify tests pass.
 
 ---
 
-## Step 5 — Verify file counts
+## What to Delete / What to Download / Where it Goes
 
-```bash
-cd ~/Desktop/curia/backend && \
-echo "Source files: $(find src/ -type f -not -name '.DS_Store' | wc -l | tr -d ' ')" && \
-echo "Test files:   $(find tests/ -type f -not -name '.DS_Store' | wc -l | tr -d ' ')" && \
-head -1 src/data/basePrices.js
-```
+### Your local folder: `~/Desktop/curia/backend/`
 
-**You should see:**
-```
-Source files: 21
-Test files:   3
-'use strict';
-```
+| What to DELETE | Why |
+|----------------|-----|
+| `node_modules/` | Only if `npm install` fails. Then run `npm install` again |
+| Nothing else | Your `src/`, `tests/`, config files are all correct and up to date |
 
-> ⚠️ If `head -1` shows `404: Not Found` instead of `'use strict';`, the download failed. Re-run Steps 1 and 2.
+### Complete file map (28 files → `~/Desktop/curia/backend/`)
 
----
-
-## Step 6 — Install dependencies & create .env
-
-```bash
-cd ~/Desktop/curia/backend && \
-ls .env 2>/dev/null || cp .env.example .env && \
-npm install
-```
-
-**You should see:** ends with `0 vulnerabilities`.
-
----
-
-## Step 7 — Run all tests
-
-```bash
-cd ~/Desktop/curia/backend && npm test
-```
-
-**You should see:**
-```
-Test Suites: 3 passed, 3 total
-Tests:       91 passed, 91 total
-```
-
-📋 **Paste the last 10 lines back to me.**
-
----
-
-## Step 8 — Start the server
-
-```bash
-cd ~/Desktop/curia/backend && npm start
-```
-
-**You should see:**
-```
-🚀 CURIA Backend Server Started
-🌐 Server URL: http://localhost:3001
-```
-
-⚠️ **Leave this terminal open! Do NOT close it.**
-
----
-
-## Step 9 — Test the server (open a NEW terminal tab: Cmd+T)
-
-Press **Cmd+T** to open a new tab. Then paste:
-
-```bash
-curl http://localhost:3001/health && echo "" && \
-curl http://localhost:3001/api/v1 && echo "" && \
-curl -X POST http://localhost:3001/ajax/berechnen/ -H "Content-Type: application/json" -d '{"width":1000,"height":1200,"profile":"iglo5"}' && echo "" && \
-curl http://localhost:3001/ajax/getOptions/
-```
-
-📋 **Paste the output back to me.**
-
-Then go back to the first tab and press **Ctrl+C** to stop the server.
+| File | Goes into folder |
+|------|-----------------|
+| `package.json` | `~/Desktop/curia/backend/` |
+| `.eslintrc.js` | `~/Desktop/curia/backend/` |
+| `.env.example` | `~/Desktop/curia/backend/` |
+| `.gitignore` | `~/Desktop/curia/backend/` |
+| `src/app.js` | `~/Desktop/curia/backend/src/` |
+| `src/server.js` | `~/Desktop/curia/backend/src/` |
+| `src/config/database.js` | `~/Desktop/curia/backend/src/config/` |
+| `src/config/index.js` | `~/Desktop/curia/backend/src/config/` |
+| `src/config/migrations.js` | `~/Desktop/curia/backend/src/config/` |
+| `src/config/swagger.js` | `~/Desktop/curia/backend/src/config/` |
+| `src/data/basePrices.js` | `~/Desktop/curia/backend/src/data/` |
+| `src/data/profileMultipliers.js` | `~/Desktop/curia/backend/src/data/` |
+| `src/data/surcharges.js` | `~/Desktop/curia/backend/src/data/` |
+| `src/db/schema.sql` | `~/Desktop/curia/backend/src/db/` |
+| `src/engine/priceCalculator.js` | `~/Desktop/curia/backend/src/engine/` |
+| `src/engine/surchargeCalculator.js` | `~/Desktop/curia/backend/src/engine/` |
+| `src/middleware/auth.js` | `~/Desktop/curia/backend/src/middleware/` |
+| `src/middleware/errorHandler.js` | `~/Desktop/curia/backend/src/middleware/` |
+| `src/middleware/security.js` | `~/Desktop/curia/backend/src/middleware/` |
+| `src/routes/auth.js` | `~/Desktop/curia/backend/src/routes/` |
+| `src/routes/berechnen.js` | `~/Desktop/curia/backend/src/routes/` |
+| `src/routes/options.js` | `~/Desktop/curia/backend/src/routes/` |
+| `src/routes/warenkorb.js` | `~/Desktop/curia/backend/src/routes/` |
+| `src/utils/logger.js` | `~/Desktop/curia/backend/src/utils/` |
+| `src/utils/responseFormatter.js` | `~/Desktop/curia/backend/src/utils/` |
+| `tests/api.test.js` | `~/Desktop/curia/backend/tests/` |
+| `tests/auth.test.js` | `~/Desktop/curia/backend/tests/` |
+| `tests/priceCalculator.test.js` | `~/Desktop/curia/backend/tests/` |
 
 ---
 
@@ -188,14 +190,13 @@ Then go back to the first tab and press **Ctrl+C** to stop the server.
 
 | Error | Fix |
 |-------|-----|
-| `SyntaxError: Missing semicolon. (1:3) 404: Not Found` | A source file contains "404: Not Found" instead of code. Re-run Steps 1 and 2 |
-| `Cannot find module 'supertest'` | Run `npm install` (Step 6) |
-| `No tests found` | tests/ folder missing — run Step 3 |
-| `ESLint couldn't find a configuration file` | Run Step 4 to download `.eslintrc.js` |
+| `Cannot find module 'supertest'` | Run `npm install` |
+| `No tests found` | `tests/` folder missing — redownload (see "How to Update" above) |
 | `ENOENT ... package.json` | Run `cd ~/Desktop/curia/backend` first |
-| `Failed to connect to localhost port 3001` | Server not running — start it with Step 8 |
+| `Failed to connect to localhost port 3001` | Server not running — start it with Step 2 |
 | `command not found: node` | Install from https://nodejs.org |
-| `EADDRINUSE :::3001` | Port in use — run `lsof -ti :3001` to find the PID, then stop it and retry |
+| `EADDRINUSE :::3001` | Port in use — run `lsof -ti :3001 | xargs kill` then retry |
+| `Force exiting Jest` | **Not an error** — this is normal, ignore it |
 
 ---
 
