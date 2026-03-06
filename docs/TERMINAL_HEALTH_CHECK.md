@@ -93,28 +93,135 @@ cd ~/Desktop/curia
 
 ---
 
-## 1. Prerequisites Check
+## 1. Check Prerequisites (what you need installed)
+
+### 1a. Git
+
+```bash
+git --version
+```
+
+**Expected:** `git version 2.x.x` (any 2.x version is fine)
+
+**If missing:** Run `xcode-select --install` in Terminal (macOS installs Git automatically)
+
+### 1b. Node.js
 
 ```bash
 node -v
+```
+
+**Expected:** `v18.x.x` or higher (v20, v22, v24 all work)
+
+**If missing:** Install from https://nodejs.org — download the **LTS** version
+
+### 1c. npm (comes with Node.js)
+
+```bash
 npm -v
 ```
 
-**Expected:** Node v18+ and npm v9+
+**Expected:** `9.x.x` or higher
 
----
+**If missing:** It installs automatically with Node.js. If outdated, run: `npm install -g npm@latest`
 
-## 2. Install Dependencies
+### 1d. Summary check — run all at once
 
 ```bash
-cd $PROJECT && npm install
+echo "=== Git ===" && git --version && echo "=== Node ===" && node -v && echo "=== npm ===" && npm -v
 ```
 
-**Expected:** No errors, 0 vulnerabilities (or only low-severity ones)
+**Expected:** All three show version numbers, no "command not found" errors.
 
 ---
 
-## 3. Run All Tests (57 tests, 3 suites)
+## 2. Check That the Repo Exists Locally
+
+```bash
+ls ~/Desktop/curia/package.json 2>/dev/null && echo "✅ Layout B — repo at ~/Desktop/curia" || \
+(ls ~/Desktop/curia/backend/package.json 2>/dev/null && echo "✅ Layout A — repo at ~/Desktop/curia/backend") || \
+echo "❌ Repo not found — you need to clone it (see Step 0)"
+```
+
+If it says `❌ Repo not found`, clone it:
+
+```bash
+git clone https://github.com/MSHH88/Backend-CRM.git ~/Desktop/curia
+cd ~/Desktop/curia
+```
+
+---
+
+## 3. Navigate to the Project & Check Structure
+
+```bash
+cd $PROJECT
+```
+
+Then verify you're in the right place:
+
+```bash
+pwd && echo "---" && ls
+```
+
+**Expected:** You should see these items:
+
+```
+package.json
+package-lock.json
+src/
+tests/
+docs/
+.env.example
+.gitignore
+README.md
+```
+
+If you also see `backend/`, `datasets/`, `Gealen-Kunstoff-PM/`, `Holz-Fenster-PM/`, `Balkon-Alu-PM/` — you have the **full repo** (Layout B). That's fine.
+
+---
+
+## 4. Check if Dependencies Are Installed
+
+```bash
+ls node_modules/.package-lock.json 2>/dev/null && echo "✅ node_modules exists" || echo "❌ node_modules missing — run: npm install"
+```
+
+If missing, install them:
+
+```bash
+npm install
+```
+
+**Expected:** No errors, `0 vulnerabilities` (or only low-severity ones).
+
+---
+
+## 5. Check the .env File
+
+```bash
+ls .env 2>/dev/null && echo "✅ .env exists" || echo "⚠️  .env missing — creating from example..."
+```
+
+If missing, create it from the example:
+
+```bash
+cp .env.example .env
+echo "✅ .env created from .env.example"
+```
+
+Then verify it has the key settings:
+
+```bash
+grep -c "PORT" .env && grep -c "JWT_SECRET" .env && echo "✅ .env has required settings"
+```
+
+> **Note:** The default `.env.example` values work for local development.
+> You do NOT need to change anything for testing.
+
+---
+
+## 6. Run All Tests (57 tests, 3 suites)
 
 ```bash
 cd $PROJECT && npm test -- --forceExit
@@ -128,9 +235,11 @@ Tests:       57 passed, 57 total
 
 The `--forceExit` is needed because bcrypt keeps handles open.
 
+**If tests fail:** Check that you ran `npm install` first (Step 4).
+
 ---
 
-## 4. Start Server (quick check, then Ctrl+C to stop)
+## 7. Start Server (quick check, then Ctrl+C to stop)
 
 ```bash
 cd $PROJECT && npm start
@@ -148,37 +257,53 @@ cd $PROJECT && npm start
 ==================================================
 ```
 
-**Leave this terminal open** — the server must stay running for Step 5.
+**Leave this terminal open** — the server must stay running for Step 8.
 
 ---
 
-## 5. Test Endpoints (open a SECOND terminal tab — Cmd+T)
+## 8. Test Endpoints (open a SECOND terminal tab — Cmd+T)
 
-Open a **new** terminal tab/window (Cmd+T), then run:
+Open a **new** terminal tab/window (Cmd+T), then run each command one at a time:
+
+### 8a. Health check
 
 ```bash
-# Health check
 curl http://localhost:3001/health
+```
 
-# API info
+**Expected:** JSON with `"status": "ok"` and `"message": "CURIA Backend is running"`
+
+### 8b. API info
+
+```bash
 curl http://localhost:3001/api/v1
+```
 
-# Price calculation test (Drutex Kunststoff Fenster)
+**Expected:** JSON listing all available endpoints
+
+### 8c. Price calculation test (Drutex Kunststoff Fenster)
+
+```bash
 curl -X POST http://localhost:3001/ajax/berechnen/ \
   -H "Content-Type: application/json" \
   -d '{"width": 1000, "height": 1200, "profile": "iglo5"}'
+```
 
-# Get configurator options
+**Expected:** JSON with calculated price data
+
+### 8d. Get configurator options
+
+```bash
 curl http://localhost:3001/ajax/getOptions/
 ```
 
-**Expected:** JSON responses with status 200 for each.
+**Expected:** JSON with available profiles, glass types, colors, etc.
 
 > After testing, go back to the first terminal and press `Ctrl+C` to stop the server.
 
 ---
 
-## 6. File Counts Verification
+## 9. File Counts Verification
 
 ```bash
 cd $PROJECT
@@ -206,33 +331,75 @@ echo "=== Documentation ===" && find docs/ -type f 2>/dev/null | wc -l
 | Folder | Files | Contents |
 |--------|-------|----------|
 | `src/` | 20 | Active codebase (Express, pricing engine, auth, middleware) |
-| `backend/` | 26 | Reference code from previous sessions (SUBPAGES-FenTuRo) |
+| `tests/` | 3 | Jest test suites (priceCalculator, api, auth) |
+| `backend/` | 27 | Reference code from previous sessions (SUBPAGES-FenTuRo) |
 | `datasets/drutex-kunststoff-fenster/` | 23 | Drutex Kunststoff pricing data + extraction tools |
 | `Gealen-Kunstoff-PM/` | 11 | Gealan PVC price matrices, extraction scripts, konfigurators |
 | `Holz-Fenster-PM/` | 5 | Holz (Wood) Fenster price matrix, surcharges, complete data |
 | `Balkon-Alu-PM/` | 3 | Alu Balkontür price matrix, surcharges, complete data |
 | `docs/` | 11 | Planning docs (master plan, security, backend dev, etc.) |
-| `tests/` | 3 | Jest test suites (priceCalculator, api, auth) |
 
 ---
 
-## 7. Verify Key Source Files Exist
+## 10. Verify Key Source Files Exist
 
 ```bash
 cd $PROJECT
 
-echo "--- Core ---" && ls src/app.js src/server.js 2>/dev/null || ls src/app.js 2>/dev/null || echo "Core files not found — check your folder"
-echo "--- Config ---" && ls src/config/
-echo "--- Middleware ---" && ls src/middleware/
-echo "--- Routes ---" && ls src/routes/
-echo "--- Utils ---" && ls src/utils/
+echo "--- Core ---"
+ls src/app.js src/server.js
+
+echo "--- Config ---"
+ls src/config/
+
+echo "--- Data (pricing tables) ---"
+ls src/data/
+
+echo "--- Engine (price calculator) ---"
+ls src/engine/
+
+echo "--- Middleware ---"
+ls src/middleware/
+
+echo "--- Routes ---"
+ls src/routes/
+
+echo "--- Utils ---"
+ls src/utils/
+
+echo "--- DB schema ---"
+ls src/db/
 ```
 
 **Expected:** All files listed without "No such file" errors.
 
+**Source file inventory (20 files):**
+| Path | Purpose |
+|------|---------|
+| `src/app.js` | Express app setup, middleware chain, route mounting |
+| `src/server.js` | Server start, graceful shutdown |
+| `src/config/database.js` | PostgreSQL connection config (future use) |
+| `src/config/index.js` | Centralized settings (200+ config values) |
+| `src/config/migrations.js` | DB table schemas (future use) |
+| `src/data/basePrices.js` | Drutex base price lookup tables |
+| `src/data/profileMultipliers.js` | Profile-specific multiplier values |
+| `src/data/surcharges.js` | Surcharge rules for options/accessories |
+| `src/db/schema.sql` | PostgreSQL schema DDL (future use) |
+| `src/engine/priceCalculator.js` | Core pricing engine logic |
+| `src/engine/surchargeCalculator.js` | Surcharge computation engine |
+| `src/middleware/auth.js` | JWT authentication + RBAC middleware |
+| `src/middleware/errorHandler.js` | Error classes + global error handler |
+| `src/middleware/security.js` | Helmet, CORS, rate limiting, XSS, HPP |
+| `src/routes/auth.js` | Auth routes (register/login/logout/refresh/me) |
+| `src/routes/berechnen.js` | POST /ajax/berechnen/ — price calculation |
+| `src/routes/options.js` | GET /ajax/getOptions/ — configurator options |
+| `src/routes/warenkorb.js` | POST /ajax/addWarenkorb/ — cart operations |
+| `src/utils/logger.js` | Winston logger with daily rotation |
+| `src/utils/responseFormatter.js` | Standardized API response formatting |
+
 ---
 
-## 8. Verify New Datasets Content (Layout B only)
+## 11. Verify New Datasets Content (Layout B only)
 
 > Skip this step if you're using Layout A (`curia/backend/`).
 
@@ -246,13 +413,47 @@ echo "=== Balkon-Alu ===" && ls Balkon-Alu-PM/
 
 ---
 
-## 9. Quick Lint Check
+## 12. Check What's NOT Set Up Yet
+
+Run this to see what's still missing (this is expected — these are Phase 2+ items):
 
 ```bash
-cd $PROJECT && npm run lint
-```
+cd $PROJECT
 
-**Expected:** No errors (warnings are OK).
+echo "========================================="
+echo " WHAT WE HAVE vs WHAT WE STILL NEED"
+echo "========================================="
+
+echo ""
+echo "✅ WHAT WE HAVE (Phase 1 Complete):"
+echo "---"
+echo -n "  Node.js:        " && node -v
+echo -n "  npm:            " && npm -v
+echo -n "  package.json:   " && (ls package.json > /dev/null 2>&1 && echo "YES" || echo "NO")
+echo -n "  node_modules:   " && (ls node_modules/.package-lock.json > /dev/null 2>&1 && echo "YES" || echo "NO")
+echo -n "  .env file:      " && (ls .env > /dev/null 2>&1 && echo "YES" || echo "NO — run: cp .env.example .env")
+echo -n "  Source code:    " && echo "$(find src/ -type f | wc -l | tr -d ' ') files in src/"
+echo -n "  Tests:          " && echo "$(find tests/ -type f 2>/dev/null | wc -l | tr -d ' ') test files (57 tests)"
+echo -n "  Express server: " && (grep -q '"express"' package.json && echo "YES (port 3001)" || echo "NO")
+echo -n "  Auth system:    " && (ls src/routes/auth.js > /dev/null 2>&1 && echo "YES (in-memory)" || echo "NO")
+echo -n "  Pricing engine: " && (ls src/engine/priceCalculator.js > /dev/null 2>&1 && echo "YES (Drutex)" || echo "NO")
+echo -n "  Security:       " && (ls src/middleware/security.js > /dev/null 2>&1 && echo "YES (helmet, CORS, rate-limit, XSS, HPP)" || echo "NO")
+
+echo ""
+echo "🔲 WHAT WE STILL NEED (Phase 2+):"
+echo "---"
+echo -n "  PostgreSQL:     " && (command -v psql > /dev/null 2>&1 && echo "INSTALLED ($(psql --version 2>/dev/null | head -1))" || echo "NOT INSTALLED — needed for Phase 2")
+echo -n "  pgAdmin:        " && echo "NOT NEEDED until Phase 2 (optional GUI for PostgreSQL)"
+echo -n "  ESLint config:  " && (ls .eslintrc* > /dev/null 2>&1 && echo "YES" || echo "MISSING — npm run lint won't work without it")
+echo -n "  Gealan pricing: " && echo "NOT YET — dataset ready, engine not built"
+echo -n "  Holz pricing:   " && echo "NOT YET — dataset ready, engine not built"
+echo -n "  Alu pricing:    " && echo "NOT YET — dataset ready, engine not built"
+echo -n "  Frontend:       " && echo "NOT YET — Phase 3"
+echo -n "  CRM features:   " && echo "NOT YET — Phase 4"
+
+echo ""
+echo "========================================="
+```
 
 ---
 
@@ -267,6 +468,8 @@ cd $PROJECT && npm run lint
 | `curl: command not found` | curl not installed | Run `brew install curl` or use the browser: `http://localhost:3001/health` |
 | `command not found: node` | Node.js not installed | Install from https://nodejs.org (LTS version) |
 | `command not found: git` | Git not installed | Run `xcode-select --install` in Terminal |
+| `npm run lint` shows "no config" | ESLint config file missing | This is a known gap — no `.eslintrc` file exists yet. Does not affect functionality. |
+| `EADDRINUSE :::3001` | Port 3001 already in use | Another server is running. Stop it with `kill $(lsof -ti :3001)` then retry |
 
 ### Do I need pgAdmin / PostgreSQL?
 
@@ -279,12 +482,20 @@ in Phase 2 when we add database persistence.
 ## Summary: What's Working
 
 - ✅ **Phase 1 Foundation (Steps 1.1-1.10)** — ALL COMPLETE
-- ✅ **57 tests** passing across 3 suites
+- ✅ **57 tests** passing across 3 suites (priceCalculator, api, auth)
 - ✅ **Server** starts on port 3001
 - ✅ **Auth system** (register/login/logout/refresh/me) — in-memory store
 - ✅ **Security middleware** (helmet, CORS, rate limiting, XSS, HPP)
 - ✅ **Pricing engine** (Drutex Kunststoff Fenster base prices + surcharges)
 - ✅ **4 dataset collections** ready for analysis
+
+## What's NOT Done Yet (Expected)
+
+- 🔲 **ESLint config** — `.eslintrc` file missing, `npm run lint` won't find violations
+- 🔲 **PostgreSQL** — not installed/needed yet (Phase 2)
+- 🔲 **Multi-material pricing** — Gealan, Holz, Alu datasets exist but engines not built
+- 🔲 **Frontend** — no frontend exists yet (Phase 3)
+- 🔲 **CRM features** — not started (Phase 4)
 
 ## What's Next
 
