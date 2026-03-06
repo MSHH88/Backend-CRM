@@ -40,15 +40,9 @@ cd ~/Desktop/curia/backend && npm start
 
 ## Step 3 — Test the server (open a NEW terminal tab: Cmd+T)
 
-Press **Cmd+T** to open a new tab. Then paste:
+Press **Cmd+T** to open a new tab.
 
-The berechnen endpoint expects a `tmp_obj` field containing a JSON config string. Here is a minimal test config:
-
-```json
-{"breite":1000,"hoehe":1200,"profil":"p1","verglasung":"g1","aussenfarbe":"fs1_01","innenfarbe":"fi1_01","schallschutz":"ss1","sicherheitsverglasung":"sv0","griff":"gr1","sicherheit":"si1","sprossen":"sp0","vperfect":"vp0"}
-```
-
-Copy-paste this full block to test all 4 endpoints:
+⚠️ **Only paste the bash block below** — nothing else. It tests all 4 endpoints in one go:
 
 ```bash
 curl http://localhost:3001/health && echo "" && \
@@ -205,6 +199,7 @@ After updating, run **Step 1** again to verify tests pass.
 | `command not found: node` | Install from https://nodejs.org |
 | `EADDRINUSE :::3001` | Port in use — run `lsof -ti :3001 | xargs kill` then retry |
 | `Force exiting Jest` | **Not an error** — this is normal, ignore it |
+| `zsh: command not found: breite:1000,...` | You pasted the JSON config as a command — only paste the `bash` block in Step 3 |
 
 ---
 
