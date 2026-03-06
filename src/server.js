@@ -1,5 +1,16 @@
 'use strict';
 
+// Suppress DEP0169 (url.parse) from Express 4.x internal dependencies.
+// This warning comes from the parseurl package used by Express, not our code.
+// It will be resolved when upgrading to Express 5.x.
+const originalEmit = process.emit;
+process.emit = function (event, error) {
+  if (event === 'warning' && error && error.code === 'DEP0169') {
+    return false;
+  }
+  return originalEmit.apply(process, arguments);
+};
+
 require('dotenv').config();
 const app = require('./app');
 
