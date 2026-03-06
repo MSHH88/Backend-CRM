@@ -193,10 +193,23 @@ After downloading all files, run `npm install` again (Step 4) to get the new `su
 ### 7e. Verify your updated src/ has 20 files
 
 ```bash
-find ~/Desktop/curia/backend/src/ -type f | wc -l
+find ~/Desktop/curia/backend/src/ -type f -not -name '.DS_Store' | wc -l
 ```
 
 **You should see:** `20`
+
+> ⚠️ **Got 21?** macOS creates hidden `.DS_Store` files in every folder you open in Finder. The old command (`find ... -type f | wc -l`) counts those too. The updated command above filters them out. **21 is fine** — it just means you have one `.DS_Store` in `src/`.
+
+### 7f. About hidden files in backend/
+
+Your `backend/` folder may contain these hidden files — **do NOT delete them**:
+
+| File | Purpose | Action |
+|------|---------|--------|
+| `.env` | Your local environment variables (port, secrets) | ✅ KEEP — needed to run the server |
+| `.env.example` | Template showing which env vars are needed | ✅ KEEP — reference file |
+| `.gitignore` | Tells Git which files to ignore (node_modules, logs, .env) | ✅ KEEP — prevents committing secrets |
+| `.DS_Store` | macOS folder metadata (auto-created) | 🗑️ Safe to delete, but it comes back |
 
 ---
 
@@ -271,7 +284,7 @@ Then go back to the first tab and press **Ctrl+C** to stop the server.
 ## Step 11 — Count your files
 
 ```bash
-cd ~/Desktop/curia/backend && echo "Source files:" && find src/ -type f | wc -l
+cd ~/Desktop/curia/backend && echo "Source files:" && find src/ -type f -not -name '.DS_Store' | wc -l
 ```
 
 **You should see:** `20`
@@ -291,7 +304,7 @@ cd ~/Desktop/curia/backend && ls src/app.js src/server.js src/engine/priceCalcul
 ## Step 13 — Full status check
 
 ```bash
-cd ~/Desktop/curia/backend && echo "=========================================" && echo " WHAT WE HAVE vs WHAT WE STILL NEED" && echo "=========================================" && echo "" && echo "✅ WHAT WE HAVE (Phase 1 Complete):" && echo "---" && echo -n "  Node.js:        " && node -v && echo -n "  npm:            " && npm -v && echo -n "  package.json:   " && (ls package.json > /dev/null 2>&1 && echo "YES" || echo "NO") && echo -n "  node_modules:   " && (ls node_modules/.package-lock.json > /dev/null 2>&1 && echo "YES" || echo "NO") && echo -n "  .env file:      " && (ls .env > /dev/null 2>&1 && echo "YES" || echo "NO") && echo -n "  Source code:    " && echo "$(find src/ -type f | wc -l | tr -d ' ') files" && echo -n "  Tests:          " && echo "$(find tests/ -type f 2>/dev/null | wc -l | tr -d ' ') files (57 tests)" && echo -n "  Express server: " && (grep -q '"express"' package.json && echo "YES (port 3001)" || echo "NO") && echo -n "  Auth system:    " && (ls src/routes/auth.js > /dev/null 2>&1 && echo "YES" || echo "NO") && echo -n "  Pricing engine: " && (ls src/engine/priceCalculator.js > /dev/null 2>&1 && echo "YES (Drutex only)" || echo "NO") && echo -n "  Surcharges:     " && (ls src/engine/surchargeCalculator.js > /dev/null 2>&1 && echo "DRAFT (Drutex only — Phase 2 will complete)" || echo "NO") && echo -n "  Security:       " && (ls src/middleware/security.js > /dev/null 2>&1 && echo "YES" || echo "NO") && echo "" && echo "🔲 WHAT WE STILL NEED (Phase 2+):" && echo "---" && echo "  Dataset analysis: NOT DONE — Gealan/Holz/Alu data not yet analyzed" && echo "  Surcharges:       DRAFT — Drutex only, other materials need analysis first" && echo "  PostgreSQL:       NOT INSTALLED — needed for Phase 2" && echo "  Gealan pricing:   NOT YET — dataset ready, engine not built" && echo "  Holz pricing:     NOT YET — dataset ready, engine not built" && echo "  Alu pricing:      NOT YET — dataset ready, engine not built" && echo "  Frontend:         NOT YET — Phase 3" && echo "  CRM features:     NOT YET — Phase 4" && echo "" && echo "========================================="
+cd ~/Desktop/curia/backend && echo "=========================================" && echo " WHAT WE HAVE vs WHAT WE STILL NEED" && echo "=========================================" && echo "" && echo "✅ WHAT WE HAVE (Phase 1 Complete):" && echo "---" && echo -n "  Node.js:        " && node -v && echo -n "  npm:            " && npm -v && echo -n "  package.json:   " && (ls package.json > /dev/null 2>&1 && echo "YES" || echo "NO") && echo -n "  node_modules:   " && (ls node_modules/.package-lock.json > /dev/null 2>&1 && echo "YES" || echo "NO") && echo -n "  .env file:      " && (ls .env > /dev/null 2>&1 && echo "YES" || echo "NO") && echo -n "  Source code:    " && echo "$(find src/ -type f -not -name '.DS_Store' | wc -l | tr -d ' ') files" && echo -n "  Tests:          " && echo "$(find tests/ -type f -not -name '.DS_Store' 2>/dev/null | wc -l | tr -d ' ') files (57 tests)" && echo -n "  Express server: " && (grep -q '"express"' package.json && echo "YES (port 3001)" || echo "NO") && echo -n "  Auth system:    " && (ls src/routes/auth.js > /dev/null 2>&1 && echo "YES" || echo "NO") && echo -n "  Pricing engine: " && (ls src/engine/priceCalculator.js > /dev/null 2>&1 && echo "YES (Drutex only)" || echo "NO") && echo -n "  Surcharges:     " && (ls src/engine/surchargeCalculator.js > /dev/null 2>&1 && echo "DRAFT (Drutex only — Phase 2 will complete)" || echo "NO") && echo -n "  Security:       " && (ls src/middleware/security.js > /dev/null 2>&1 && echo "YES" || echo "NO") && echo "" && echo "🔲 WHAT WE STILL NEED (Phase 2+):" && echo "---" && echo "  Dataset analysis: NOT DONE — Gealan/Holz/Alu data not yet analyzed" && echo "  Surcharges:       DRAFT — Drutex only, other materials need analysis first" && echo "  PostgreSQL:       NOT INSTALLED — needed for Phase 2" && echo "  Gealan pricing:   NOT YET — dataset ready, engine not built" && echo "  Holz pricing:     NOT YET — dataset ready, engine not built" && echo "  Alu pricing:      NOT YET — dataset ready, engine not built" && echo "  Frontend:         NOT YET — Phase 3" && echo "  CRM features:     NOT YET — Phase 4" && echo "" && echo "========================================="
 ```
 
 📋 **Paste the full output back to me.**
