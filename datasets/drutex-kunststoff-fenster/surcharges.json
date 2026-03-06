@@ -1,0 +1,300 @@
+{
+  "exteriorColor": {
+    "fs1_01": {
+      "name": "Weiß",
+      "amount": 0
+    },
+    "fs1_02": {
+      "name": "Dunkelbraun",
+      "amount": 0
+    },
+    "fs1_03": {
+      "name": "Nussbaum golden",
+      "amount": 43.68
+    },
+    "fs1_04": {
+      "name": "Mahagoni",
+      "amount": 43.68
+    },
+    "fs1_05": {
+      "name": "Anthrazit grau",
+      "amount": 43.68
+    },
+    "fs1_06": {
+      "name": "Silbergrau",
+      "amount": 43.68
+    },
+    "fs1_07": {
+      "name": "Bergkiefer",
+      "amount": 43.68
+    },
+    "fs1_08": {
+      "name": "Teak",
+      "amount": 43.68
+    },
+    "fs1_09": {
+      "name": "Eiche golden",
+      "amount": 43.68
+    },
+    "fs1_10": {
+      "name": "Rosewood",
+      "amount": 43.68
+    },
+    "fs1_11": {
+      "name": "Graubeige",
+      "amount": 43.68
+    },
+    "fs1_12": {
+      "name": "Mooreiche",
+      "amount": 43.68
+    },
+    "fs1_13": {
+      "name": "Winchester",
+      "amount": 43.68
+    },
+    "fs1_14": {
+      "name": "Schwarzbraun",
+      "amount": 43.68
+    },
+    "fs1_15": {
+      "name": "Cremeweiss",
+      "amount": 43.68
+    },
+    "fs1_16": {
+      "name": "Premium Eiche",
+      "amount": 78.48
+    },
+    "fs1_17": {
+      "name": "Premium Nussbaum",
+      "amount": 78.48
+    },
+    "fs1_18": {
+      "name": "Premium Kirsche",
+      "amount": 78.48
+    },
+    "fs1_20": {
+      "name": "Alux Gold",
+      "amount": 83.19
+    },
+    "fs1_21": {
+      "name": "Alux Silber",
+      "amount": 83.19
+    },
+    "fs1_25": {
+      "name": "Special Premium 1",
+      "amount": 104.64
+    },
+    "fs1_26": {
+      "name": "Special Premium 2",
+      "amount": 104.64
+    }
+  },
+  "interiorColor": {
+    "fi1_01": {
+      "name": "Weiß",
+      "amount": 0
+    },
+    "fi1_02": {
+      "name": "Dunkelbraun",
+      "amount": 0
+    },
+    "fi1_03": {
+      "name": "Nussbaum golden",
+      "amount": 43.68
+    },
+    "fi1_04": {
+      "name": "Mahagoni",
+      "amount": 43.68
+    },
+    "fi1_05": {
+      "name": "Anthrazit grau",
+      "amount": 43.68
+    },
+    "fi1_06": {
+      "name": "Silbergrau",
+      "amount": 43.68
+    },
+    "fi1_07": {
+      "name": "Bergkiefer",
+      "amount": 43.68
+    },
+    "fi1_08": {
+      "name": "Teak",
+      "amount": 43.68
+    },
+    "fi1_09": {
+      "name": "Eiche golden",
+      "amount": 43.68
+    },
+    "fi1_10": {
+      "name": "Rosewood",
+      "amount": 43.68
+    },
+    "fi1_11": {
+      "name": "Graubeige",
+      "amount": 43.68
+    },
+    "fi1_12": {
+      "name": "Mooreiche",
+      "amount": 43.68
+    },
+    "fi1_13": {
+      "name": "Winchester",
+      "amount": 43.68
+    },
+    "fi1_14": {
+      "name": "Schwarzbraun",
+      "amount": 43.68
+    },
+    "fi1_15": {
+      "name": "Cremeweiss",
+      "amount": 43.68
+    },
+    "fi1_16": {
+      "name": "Premium Eiche",
+      "amount": 78.48
+    },
+    "fi1_17": {
+      "name": "Premium Nussbaum",
+      "amount": 78.48
+    },
+    "fi1_18": {
+      "name": "Premium Kirsche",
+      "amount": 78.48
+    },
+    "fi1_20": {
+      "name": "Alux Gold",
+      "amount": 83.19
+    },
+    "fi1_21": {
+      "name": "Alux Silber",
+      "amount": 83.19
+    },
+    "fi1_25": {
+      "name": "Special Premium 1",
+      "amount": 104.64
+    },
+    "fi1_26": {
+      "name": "Special Premium 2",
+      "amount": 104.64
+    }
+  },
+  "glass": {
+    "g1": {
+      "name": "2-fach Wärmeschutzglas Ug=1.1",
+      "amount": 0
+    },
+    "g2": {
+      "name": "2-fach Wärmeschutzglas Ug=1.0",
+      "amount": 0
+    },
+    "g3": {
+      "name": "3-fach Wärmeschutzglas Ug=0.7",
+      "amount": 39.81
+    },
+    "g4": {
+      "name": "3-fach Wärmeschutzglas Ug=0.6",
+      "amount": 39.81
+    },
+    "g7": {
+      "name": "Sandwichplatte",
+      "amount": 99.98
+    },
+    "g8": {
+      "name": "Ohne Glasscheibe",
+      "amount": -15.05
+    }
+  },
+  "soundProtection": {
+    "ss1": {
+      "name": "Standard",
+      "amount": 0
+    },
+    "ss2": {
+      "name": "Schallschutz 33dB",
+      "amount": 26
+    },
+    "ss3": {
+      "name": "Schallschutz 36dB",
+      "amount": 45
+    },
+    "ss4": {
+      "name": "Schallschutz 42dB",
+      "amount": 78
+    }
+  },
+  "securityGlass": {
+    "sv0": {
+      "name": "Ohne",
+      "amount": 0
+    },
+    "sv1": {
+      "name": "VSG",
+      "amount": 58
+    },
+    "sv2": {
+      "name": "ESG",
+      "amount": 38
+    }
+  },
+  "handle": {
+    "gr1": {
+      "name": "Standard",
+      "amount": 0
+    },
+    "gr2": {
+      "name": "Secvest",
+      "amount": 25
+    },
+    "gr3": {
+      "name": "Premium Griff",
+      "amount": 45
+    }
+  },
+  "security": {
+    "si1": {
+      "name": "Keine",
+      "amount": 0
+    },
+    "si2": {
+      "name": "RC2 Beschlag",
+      "amount": 55
+    },
+    "si3": {
+      "name": "RC2 Glas",
+      "amount": 95
+    },
+    "si4": {
+      "name": "RC3 Komplett",
+      "amount": 178
+    }
+  },
+  "sprossen": {
+    "sp0": {
+      "name": "Ohne",
+      "amount": 0
+    },
+    "sp1": {
+      "name": "Wiener Sprosse",
+      "amount": 35
+    },
+    "sp2": {
+      "name": "Echte Sprosse",
+      "amount": 95
+    },
+    "sp3": {
+      "name": "Kreuzprosse",
+      "amount": 55
+    }
+  },
+  "vPerfect": {
+    "vp0": {
+      "name": "Ohne",
+      "amount": 0
+    },
+    "vp1": {
+      "name": "V-Perfect Abdichtung",
+      "amount": 29
+    }
+  }
+}
