@@ -6,8 +6,14 @@
   "scripts": {
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
-    "test": "jest --testEnvironment=node",
+    "test": "jest --testEnvironment=node --forceExit",
     "lint": "eslint src/"
+  },
+  "jest": {
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/backend/"
+    ]
   },
   "keywords": [
     "crm",
