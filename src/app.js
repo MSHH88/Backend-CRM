@@ -35,6 +35,10 @@ const warenkorbRouter  = require('./routes/warenkorb');
 const optionsRouter    = require('./routes/options');
 const authRouter       = require('./routes/auth');
 
+// ── Swagger API docs ────────────────────────────────────────────────────────
+const swaggerUi   = require('swagger-ui-express');
+const swaggerSpec = require('./config/swagger');
+
 const app = express();
 
 // =============================================================================
@@ -80,14 +84,28 @@ if (process.env.NODE_ENV !== 'production') {
 // ROUTES
 // =============================================================================
 
-// ── Health check ──────────────────────────────────────────────────────────────
-app.get('/health', (_req, res) => {
+// ── Health check (includes DB status) ─────────────────────────────────────────
+app.get('/health', async (_req, res) => {
+  let dbStatus = 'not_configured';
+
+  // Only check DB if credentials are set
+  if (process.env.DB_PASSWORD) {
+    try {
+      const { pool } = require('./config/database');
+      await pool.query('SELECT 1');
+      dbStatus = 'connected';
+    } catch (_err) {
+      dbStatus = 'disconnected';
+    }
+  }
+
   res.status(200).json({
     status: 'ok',
     message: 'CURIA Backend is running',
     timestamp: new Date().toISOString(),
     environment: process.env.NODE_ENV || 'development',
     uptime: process.uptime(),
+    database: dbStatus,
   });
 });
 
@@ -101,20 +119,28 @@ app.get('/api/v1', (_req, res) => {
       health: '/health',
       api: '/api/v1',
       auth: '/api/v1/auth',
-      berechnen: 'POST /ajax/berechnen/',
-      warenkorb: 'POST /ajax/addWarenkorb/',
-      options: 'GET /ajax/getOptions/',
+      berechnen: 'POST /api/v1/berechnen/',
+      warenkorb: 'POST /api/v1/warenkorb/',
+      options: 'GET /api/v1/options/',
     },
   });
 });
 
-// ── Pricing engine routes (from PR #1) ──────────────────────────────────────
+// ── Pricing engine routes (standardized under /api/v1/) ─────────────────────
+app.use('/api/v1/berechnen',  berechnenRouter);
+app.use('/api/v1/warenkorb',  warenkorbRouter);
+app.use('/api/v1/options',    optionsRouter);
+
+// ── Legacy /ajax/ aliases (backward compatibility) ──────────────────────────
 app.use('/ajax/berechnen',    berechnenRouter);
 app.use('/ajax/addWarenkorb', warenkorbRouter);
 app.use('/ajax/getOptions',   optionsRouter);
 
 // ── Auth routes (Step 1.10) ─────────────────────────────────────────────────
 app.use('/api/v1/auth',       authRouter);
+
+// ── Swagger API documentation ───────────────────────────────────────────────
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // ── Placeholder routes (Phase 2+) ───────────────────────────────────────────
 // app.use('/api/v1/users',    require('./routes/users'));

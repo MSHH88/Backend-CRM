@@ -18,11 +18,11 @@ const VALID_CONFIG = JSON.stringify({
   vperfect:    'vp0',
 });
 
-// ── POST /ajax/berechnen/ ─────────────────────────────────────────────────────
-describe('POST /ajax/berechnen/', () => {
+// ── POST /api/v1/berechnen/ (standardized route) ─────────────────────────────
+describe('POST /api/v1/berechnen/', () => {
   test('returns 200 and HTML for a valid configuration', async () => {
     const res = await request(app)
-      .post('/ajax/berechnen/')
+      .post('/api/v1/berechnen/')
       .type('form')
       .send({ tmp_obj: VALID_CONFIG });
 
@@ -34,7 +34,7 @@ describe('POST /ajax/berechnen/', () => {
 
   test('returns 400 when tmp_obj is missing', async () => {
     const res = await request(app)
-      .post('/ajax/berechnen/')
+      .post('/api/v1/berechnen/')
       .type('form')
       .send({});
 
@@ -43,7 +43,7 @@ describe('POST /ajax/berechnen/', () => {
 
   test('returns 400 for malformed JSON in tmp_obj', async () => {
     const res = await request(app)
-      .post('/ajax/berechnen/')
+      .post('/api/v1/berechnen/')
       .type('form')
       .send({ tmp_obj: '{invalid json' });
 
@@ -53,28 +53,48 @@ describe('POST /ajax/berechnen/', () => {
   test('returns 400 for invalid dimensions', async () => {
     const badConfig = JSON.stringify({ breite: 100, hoehe: 100, profil: 'p1' });
     const res = await request(app)
-      .post('/ajax/berechnen/')
+      .post('/api/v1/berechnen/')
       .type('form')
       .send({ tmp_obj: badConfig });
 
     expect(res.status).toBe(400);
   });
 
-  test('HTML output contains the offer price for 1000x1000 p1 all-defaults (177,26 EUR)', async () => {
+  test('HTML output shows price with no discount by default (295,44 EUR)', async () => {
+    const res = await request(app)
+      .post('/api/v1/berechnen/')
+      .type('form')
+      .send({ tmp_obj: VALID_CONFIG });
+
+    expect(res.status).toBe(200);
+    // No hardcoded discount: angebotspreis = preisempfehlung = 295.44
+    expect(res.text).toContain('295,44 EUR');
+  });
+
+  test('HTML output includes VAT info by default', async () => {
+    const res = await request(app)
+      .post('/api/v1/berechnen/')
+      .type('form')
+      .send({ tmp_obj: VALID_CONFIG });
+
+    expect(res.status).toBe(200);
+    expect(res.text).toContain('MwSt');
+  });
+});
+
+// ── Legacy /ajax/ routes still work ──────────────────────────────────────────
+describe('Legacy /ajax/ routes', () => {
+  test('POST /ajax/berechnen/ still works', async () => {
     const res = await request(app)
       .post('/ajax/berechnen/')
       .type('form')
       .send({ tmp_obj: VALID_CONFIG });
 
     expect(res.status).toBe(200);
-    // German locale: 177.26 → "177,26"
-    expect(res.text).toContain('177,26 EUR');
+    expect(res.text).toContain('kalkulation-ergebnis');
   });
-});
 
-// ── POST /ajax/addWarenkorb/ ──────────────────────────────────────────────────
-describe('POST /ajax/addWarenkorb/', () => {
-  test('returns 200 and JSON for a valid configuration', async () => {
+  test('POST /ajax/addWarenkorb/ still works', async () => {
     const res = await request(app)
       .post('/ajax/addWarenkorb/')
       .type('form')
@@ -82,14 +102,35 @@ describe('POST /ajax/addWarenkorb/', () => {
 
     expect(res.status).toBe(200);
     expect(res.body.success).toBe(true);
+  });
+
+  test('GET /ajax/getOptions/ still works', async () => {
+    const res = await request(app).get('/ajax/getOptions/');
+    expect(res.status).toBe(200);
+    expect(res.body.success).toBe(true);
+  });
+});
+
+// ── POST /api/v1/warenkorb/ ──────────────────────────────────────────────────
+describe('POST /api/v1/warenkorb/', () => {
+  test('returns 200 and JSON for a valid configuration', async () => {
+    const res = await request(app)
+      .post('/api/v1/warenkorb/')
+      .type('form')
+      .send({ tmp_obj: VALID_CONFIG });
+
+    expect(res.status).toBe(200);
+    expect(res.body.success).toBe(true);
     expect(res.body.item).toBeDefined();
-    expect(res.body.item.angebotspreis).toBe(177.26);
+    // No hardcoded discount: angebotspreis = preisempfehlung = grundpreis
+    expect(res.body.item.angebotspreis).toBe(295.44);
     expect(res.body.item.grundpreis).toBe(295.44);
+    expect(res.body.item.discountRate).toBe(0);
   });
 
   test('returns 400 JSON when tmp_obj is missing', async () => {
     const res = await request(app)
-      .post('/ajax/addWarenkorb/')
+      .post('/api/v1/warenkorb/')
       .type('form')
       .send({});
 
@@ -100,7 +141,7 @@ describe('POST /ajax/addWarenkorb/', () => {
 
   test('returns 400 JSON for malformed JSON in tmp_obj', async () => {
     const res = await request(app)
-      .post('/ajax/addWarenkorb/')
+      .post('/api/v1/warenkorb/')
       .type('form')
       .send({ tmp_obj: 'not-json' });
 
@@ -110,19 +151,40 @@ describe('POST /ajax/addWarenkorb/', () => {
 
   test('JSON response includes konfiguration echo', async () => {
     const res = await request(app)
-      .post('/ajax/addWarenkorb/')
+      .post('/api/v1/warenkorb/')
       .type('form')
       .send({ tmp_obj: VALID_CONFIG });
 
     expect(res.body.item.konfiguration).toBeDefined();
     expect(res.body.item.konfiguration.profil).toBe('p1');
   });
+
+  test('JSON response includes VAT fields', async () => {
+    const res = await request(app)
+      .post('/api/v1/warenkorb/')
+      .type('form')
+      .send({ tmp_obj: VALID_CONFIG });
+
+    expect(res.body.item.vatRate).toBe(0.19);
+    expect(res.body.item.vatAmount).toBeGreaterThan(0);
+    expect(res.body.item.totalWithVat).toBeGreaterThan(res.body.item.totalPrice);
+  });
+
+  test('JSON response includes quantity fields', async () => {
+    const res = await request(app)
+      .post('/api/v1/warenkorb/')
+      .type('form')
+      .send({ tmp_obj: VALID_CONFIG });
+
+    expect(res.body.item.quantity).toBe(1);
+    expect(res.body.item.quantityDiscount).toBe(0);
+  });
 });
 
-// ── GET /ajax/getOptions/ ─────────────────────────────────────────────────────
-describe('GET /ajax/getOptions/', () => {
+// ── GET /api/v1/options/ ─────────────────────────────────────────────────────
+describe('GET /api/v1/options/', () => {
   test('returns 200 and JSON', async () => {
-    const res = await request(app).get('/ajax/getOptions/');
+    const res = await request(app).get('/api/v1/options/');
 
     expect(res.status).toBe(200);
     expect(res.body.success).toBe(true);
@@ -130,14 +192,14 @@ describe('GET /ajax/getOptions/', () => {
   });
 
   test('response contains profiles array', async () => {
-    const res = await request(app).get('/ajax/getOptions/');
+    const res = await request(app).get('/api/v1/options/');
 
     expect(Array.isArray(res.body.options.profiles)).toBe(true);
     expect(res.body.options.profiles.length).toBeGreaterThan(0);
   });
 
   test('response contains glass options', async () => {
-    const res = await request(app).get('/ajax/getOptions/');
+    const res = await request(app).get('/api/v1/options/');
 
     expect(Array.isArray(res.body.options.verglasung)).toBe(true);
     const g3 = res.body.options.verglasung.find((g) => g.id === 'g3');
@@ -146,7 +208,7 @@ describe('GET /ajax/getOptions/', () => {
   });
 
   test('response contains dimensionen constraints', async () => {
-    const res = await request(app).get('/ajax/getOptions/');
+    const res = await request(app).get('/api/v1/options/');
 
     expect(res.body.options.dimensionen.minBreite).toBe(400);
     expect(res.body.options.dimensionen.maxBreite).toBe(2400);
@@ -160,5 +222,19 @@ describe('GET /health', () => {
 
     expect(res.status).toBe(200);
     expect(res.body.status).toBe('ok');
+  });
+
+  test('includes database status field', async () => {
+    const res = await request(app).get('/health');
+
+    expect(res.body.database).toBeDefined();
+  });
+});
+
+// ── Swagger docs ──────────────────────────────────────────────────────────────
+describe('GET /api-docs', () => {
+  test('returns 200 (Swagger UI)', async () => {
+    const res = await request(app).get('/api-docs/').redirects(1);
+    expect(res.status).toBe(200);
   });
 });

@@ -112,8 +112,17 @@ const config = {
   business: {
     defaultMargin: parseFloat(process.env.DEFAULT_MARGIN) || 0.50, // 50%
     defaultVatRate: parseFloat(process.env.DEFAULT_VAT_RATE) || 0.19, // 19% German VAT
+    showVat: process.env.SHOW_VAT !== 'false', // default true, German law requires it
     currency: process.env.DEFAULT_CURRENCY || 'EUR',
     locale: process.env.DEFAULT_LOCALE || 'de-DE',
+    // Discount is NOT hardcoded. Set via CRM per product/category/global.
+    // Default 0 means no discount unless CRM specifies one.
+    defaultDiscountRate: parseFloat(process.env.DEFAULT_DISCOUNT_RATE) || 0,
+    // Quantity pricing tiers (adjustable via CRM, can be set to 0/empty to disable)
+    // Example tiers: 5+ pieces = 5%, 10+ = 7%, 20+ = 10%
+    quantityTiers: process.env.QUANTITY_TIERS
+      ? JSON.parse(process.env.QUANTITY_TIERS)
+      : [],
   },
 
   // -----------------------------------------
