@@ -25,7 +25,7 @@ const router = express.Router();
  */
 router.post('/', (req, res) => {
   const wantJSON = req.query.format === 'json'
-    || (req.headers.accept && req.headers.accept.includes('application/json'));
+    || (req.get('Accept') || '').includes('application/json');
 
   let objKonfig;
 
