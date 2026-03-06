@@ -1,86 +1,13 @@
-# Terminal Health Check — Quick Testing Guide
+# How to Test the Backend
 
-> Repo is **public** — all `curl` commands work directly. Just copy-paste.
-
----
-
-## Step 1 — Run all tests
-
-```bash
-cd ~/Desktop/curia/backend && npm test
-```
-
-**You should see:**
-```
-Test Suites: 3 passed, 3 total
-Tests:       95 passed, 95 total
-```
-
-> The "Force exiting Jest" message at the end is **normal** — ignore it.
-
-📋 **Paste the last 10 lines back to me.**
+Open **Terminal** on your Mac. Paste each block one at a time.
 
 ---
 
-## Step 2 — Start the server
+## 1. Download all files
 
-```bash
-cd ~/Desktop/curia/backend && npm start
-```
+Paste this in Terminal. It deletes your old files and downloads all new ones:
 
-**You should see:**
-```
-🚀 CURIA Backend Server Started
-🌐 Server URL: http://localhost:3001
-```
-
-⚠️ **Leave this terminal open! Do NOT close it.**
-
----
-
-## Step 3 — Test the server (open a NEW terminal tab: Cmd+T)
-
-Press **Cmd+T** to open a new tab.
-
-⚠️ **Only paste the bash block below** — nothing else. It tests all 4 endpoints in one go:
-
-```bash
-curl http://localhost:3001/health && echo "" && \
-curl http://localhost:3001/api/v1 && echo "" && \
-curl -X POST "http://localhost:3001/ajax/berechnen/?format=json" \
-  -H "Content-Type: application/x-www-form-urlencoded" \
-  -d 'tmp_obj={"breite":1000,"hoehe":1200,"profil":"p1","verglasung":"g1","aussenfarbe":"fs1_01","innenfarbe":"fi1_01","schallschutz":"ss1","sicherheitsverglasung":"sv0","griff":"gr1","sicherheit":"si1","sprossen":"sp0","vperfect":"vp0"}' && echo "" && \
-curl http://localhost:3001/ajax/getOptions/
-```
-
-**You should see (4 JSON responses):**
-1. `{"status":"ok", ...}` — health check ✅
-2. `{"name":"CURIA API", ...}` — API info ✅
-3. `{"success":true,"item":{"produktName":"Drutex ...","angebotspreis":336.75,...}}` — price calculation ✅
-4. `{"success":true,"options":{...}}` — all product options ✅
-
-📋 **Paste the output back to me.**
-
-Then go back to the first tab and press **Ctrl+C** to stop the server.
-
----
-
-## How to Update Files From GitHub
-
-When I tell you files have changed, use these commands. The repo is public so `curl` works.
-
-**Base URL (copy once):**
-```bash
-BASE="https://raw.githubusercontent.com/MSHH88/Backend-CRM/copilot/analyze-project-phase-1/backend"
-```
-
-**Download a single file** (replace the path as needed):
-```bash
-cd ~/Desktop/curia/backend && \
-curl -fsSL "$BASE/src/engine/priceCalculator.js" -o src/engine/priceCalculator.js
-```
-
-**Download everything fresh** (nuclear option — deletes and redownloads all):
 ```bash
 cd ~/Desktop/curia/backend && \
 rm -rf src/ tests/ && \
@@ -115,105 +42,66 @@ curl -fsSL "$BASE/.eslintrc.js"   -o .eslintrc.js && \
 curl -fsSL "$BASE/.env.example"   -o .env.example && \
 curl -fsSL "$BASE/.gitignore"     -o .gitignore && \
 npm install && \
-echo "✅ All 28 files downloaded + dependencies installed"
+echo "" && echo "✅ Done"
 ```
 
-After updating, run **Step 1** again to verify tests pass.
+You should see `✅ Done` at the end.
 
 ---
 
-## What to Delete / What to Download / Where it Goes
+## 2. Run tests
 
-### Your local folder: `~/Desktop/curia/backend/`
+Paste this in Terminal:
 
-| What to DELETE | Why |
-|----------------|-----|
-| `node_modules/` | Only if `npm install` fails. Then run `npm install` again |
-| Nothing else | Keep existing files unless I tell you to update specific ones |
+```bash
+npm test
+```
 
-### Complete file map (28 files → `~/Desktop/curia/backend/`)
+You should see:
 
-| File | Goes into folder |
-|------|-----------------|
-| `package.json` | `~/Desktop/curia/backend/` |
-| `.eslintrc.js` | `~/Desktop/curia/backend/` |
-| `.env.example` | `~/Desktop/curia/backend/` |
-| `.gitignore` | `~/Desktop/curia/backend/` |
-| `src/app.js` | `~/Desktop/curia/backend/src/` |
-| `src/server.js` | `~/Desktop/curia/backend/src/` |
-| `src/config/database.js` | `~/Desktop/curia/backend/src/config/` |
-| `src/config/index.js` | `~/Desktop/curia/backend/src/config/` |
-| `src/config/migrations.js` | `~/Desktop/curia/backend/src/config/` |
-| `src/config/swagger.js` | `~/Desktop/curia/backend/src/config/` |
-| `src/data/basePrices.js` | `~/Desktop/curia/backend/src/data/` |
-| `src/data/profileMultipliers.js` | `~/Desktop/curia/backend/src/data/` |
-| `src/data/surcharges.js` | `~/Desktop/curia/backend/src/data/` |
-| `src/db/schema.sql` | `~/Desktop/curia/backend/src/db/` |
-| `src/engine/priceCalculator.js` | `~/Desktop/curia/backend/src/engine/` |
-| `src/engine/surchargeCalculator.js` | `~/Desktop/curia/backend/src/engine/` |
-| `src/middleware/auth.js` | `~/Desktop/curia/backend/src/middleware/` |
-| `src/middleware/errorHandler.js` | `~/Desktop/curia/backend/src/middleware/` |
-| `src/middleware/security.js` | `~/Desktop/curia/backend/src/middleware/` |
-| `src/routes/auth.js` | `~/Desktop/curia/backend/src/routes/` |
-| `src/routes/berechnen.js` | `~/Desktop/curia/backend/src/routes/` |
-| `src/routes/options.js` | `~/Desktop/curia/backend/src/routes/` |
-| `src/routes/warenkorb.js` | `~/Desktop/curia/backend/src/routes/` |
-| `src/utils/logger.js` | `~/Desktop/curia/backend/src/utils/` |
-| `src/utils/responseFormatter.js` | `~/Desktop/curia/backend/src/utils/` |
-| `tests/api.test.js` | `~/Desktop/curia/backend/tests/` |
-| `tests/auth.test.js` | `~/Desktop/curia/backend/tests/` |
-| `tests/priceCalculator.test.js` | `~/Desktop/curia/backend/tests/` |
+```
+Tests:       95 passed, 95 total
+```
+
+Ignore "Force exiting Jest" — that is normal.
+
+📋 **Copy the last 10 lines and paste them back to me.**
 
 ---
 
-## What's in each folder
+## 3. Start the server
 
-| Folder / File | What it contains | Count |
-|---------------|-----------------|-------|
-| `src/` | All backend source code | 21 files |
-| `src/config/` | Database, Swagger, app config | 4 files |
-| `src/data/` | Pricing data (Drutex base prices, surcharges, multipliers) | 3 files |
-| `src/db/` | PostgreSQL schema (Phase 2) | 1 file |
-| `src/engine/` | Price calculation engine | 2 files |
-| `src/middleware/` | Auth, security, error handling | 3 files |
-| `src/routes/` | API endpoints (berechnen, warenkorb, options, auth) | 4 files |
-| `src/utils/` | Logger, response formatter | 2 files |
-| `src/app.js` | Express app setup | 1 file |
-| `src/server.js` | Server entry point | 1 file |
-| `tests/` | Jest test suites (95 tests total) | 3 files |
-| `package.json` | Dependencies and scripts | config |
-| `.eslintrc.js` | ESLint code quality rules | config |
-| `.env.example` | Environment variable template | config |
-| `.gitignore` | Git ignore rules | config |
+Paste this in Terminal:
+
+```bash
+npm start
+```
+
+You should see:
+
+```
+🚀 CURIA Backend Server Started
+```
+
+**Do NOT close this terminal window.** Leave it running.
 
 ---
 
-## Troubleshooting
+## 4. Test the endpoints
 
-| Error | Fix |
-|-------|-----|
-| `Cannot find module 'supertest'` | Run `npm install` |
-| `No tests found` | `tests/` folder missing — redownload (see "How to Update" above) |
-| `ENOENT ... package.json` | Run `cd ~/Desktop/curia/backend` first |
-| `Failed to connect to localhost port 3001` | Server not running — start it with Step 2 |
-| `command not found: node` | Install from https://nodejs.org |
-| `EADDRINUSE :::3001` | Port in use — run `lsof -ti :3001 | xargs kill` then retry |
-| `Force exiting Jest` | **Not an error** — this is normal, ignore it |
-| `zsh: command not found: breite:1000,...` | You pasted the JSON config as a command — only paste the `bash` block in Step 3 |
+Open a **new terminal tab** (press **Cmd+T**). Paste this:
 
----
+```bash
+curl http://localhost:3001/health && echo "" && \
+curl http://localhost:3001/api/v1 && echo "" && \
+curl -X POST "http://localhost:3001/ajax/berechnen/?format=json" \
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  -d 'tmp_obj={"breite":1000,"hoehe":1200,"profil":"p1","verglasung":"g1","aussenfarbe":"fs1_01","innenfarbe":"fi1_01","schallschutz":"ss1","sicherheitsverglasung":"sv0","griff":"gr1","sicherheit":"si1","sprossen":"sp0","vperfect":"vp0"}' && echo "" && \
+curl http://localhost:3001/ajax/getOptions/
+```
 
-## Quick Summary
+You should see **4 lines** that all start with `{` — they are JSON data.
 
-| What | Status |
-|------|--------|
-| Phase 1 backend | ✅ DONE |
-| 95 tests | ✅ Passing |
-| Server on port 3001 | ✅ Working |
-| Auth system | ✅ In-memory |
-| Security middleware | ✅ Working |
-| Pricing engine (Drutex) | ✅ Working |
-| PostgreSQL | 🔲 Phase 2 |
-| Multi-material pricing | 🔲 Datasets ready |
-| Frontend | 🔲 Phase 3 |
-| CRM | 🔲 Phase 4 |
+📋 **Copy all the output and paste it back to me.**
+
+Then go back to the server tab and press **Ctrl+C** to stop it.
