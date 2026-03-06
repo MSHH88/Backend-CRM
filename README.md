@@ -75,11 +75,11 @@ Lives on this branch (`copilot/analyze-project-phase-1`):
 - [x] Step 1.5: Database connection setup (src/config/database.js — PostgreSQL pool)
 - [x] Step 1.6: Error handling middleware (src/middleware/errorHandler.js — 20+ error classes)
 - [x] Step 1.7: Logging setup (src/utils/logger.js — Winston-based)
+- [x] Step 1.8: Security middleware (applySecurity wired into app.js — helmet, CORS, XSS, HPP, rate limiting, mongo-sanitize) ✅
+- [x] Step 1.9: Route structure (pricing routes + auth routes + error handlers from middleware) ✅
+- [x] Step 1.10: Authentication setup (JWT register/login/logout/refresh/me, bcrypt, role assignment) ✅
 - [x] Pricing engine integrated (src/engine/, src/data/, src/routes/)
-- [x] All 41 tests passing (priceCalculator.test.js + api.test.js)
-- [ ] Step 1.8: Security middleware (src/middleware/security.js exists but not integrated into app.js)
-- [ ] Step 1.9: Basic route structure (split placeholder routes into files)
-- [ ] Step 1.10: Authentication setup (src/middleware/auth.js exists but not integrated)
+- [x] All 57 tests passing (priceCalculator.test.js + api.test.js + auth.test.js)
 
 ### Frontend Design Assets (in `frontend-glass-configurator` repo)
 - Homepage V1 design with glassmorphism effect (complete HTML prototype)
@@ -122,6 +122,7 @@ src/
 │   ├── errorHandler.js             # 20+ error classes, DB error handling
 │   └── security.js                 # XSS, HPP, rate limiting (ready for integration)
 ├── routes/
+│   ├── auth.js                     # POST register/login/logout/refresh, GET me
 │   ├── berechnen.js                # POST /ajax/berechnen/ → HTML response
 │   ├── warenkorb.js                # POST /ajax/addWarenkorb/ → JSON response
 │   └── options.js                  # GET /ajax/getOptions/ → JSON catalog
@@ -130,7 +131,8 @@ src/
     └── responseFormatter.js        # HTML and JSON formatters with XSS escaping
 tests/
 ├── priceCalculator.test.js         # Unit tests: base prices, multipliers, surcharges, full calc
-└── api.test.js                     # Integration tests: all endpoints + error cases
+├── api.test.js                     # Integration tests: all endpoints + error cases
+└── auth.test.js                    # Auth tests: register, login, logout, refresh, me (16 tests)
 ```
 
 ---
@@ -143,11 +145,11 @@ tests/
 | Step | Description | Status |
 |------|-------------|--------|
 | 1.1–1.7 | Project setup, server, config, DB, error handling, logging | ✅ Done |
-| 1.8 | Security middleware (integrate into app.js) | ⬜ TODO |
-| 1.9 | Basic route structure (review/clean 90KB routes file) | ⬜ TODO |
-| 1.10 | Authentication system (JWT, login/register/logout) | ⬜ TODO |
+| 1.8 | Security middleware (integrate into app.js) | ✅ Done |
+| 1.9 | Basic route structure (auth routes, pricing routes, error handlers) | ✅ Done |
+| 1.10 | Authentication system (JWT, login/register/logout/refresh/me) | ✅ Done |
 | Week 2 | Database schema & migrations (users, roles, products, orders) | ⬜ TODO |
-| Week 3 | Auth system (password hashing, JWT tokens, role-based middleware) | ⬜ TODO |
+| Week 3 | Auth system (password hashing, JWT tokens, role-based middleware) | ✅ Done (in-memory, needs DB) |
 | Week 4 | Core API routes (users, products CRUD), input validation, rate limiting | ⬜ TODO |
 
 ### Phase 2: Pricing Engine & Configurator — Weeks 5–8
@@ -204,10 +206,11 @@ tests/
 ### Technical Gaps
 1. ~~**Backend branch has `node_modules` committed**~~ ✅ Fixed — proper .gitignore in unified codebase
 2. ~~**Routes file is 90KB**~~ ✅ Fixed — clean route files from PR #1 (berechnen, warenkorb, options)
-3. **Security middleware exists but not wired into app.js** — Ready for Step 1.8
-4. **Auth middleware exists but not wired into app.js** — Ready for Step 1.10
-5. **Database migrations exist but not tested against live PostgreSQL**
-6. ~~**No test files exist yet**~~ ✅ Fixed — 41 tests passing (Jest + Supertest)
+3. ~~**Security middleware exists but not wired into app.js**~~ ✅ Fixed — `applySecurity()` integrated (Step 1.8)
+4. ~~**Auth middleware exists but not wired into app.js**~~ ✅ Fixed — Auth routes created with JWT (Step 1.10)
+5. **Database migrations exist but not tested against live PostgreSQL** — Next: Phase 1 Week 2
+6. ~~**No test files exist yet**~~ ✅ Fixed — 57 tests passing (Jest + Supertest)
+7. **Auth uses in-memory user store** — Placeholder until PostgreSQL schema is set up
 
 ### Data Gaps (Non-Blocking for Development)
 1. **KATALOG** — CEO's actual product catalog with Einkaufspreise (purchase prices) — needed before launch
@@ -239,24 +242,26 @@ tests/
 3. ✅ Merged CURIA platform foundation (config/, middleware/, utils/) from `Backend` branch
 4. ✅ Ported pricing engine from PR #1 (engine/, data/, pricing routes, response formatter, tests)
 5. ✅ Reconciled app.js — Backend branch security middleware + PR #1 pricing routes
-6. ✅ All 41 tests pass, server starts cleanly, 0 npm vulnerabilities
+6. ✅ All 57 tests pass, server starts cleanly, 0 npm vulnerabilities
 
-**Step B: Wire Up Existing Middleware (Steps 1.8–1.10)**
-1. Integrate `security.js` into the Express app middleware chain
-2. Split the 90KB `routes/index.js` into separate route files (auth, users, products, configurator)
-3. Wire `auth.js` middleware into protected routes
-4. Create auth routes (login, register, logout, refresh, me)
+**Step B: Wire Up Existing Middleware (Steps 1.8–1.10)** ✅ DONE
+1. ✅ Integrated `security.js` into the Express app middleware chain via `applySecurity()`
+2. ✅ Integrated `errorHandler.js` (`notFoundHandler` + `errorHandler`) into app.js
+3. ✅ Wired `auth.js` middleware into protected routes (authenticate for /me, /logout)
+4. ✅ Created auth routes (register, login, logout, refresh, me) with 16 passing tests
 
-**Step C: Database Schema (Week 2)**
+**Step C: Database Schema (Week 2)** ← NEXT
 1. Set up PostgreSQL (or use SQLite for dev)
-2. Run the migration SQL from `Backend/src/config/migrations.js`
-3. Seed the price data (base prices, multipliers, surcharges) from PR #1's data files
+2. Run the migration SQL from `src/config/migrations.js`
+3. Seed the price data (base prices, multipliers, surcharges) from data files
 4. Create User and Role models
+5. Connect auth routes to database (replace in-memory user store)
 
-**Step D: Tests**
-1. Port the passing tests from PR #1 (priceCalculator.test.js, api.test.js)
-2. Add tests for auth middleware and security middleware
-3. Add integration tests for database operations
+**Step D: Core API Routes (Week 4)**
+1. Users CRUD API with role-based access
+2. Products CRUD API
+3. Input validation with express-validator
+4. API rate limiting per route type
 
 ### ✅ Codebases Reconciled
 
@@ -314,6 +319,11 @@ The `Backend` branch and PR #1 have been merged into a unified codebase on this 
 |----------|--------|-------------|
 | `/health` | GET | Server health check |
 | `/api/v1` | GET | API version info |
+| `/api/v1/auth/register` | POST | Register new user |
+| `/api/v1/auth/login` | POST | Login and get tokens |
+| `/api/v1/auth/logout` | POST | Logout (revoke token) |
+| `/api/v1/auth/refresh` | POST | Refresh token pair |
+| `/api/v1/auth/me` | GET | Get current user info |
 | `/ajax/berechnen/` | POST | Price calculation (returns HTML) |
 | `/ajax/addWarenkorb/` | POST | Add to cart (returns JSON) |
 | `/ajax/getOptions/` | GET | Get configurator options (returns JSON) |
