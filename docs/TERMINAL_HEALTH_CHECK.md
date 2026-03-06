@@ -2,23 +2,64 @@
 
 Run these commands **in order** from your terminal on your MacBook.
 
-> ⚠️ **IMPORTANT:** Every command below assumes you are inside the `curia` folder.
-> If you get `ENOENT: no such file or directory ... package.json` it means you are
-> NOT inside `curia`. Run `cd ~/Desktop/curia` first.
+> ⚠️ **IMPORTANT:** Every command below assumes you are inside the project folder
+> that contains `package.json`. If you get `ENOENT: no such file or directory ...
+> package.json` it means you are NOT in the right folder. Follow Step 0 carefully.
+
+> 💡 **PostgreSQL / pgAdmin NOT needed yet.** The current version uses in-memory
+> stores for everything. You do NOT need to install or open PGAdmin, PostgreSQL,
+> or any database. Just Node.js and npm.
 
 ---
 
-## 0. Navigate Into Your Project Folder
+## 0. Clone the Project & Navigate Into It
+
+### If you have NOT cloned the repo yet
+
+Open Terminal (Cmd+Space → type "Terminal" → Enter), then run:
 
 ```bash
+cd ~/Desktop
+git clone https://github.com/MSHH88/Backend-CRM.git curia
 cd ~/Desktop/curia
 ```
 
-**Expected:** No output (silence = success). You are now inside the project.
+This clones the repository directly into a folder called `curia` on your Desktop.
 
-To double-check you're in the right place:
+### If your `curia` folder already exists but has no `package.json`
+
+This usually means `git clone` created a subfolder inside `curia`. Check:
 
 ```bash
+ls ~/Desktop/curia/package.json
+```
+
+If you see `No such file or directory`, check for a subfolder:
+
+```bash
+ls ~/Desktop/curia/Backend-CRM/package.json
+```
+
+If **that** works, the project is nested one level deep. Fix it by moving
+everything up:
+
+```bash
+# Move repo contents up into curia directly
+mv ~/Desktop/curia/Backend-CRM/{*,.[!.]*} ~/Desktop/curia/ 2>/dev/null
+rmdir ~/Desktop/curia/Backend-CRM
+```
+
+Or, the simpler approach — just delete and re-clone:
+
+```bash
+rm -rf ~/Desktop/curia
+git clone https://github.com/MSHH88/Backend-CRM.git ~/Desktop/curia
+```
+
+### Verify you're in the right place
+
+```bash
+cd ~/Desktop/curia
 pwd && ls package.json
 ```
 
@@ -28,7 +69,8 @@ pwd && ls package.json
 package.json
 ```
 
-If you see `No such file or directory`, you are in the wrong folder.
+If you see `No such file or directory` for `package.json`, go back to the
+clone steps above — something is not right.
 
 ---
 
@@ -191,12 +233,19 @@ cd ~/Desktop/curia && npm run lint
 
 | Error | Cause | Fix |
 |-------|-------|-----|
+| `ENOENT ... package.json` | `package.json` is not in your current folder | See Step 0 — you likely have a nested `Backend-CRM/` subfolder inside `curia`, or need to clone the repo |
 | `cd: no such file or directory: Backend-CRM` | Folder is called `curia` on your Desktop | Use `cd ~/Desktop/curia` |
 | `cd: no such file or directory: /Users/.../curia` | You used `~/curia` but the folder is on your Desktop | Use `cd ~/Desktop/curia` |
-| `ENOENT: no such file or directory ... package.json` | You're not inside the project folder | Run `cd ~/Desktop/curia` first |
 | `Failed to connect to localhost port 3001` | Server is not running | Start it first with `cd ~/Desktop/curia && npm start` in another terminal |
 | `curl: command not found` | curl not installed | Run `brew install curl` or use the browser: `http://localhost:3001/health` |
 | `command not found: node` | Node.js not installed | Install from https://nodejs.org (LTS version) |
+| `command not found: git` | Git not installed | Run `xcode-select --install` in Terminal |
+
+### Do I need pgAdmin / PostgreSQL?
+
+**No, not yet.** The current version (Phase 1) uses in-memory data stores.
+Everything works with just Node.js and npm. PostgreSQL will be needed later
+in Phase 2 when we add database persistence.
 
 ---
 
