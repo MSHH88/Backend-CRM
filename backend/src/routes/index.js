@@ -1,3 +1,4 @@
+/**
  * CURIA Backend - API Routes Index
  * 
  * ROUTE STRUCTURE:

@@ -1,3 +1,4 @@
+/**
  * CURIA Backend - Security Middleware
  * 
  * INDUSTRY STANDARD SECURITY FEATURES:

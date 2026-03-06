@@ -1,3 +1,4 @@
+/**
  * CURIA Backend - Database Migrations
  * Complete schema for all features
  * 

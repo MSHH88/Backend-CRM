@@ -1,3 +1,4 @@
+/**
  * CURIA Backend - Authentication Middleware
  * 
  * FEATURES:

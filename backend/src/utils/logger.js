@@ -1,3 +1,4 @@
+/**
  * CURIA Backend - Comprehensive Logging Utility
  * 
  * Features:
