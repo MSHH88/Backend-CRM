@@ -37,7 +37,7 @@ router.post('/', (req, res) => {
     // Modern format: config object sent directly as JSON body
     objKonfig = req.body;
   } else {
-    return res.status(400).send('<p class="error">Fehler: tmp_obj fehlt in der Anfrage.</p>');
+    return res.status(400).send('<p class="error">Fehler: Anfrage enthält keine gültigen Konfigurationsdaten (tmp_obj oder breite/hoehe erforderlich).</p>');
   }
 
   try {
