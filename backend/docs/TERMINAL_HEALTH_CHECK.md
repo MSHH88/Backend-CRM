@@ -118,7 +118,7 @@ cd ~/Desktop/curia/backend && npm test
 Tests:       100 passed, 100 total
 ```
 
-> The message "Force exiting Jest" may appear — **that is normal, ignore it.**
+> The messages "Force exiting Jest" and "A worker process has failed to exit gracefully" may appear — **both are normal, ignore them.**
 
 📋 **Copy the last 10 lines from Terminal and send them to me.**
 
