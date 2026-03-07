@@ -206,6 +206,10 @@ cd ~/Desktop/curia/backend && npm start
 
 > These messages are **expected**. The server falls back to in-memory storage automatically.
 
+> ⚠️ **PGAdmin users — "server" is NOT the same as "database"!**
+>
+> In PGAdmin, a **server** is just a connection to your PostgreSQL instance (like a bookmark). A **database** is where the actual data lives. If you named your server "curia" in PGAdmin, that does NOT create a database called "curia". You still need to create the database — see [Step 5b](#5b--create-the-database) below.
+
 ⚠️ **IMPORTANT: Do NOT close this Terminal window. Leave the server running.**
 
 ---
@@ -253,16 +257,43 @@ curl -s -X POST http://localhost:3001/api/v1/auth/login \
   -d '{"email":"test@example.com","password":"Test1234!"}' | python3 -m json.tool
 ```
 
-**✅ You should see:** A JSON response with `user` and `tokens`. Copy the `accessToken` value for the next step.
+**✅ You should see:** A JSON response with `user` and `tokens`.
 
-**Get your profile (replace YOUR_TOKEN with the accessToken you copied):**
+**Get your profile — option A (all-in-one, recommended):**
+
+Paste this **single block** — it logs in, extracts the token automatically, and fetches your profile:
 
 ```bash
+TOKEN=$(curl -s -X POST http://localhost:3001/api/v1/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"test@example.com","password":"Test1234!"}' | python3 -c "import sys,json; print(json.load(sys.stdin)['tokens']['accessToken'])") && \
+echo "Using token: ${TOKEN:0:20}..." && \
 curl -s http://localhost:3001/api/v1/auth/me \
-  -H "Authorization: Bearer YOUR_TOKEN" | python3 -m json.tool
+  -H "Authorization: Bearer $TOKEN" | python3 -m json.tool
 ```
 
 **✅ You should see:** Your user profile (id, email, firstName, lastName, role).
+
+**Get your profile — option B (manual token copy):**
+
+If option A doesn't work, do it in two steps:
+
+1. Look at the login response from above. Find the `"accessToken"` value — it's the long string starting with `eyJ...`. **Copy that entire string** (without the quotes).
+
+2. Paste this command, replacing `PASTE_YOUR_TOKEN_HERE` with the token you copied:
+
+```bash
+curl -s http://localhost:3001/api/v1/auth/me \
+  -H "Authorization: Bearer PASTE_YOUR_TOKEN_HERE" | python3 -m json.tool
+```
+
+> **Where is the access token?** In the JSON response from register or login, look for:
+> ```json
+> "tokens": {
+>     "accessToken": "eyJhbGciOi...",   ← THIS is your access token
+>     "refreshToken": "eyJhbGciOi...",
+> ```
+> Copy the full `eyJ...` string after `"accessToken":`.
 
 📋 **Copy all the output and send it to me.**
 
@@ -302,17 +333,25 @@ If you downloaded the official PostgreSQL installer from [postgresql.org](https:
 
 ### 5b — Create the database
 
+> ⚠️ **Important: A PGAdmin "server" is NOT a database!**
+>
+> In PGAdmin, a **server** is a connection to your PostgreSQL instance — think of it as a bookmark.
+> Inside that server, you can have multiple **databases**. You need to create a **database** called `curia` inside your server.
+>
+> If you already named your server "curia" in PGAdmin, that's fine — but you still need to create a **database** called `curia` inside it.
+
 **If you use PGAdmin (graphical):**
 
 1. Open **PGAdmin**
-2. In the left sidebar, expand **Servers** → your local server (usually "PostgreSQL 16" or "localhost")
+2. In the left sidebar, expand **Servers** → your local server (e.g. "curia", "PostgreSQL 16", or "localhost")
 3. Enter your password if prompted (the one you set during PostgreSQL installation)
-4. Right-click **Databases** → **Create** → **Database…**
-5. Set **Database name** to `curia`
-6. Click **Save**
-7. You should see "curia" appear under Databases ✅
+4. Look under that server — you'll see **Databases**, **Login/Group Roles**, etc.
+5. Right-click **Databases** → **Create** → **Database…**
+6. Set **Database name** to `curia`
+7. Click **Save**
+8. You should see "curia" appear under Databases ✅
 
-> **Already see "curia" in PGAdmin?** You're done with this step — move to 5c.
+> **Already see "curia" under Databases (not just as a server name)?** You're done with this step — move to 5c.
 
 **If you prefer the Terminal:**
 
@@ -431,12 +470,14 @@ curl -s http://localhost:3001/health | python3 -m json.tool
 
 | Problem | Solution |
 |---------|----------|
-| `database "curia" does not exist` | Create the database in PGAdmin (right-click Databases → Create → Database → name it `curia`) or run `createdb curia` in Terminal |
+| `database "curia" does not exist` | Create the database in PGAdmin (right-click Databases → Create → Database → name it `curia`) or run `createdb curia` in Terminal. **Note:** naming your PGAdmin server "curia" does NOT create a database — you must create the database separately inside the server. |
+| I named my PGAdmin server "curia" but still get the error | A **server** in PGAdmin is just a connection bookmark. You need to create a **database** called `curia` inside that server. Expand your server → right-click **Databases** → Create → Database → name it `curia`. |
 | `password authentication failed for user "postgres"` | The password in your `.env` file doesn't match. Check the password in PGAdmin: right-click your server → Properties → Connection tab. Update `DB_PASSWORD` in `.env` |
 | `connection refused` or `could not connect to server` | PostgreSQL is not running. In PGAdmin, check if your server shows a red X. On Mac: `brew services start postgresql@16` or start it from PGAdmin |
 | `role "postgres" does not exist` | Your PostgreSQL uses a different username. Check your macOS username with `whoami` in Terminal, then set `DB_USER=yourusername` in `.env` |
-| Server says `⚠️ PostgreSQL not reachable` even after setup | Did you save the `.env` file? Did you restart the server with `npm start`? The server reads `.env` only at startup |
+| Server says `⚠️ PostgreSQL not reachable` even after setup | Did you create a `.env` file? (not just `.env.example`) Did you save it? Did you restart the server with `npm start`? The server reads `.env` only at startup |
 | I don't remember my PostgreSQL password | Uninstall and reinstall PostgreSQL, or reset the password: `psql postgres -c "ALTER USER postgres WITH PASSWORD 'newpassword';"` |
+| I don't have a `.env` file | Run `cp .env.example .env` in your backend folder, then edit the new `.env` file with your database password. See [Step 5c](#5c--configure-your-env-file). |
 
 ---
 
@@ -449,7 +490,9 @@ curl -s http://localhost:3001/health | python3 -m json.tool
 | Do I need PostgreSQL installed? | **Not for tests.** Tests run in in-memory mode. PostgreSQL is only needed for Step 5 (persistent data). |
 | Do I need `npm install`? | **No** — no new packages were added. The `pg` (PostgreSQL) driver was already installed in Phase 1. |
 | How many tests should pass? | **124 tests** across 4 suites. |
-| I see "PostgreSQL not reachable" or "database curia does not exist"? | **That's normal** if PostgreSQL isn't installed or the `curia` database hasn't been created yet. The server works fine with in-memory storage. |
+| I see "PostgreSQL not reachable" or "database curia does not exist"? | **That's normal** if PostgreSQL isn't installed, the `curia` database hasn't been created yet, or you don't have a `.env` file. The server works fine with in-memory storage. See [Step 5](#step-5--set-up-postgresql-optional--for-persistent-data) for setup. |
+| I named my PGAdmin server "curia" — why does it say database not found? | A PGAdmin **server** is just a connection to PostgreSQL. You need to create a **database** called "curia" inside that server. See [Step 5b](#5b--create-the-database). |
+| How do I use the access token from login/register? | Use the all-in-one command in [Step 4b](#4b--test-the-full-auth-flow-new), or copy the `accessToken` value from the JSON response and paste it into the `Authorization: Bearer` header. |
 | I see "Force exiting Jest"? | **Normal.** Ignore it. |
 | Where do I paste the code blocks? | In the **Terminal** app on your Mac. |
 | Do I paste the whole grey block? | **Yes.** Copy the entire block including all lines and paste it once. |
