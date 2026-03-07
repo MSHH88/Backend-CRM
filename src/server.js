@@ -3,6 +3,13 @@
 // Suppress DEP0169 (url.parse) from Express 4.x internal dependencies.
 // This warning comes from the parseurl package used by Express, not our code.
 // It will be resolved when upgrading to Express 5.x.
+// Override emitWarning (catches it before stderr) + emit (safety net).
+const _emitWarning = process.emitWarning;
+process.emitWarning = function (warning, typeOrOptions, code, ...rest) {
+  if (code === 'DEP0169') return;
+  if (typeof typeOrOptions === 'object' && typeOrOptions && typeOrOptions.code === 'DEP0169') return;
+  return _emitWarning.call(this, warning, typeOrOptions, code, ...rest);
+};
 const originalEmit = process.emit;
 process.emit = function (event, warning) {
   if (event === 'warning' && warning && warning.code === 'DEP0169') {

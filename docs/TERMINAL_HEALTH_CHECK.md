@@ -6,20 +6,21 @@
 
 ---
 
-## What changed? — Only 2 files
+## What changed? — Only 3 files
 
-The latest update adds **standardized REST API routes** (`/api/v1/pricing/…`) alongside all existing routes. Only **2 files** were updated:
+The latest update adds **standardized REST API routes** (`/api/v1/pricing/…`) and improves the DEP0169 deprecation suppression. Only **3 files** were updated:
 
 | # | File | What it does | What changed |
 |---|------|-------------|-------------|
 | 1 | **`src/app.js`** | Main application — wires all routes and middleware | Added 3 new standardized routes (`/api/v1/pricing/calculate/`, `/api/v1/pricing/cart/`, `/api/v1/pricing/options/`). All old routes still work unchanged. |
 | 2 | **`tests/api.test.js`** | API test suite (35 tests) | Added 5 tests for the new standardized routes. Total now 100 across all suites. |
+| 3 | **`src/server.js`** | Server startup | Improved DEP0169 warning suppression — now works on all Node.js versions. |
 
-**These 2 files are stable and complete.** They will not need to change again unless entirely new features are added in a future phase. All existing routes, legacy aliases, security, and middleware remain untouched.
+**These files are stable and complete.** They will not need to change again unless entirely new features are added in a future phase. All existing routes, legacy aliases, security, and middleware remain untouched.
 
 ---
 
-## Step 1 → Download the 2 updated files
+## Step 1 → Download the 3 updated files
 
 **Delete** the old versions and **replace** them with the new ones from GitHub.
 
@@ -28,6 +29,7 @@ The latest update adds **standardized REST API routes** (`/api/v1/pricing/…`) 
 1. Go to each link below and click the **download icon** (⬇) or right-click → "Save As":
 
    - **`src/app.js`** → [Download raw file](https://github.com/MSHH88/Backend-CRM/raw/copilot/analyze-project-phase-1/backend/src/app.js)
+   - **`src/server.js`** → [Download raw file](https://github.com/MSHH88/Backend-CRM/raw/copilot/analyze-project-phase-1/backend/src/server.js)
    - **`tests/api.test.js`** → [Download raw file](https://github.com/MSHH88/Backend-CRM/raw/copilot/analyze-project-phase-1/backend/tests/api.test.js)
 
 2. **Replace** the files in your local folder:
@@ -35,19 +37,21 @@ The latest update adds **standardized REST API routes** (`/api/v1/pricing/…`) 
    | Downloaded file | Place it here (replace existing) |
    |---|---|
    | `app.js` | `~/Desktop/curia/backend/src/app.js` |
+   | `server.js` | `~/Desktop/curia/backend/src/server.js` |
    | `api.test.js` | `~/Desktop/curia/backend/tests/api.test.js` |
 
 That's it — no other files need to change. No `npm install` needed.
 
 ### Option B — Download via Terminal (one paste block)
 
-If you prefer Terminal, paste this block — it downloads only the 2 files:
+If you prefer Terminal, paste this block — it downloads only the 3 files:
 
 ```bash
 cd ~/Desktop/curia/backend && \
 curl -fsSL "https://raw.githubusercontent.com/MSHH88/Backend-CRM/copilot/analyze-project-phase-1/backend/src/app.js" -o src/app.js && \
+curl -fsSL "https://raw.githubusercontent.com/MSHH88/Backend-CRM/copilot/analyze-project-phase-1/backend/src/server.js" -o src/server.js && \
 curl -fsSL "https://raw.githubusercontent.com/MSHH88/Backend-CRM/copilot/analyze-project-phase-1/backend/tests/api.test.js" -o tests/api.test.js && \
-echo "" && echo "✅ 2 files updated"
+echo "" && echo "✅ 3 files updated"
 ```
 
 ### Option C — Full reinstall (only if something is broken)
@@ -170,10 +174,12 @@ When you are done, go back to the **first tab** (the server) and press **Ctrl + 
 
 | What do I do? | Answer |
 |---|---|
-| Which 2 files do I need? | **`src/app.js`** and **`tests/api.test.js`** — that's it. |
-| Do I need to delete anything? | **Delete** the old `src/app.js` and `tests/api.test.js`, then replace with the new ones. |
-| Do I need `npm install`? | **No** — these 2 files don't add new packages. If you previously ran the full install (Option C), you already have everything. |
-| Will these 2 files change again? | **No.** They are stable and complete for the current phase. |
+| Which files do I need? | **`src/app.js`**, **`src/server.js`**, and **`tests/api.test.js`** — that's it. |
+| Do I need `.prettierrc` / `.prettierignore`? | **No.** Those files are only used by `npm run lint` / `npm run format`. Tests and server work without them. If you already have them from a previous full install, keep them — they don't need updating. |
+| Do I need to delete anything? | **Delete** the old versions of the 3 files, then replace with the new ones. |
+| Do I need `npm install`? | **No** — these files don't add new packages. If you previously ran the full install (Option C), you already have everything. |
+| Will these files change again? | **No.** They are stable and complete for the current phase. |
+| I see a DEP0169 warning when starting the server? | **Download the new `src/server.js`** — it fixes the DEP0169 suppression for all Node.js versions. |
 | Where do I paste the code blocks? | In the **Terminal** app on your Mac. |
 | Do I paste the whole grey block? | **Yes.** Copy the entire block including all lines and paste it once. |
 | What if I already ran Step 1 before? | Run it again — it always downloads the latest versions. |
