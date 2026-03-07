@@ -221,6 +221,8 @@ curl http://localhost:3001/api/v1/pricing/options/
 
 This tests the complete authentication cycle: register → login → access protected route → logout.
 
+> **Note:** The `| python3 -m json.tool` part formats JSON for readability. Python 3 is pre-installed on modern macOS. If it's missing, the commands still work — just remove the `| python3 -m json.tool` part and the output will be unformatted JSON.
+
 **Register a new user:**
 
 ```bash
@@ -284,10 +286,12 @@ Download from [https://postgresapp.com](https://postgresapp.com), install, and c
 
 ```bash
 psql postgres -c "CREATE DATABASE curia;" && \
-psql postgres -c "CREATE USER postgres WITH PASSWORD 'yourpassword';" && \
+psql postgres -c "CREATE USER postgres WITH PASSWORD 'REPLACE_WITH_YOUR_SECURE_PASSWORD';" && \
 psql postgres -c "GRANT ALL PRIVILEGES ON DATABASE curia TO postgres;" && \
 echo "" && echo "✅ Database 'curia' created"
 ```
+
+> ⚠️ **Change the password** above to something secure before pasting. Use a mix of letters, numbers, and symbols (e.g. `MyStr0ng!Pass#2026`).
 
 > If you get "role postgres already exists" or "database curia already exists", that's fine — it means they were already set up.
 
@@ -305,14 +309,14 @@ Then open the file and check these settings match your PostgreSQL setup:
 open -e ~/Desktop/curia/backend/.env
 ```
 
-The database settings should look like this (change password if needed):
+The database settings should look like this (**change the password** to match what you set in Step 5b):
 
 ```
 DB_HOST=localhost
 DB_PORT=5432
 DB_NAME=curia
 DB_USER=postgres
-DB_PASSWORD=yourpassword
+DB_PASSWORD=REPLACE_WITH_YOUR_SECURE_PASSWORD
 ```
 
 ### 5d — Start the server with database
