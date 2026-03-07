@@ -172,7 +172,7 @@ When you are done, go back to the **first tab** (the server) and press **Ctrl + 
 |---|---|
 | Which 2 files do I need? | **`src/app.js`** and **`tests/api.test.js`** — that's it. |
 | Do I need to delete anything? | **Delete** the old `src/app.js` and `tests/api.test.js`, then replace with the new ones. |
-| Do I need `npm install`? | **No** — no new packages were added. Just replace the 2 files. |
+| Do I need `npm install`? | **No** — these 2 files don't add new packages. If you previously ran the full install (Option C), you already have everything. |
 | Will these 2 files change again? | **No.** They are stable and complete for the current phase. |
 | Where do I paste the code blocks? | In the **Terminal** app on your Mac. |
 | Do I paste the whole grey block? | **Yes.** Copy the entire block including all lines and paste it once. |
