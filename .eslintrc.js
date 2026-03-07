@@ -9,7 +9,7 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 2021,
   },
-  extends: ['eslint:recommended'],
+  extends: ['eslint:recommended', 'prettier'],
   rules: {
     'no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
     'no-console': 'off',

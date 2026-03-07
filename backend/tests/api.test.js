@@ -357,3 +357,53 @@ describe('GET /api-docs', () => {
     expect(res.status).toBe(200);
   });
 });
+
+// ── Standardized /api/v1/pricing/ routes ────────────────────────────────────
+describe('Standardized /api/v1/pricing/ routes', () => {
+  test('POST /api/v1/pricing/calculate/ returns 200 JSON', async () => {
+    const res = await request(app)
+      .post('/api/v1/pricing/calculate/?format=json')
+      .type('form')
+      .send({ tmp_obj: VALID_CONFIG });
+
+    expect(res.status).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(res.body.item).toHaveProperty('grundpreis');
+  });
+
+  test('POST /api/v1/pricing/calculate/ returns 400 when empty', async () => {
+    const res = await request(app)
+      .post('/api/v1/pricing/calculate/?format=json')
+      .type('form')
+      .send({});
+
+    expect(res.status).toBe(400);
+  });
+
+  test('GET /api/v1/pricing/options/ returns available options', async () => {
+    const res = await request(app).get('/api/v1/pricing/options/');
+
+    expect(res.status).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(res.body.options).toHaveProperty('profiles');
+    expect(res.body.options).toHaveProperty('verglasung');
+  });
+
+  test('POST /api/v1/pricing/cart/ returns 400 when empty', async () => {
+    const res = await request(app)
+      .post('/api/v1/pricing/cart/')
+      .type('form')
+      .send({});
+
+    expect(res.status).toBe(400);
+  });
+
+  test('GET /api/v1 lists new pricing routes', async () => {
+    const res = await request(app).get('/api/v1');
+
+    expect(res.status).toBe(200);
+    expect(res.body.endpoints).toHaveProperty('pricing');
+    expect(res.body.endpoints.pricing.calculate).toContain('/api/v1/pricing/calculate');
+    expect(res.body.endpoints.pricing.options).toContain('/api/v1/pricing/options');
+  });
+});

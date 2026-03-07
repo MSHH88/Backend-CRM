@@ -121,14 +121,26 @@ app.get('/api/v1', (_req, res) => {
       health: '/health',
       api: '/api/v1',
       auth: '/api/v1/auth',
-      berechnen: 'POST /api/v1/berechnen/',
-      warenkorb: 'POST /api/v1/warenkorb/',
-      options: 'GET /api/v1/options/',
+      pricing: {
+        calculate: 'POST /api/v1/pricing/calculate/',
+        cart: 'POST /api/v1/pricing/cart/',
+        options: 'GET /api/v1/pricing/options/',
+      },
+      legacy: {
+        berechnen: 'POST /api/v1/berechnen/',
+        warenkorb: 'POST /api/v1/warenkorb/',
+        options: 'GET /api/v1/options/',
+      },
     },
   });
 });
 
-// ── Pricing engine routes (standardized under /api/v1/) ─────────────────────
+// ── Pricing engine routes (clean RESTful paths) ─────────────────────────────
+app.use('/api/v1/pricing/calculate', berechnenRouter);
+app.use('/api/v1/pricing/cart',      warenkorbRouter);
+app.use('/api/v1/pricing/options',   optionsRouter);
+
+// ── v1 aliases (original /api/v1/ paths) ────────────────────────────────────
 app.use('/api/v1/berechnen',  berechnenRouter);
 app.use('/api/v1/warenkorb',  warenkorbRouter);
 app.use('/api/v1/options',    optionsRouter);
