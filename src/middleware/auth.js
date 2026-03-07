@@ -26,6 +26,7 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
+const sessionRepo = require('../repositories/sessionRepository');
 
 // ============================================
 // CONFIGURATION
@@ -213,29 +214,26 @@ const PERMISSIONS = {
 };
 
 // ============================================
-// TOKEN BLACKLIST (In-Memory - Use Redis in production)
+// TOKEN BLACKLIST & REFRESH TOKENS
+// Delegated to sessionRepository (in-memory for tests, PostgreSQL for production)
 // ============================================
 
-const tokenBlacklist = new Set();
-const refreshTokens = new Map();  // userId -> Set of refresh tokens
+// Re-export session repository references for backward compatibility
+const tokenBlacklist = sessionRepo.tokenBlacklist;
+const refreshTokens = sessionRepo.refreshTokens;
 
 /**
  * Add token to blacklist
  */
 const blacklistToken = (token) => {
-  tokenBlacklist.add(token);
-  
-  // Auto-cleanup after token would expire anyway
-  setTimeout(() => {
-    tokenBlacklist.delete(token);
-  }, 24 * 60 * 60 * 1000);  // 24 hours
+  sessionRepo.blacklistToken(token);
 };
 
 /**
  * Check if token is blacklisted
  */
 const isTokenBlacklisted = (token) => {
-  return tokenBlacklist.has(token);
+  return sessionRepo.isTokenBlacklisted(token);
 };
 
 // ============================================
@@ -344,18 +342,10 @@ const generateRefreshToken = (user) => {
   
   // Store refresh token for user
   const userId = user._id || user.id;
-  if (!refreshTokens.has(userId)) {
-    refreshTokens.set(userId, new Set());
-  }
-  refreshTokens.get(userId).add(tokenId);
+  sessionRepo.storeRefreshToken(userId, tokenId);
   
   // Limit concurrent sessions
-  const userTokens = refreshTokens.get(userId);
-  if (userTokens.size > config.session.maxConcurrentSessions) {
-    const tokensArray = Array.from(userTokens);
-    tokensArray.slice(0, userTokens.size - config.session.maxConcurrentSessions)
-      .forEach(t => userTokens.delete(t));
-  }
+  sessionRepo.enforceSessionLimit(userId, config.session.maxConcurrentSessions);
   
   return token;
 };
@@ -415,8 +405,7 @@ const verifyRefreshToken = (token) => {
     }
     
     // Check if token is still valid for user
-    const userTokens = refreshTokens.get(decoded.userId);
-    if (!userTokens || !userTokens.has(decoded.tokenId)) {
+    if (!sessionRepo.isRefreshTokenValid(decoded.userId, decoded.tokenId)) {
       return { valid: false, error: 'Token has been invalidated' };
     }
     
@@ -439,10 +428,7 @@ const refreshTokenPair = async (refreshToken, getUserById) => {
   const { decoded } = verification;
   
   // Invalidate old refresh token
-  const userTokens = refreshTokens.get(decoded.userId);
-  if (userTokens) {
-    userTokens.delete(decoded.tokenId);
-  }
+  sessionRepo.invalidateRefreshToken(decoded.userId, decoded.tokenId);
   
   // Get fresh user data
   const user = await getUserById(decoded.userId);
@@ -462,7 +448,7 @@ const refreshTokenPair = async (refreshToken, getUserById) => {
  * Revoke all tokens for user
  */
 const revokeAllUserTokens = (userId) => {
-  refreshTokens.delete(userId);
+  sessionRepo.revokeAllUserTokens(userId);
 };
 
 /**

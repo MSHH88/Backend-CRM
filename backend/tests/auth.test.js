@@ -3,10 +3,12 @@
 const request = require('supertest');
 const app     = require('../src/app');
 
-// Reset user store between tests
+// Reset user store AND session store between tests
 beforeEach(() => {
   const { clearUsers } = require('../src/routes/auth');
+  const sessionRepo = require('../src/repositories/sessionRepository');
   clearUsers();
+  sessionRepo.clear();
 });
 
 const VALID_USER = {

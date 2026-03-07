@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * CURIA Backend - Authentication Routes (Step 1.10)
+ * CURIA Backend - Authentication Routes
  *
  * POST /api/v1/auth/register  - Register new user
  * POST /api/v1/auth/login     - Login and get token pair
@@ -26,19 +26,15 @@ const {
   AuthenticationError,
   ConflictError,
 } = require('../middleware/errorHandler');
+const userRepo = require('../repositories/userRepository');
 
 const router = express.Router();
-
-// In-memory user store (placeholder until PostgreSQL is connected in Phase 1 Week 2)
-const users = [];
-let nextUserId = 1;
 
 /**
  * Clear all users (for testing)
  */
 function clearUsers() {
-  users.length = 0;
-  nextUserId = 1;
+  userRepo.clear();
 }
 
 /**
@@ -69,24 +65,21 @@ router.post('/register', async (req, res, next) => {
 
     // ── Check for duplicate email ─────────────────────────────────────────
     const normalizedEmail = email.toLowerCase().trim();
-    const existingUser = users.find((u) => u.email === normalizedEmail);
+    const existingUser = await userRepo.findByEmail(normalizedEmail);
     if (existingUser) {
       throw new ConflictError('A user with this email already exists');
     }
 
     // ── Create user ───────────────────────────────────────────────────────
     const hashedPassword = await hashPassword(password);
-    const newUser = {
-      id: nextUserId++,
+    const newUser = await userRepo.create({
       email: normalizedEmail,
       passwordHash: hashedPassword,
       firstName: firstName || '',
       lastName: lastName || '',
       role: ROLES.CUSTOMER,
       isActive: true,
-      createdAt: new Date().toISOString(),
-    };
-    users.push(newUser);
+    });
 
     // ── Generate tokens ───────────────────────────────────────────────────
     const tokens = generateTokenPair({ id: newUser.id, role: newUser.role });
@@ -121,7 +114,7 @@ router.post('/login', async (req, res, next) => {
     }
 
     // ── Find user ─────────────────────────────────────────────────────────
-    const user = users.find((u) => u.email === email.toLowerCase());
+    const user = await userRepo.findByEmail(email);
     if (!user) {
       throw new AuthenticationError('Invalid email or password');
     }
@@ -189,7 +182,7 @@ router.post('/refresh', async (req, res, next) => {
       throw new ValidationError('Refresh token is required');
     }
 
-    const getUserById = async (userId) => users.find((u) => u.id === userId);
+    const getUserById = async (userId) => userRepo.findById(userId);
     const tokens = await refreshTokenPair(refreshToken, getUserById);
 
     res.status(200).json({
@@ -205,8 +198,8 @@ router.post('/refresh', async (req, res, next) => {
  * GET /api/v1/auth/me
  * Return the currently authenticated user's info.
  */
-router.get('/me', authenticate, (req, res) => {
-  const user = users.find((u) => u.id === req.user.userId);
+router.get('/me', authenticate, async (req, res) => {
+  const user = await userRepo.findById(req.user.userId);
 
   if (!user) {
     return res.status(404).json({
