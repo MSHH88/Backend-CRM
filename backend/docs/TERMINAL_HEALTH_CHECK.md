@@ -184,15 +184,27 @@ cd ~/Desktop/curia/backend && npm start
 **✅ What you should see:**
 
 ```
+==================================================
 🚀 CURIA Backend Server Started
-   Environment: development
-   URL:         http://localhost:3001
-   Health:      http://localhost:3001/health
-   API Docs:    http://localhost:3001/api/v1
-⚠️  Database not available — using in-memory storage (data resets on restart)
+==================================================
+📍 Environment: development
+🌐 Server URL: http://localhost:3001
+❤️  Health Check: http://localhost:3001/health
+📚 API Docs: http://localhost:3001/api/v1
+==================================================
+⚠️  PostgreSQL not reachable — running with in-memory storage
 ```
 
-> The "Database not available" message is **expected** if PostgreSQL is not installed yet.
+> **If PostgreSQL is installed but the `curia` database doesn't exist yet**, you will also see
+> error messages before the fallback warning — this is completely normal:
+>
+> ```
+> ❌ Query error: database "curia" does not exist
+> ❌ Database connection failed: database "curia" does not exist
+> ⚠️  PostgreSQL not reachable — running with in-memory storage
+> ```
+
+> These messages are **expected**. The server falls back to in-memory storage automatically.
 
 ⚠️ **IMPORTANT: Do NOT close this Terminal window. Leave the server running.**
 
@@ -328,18 +340,42 @@ cd ~/Desktop/curia/backend && npm start
 **✅ What you should see (with database connected):**
 
 ```
+==================================================
 🚀 CURIA Backend Server Started
-   Environment: development
-   URL:         http://localhost:3001
-   Health:      http://localhost:3001/health
-   API Docs:    http://localhost:3001/api/v1
-✅ Database connected — PostgreSQL
-✅ Migrations complete — 23 tables ready
-✅ Seed data loaded — 8 roles, 4 categories, 4 manufacturers
+==================================================
+📍 Environment: development
+🌐 Server URL: http://localhost:3001
+❤️  Health Check: http://localhost:3001/health
+📚 API Docs: http://localhost:3001/api/v1
+==================================================
+📗 New database connection established
+✅ Database connected: curia
+
+==================================================
+🚀 CURIA Database Migrations
+==================================================
+
+🔧 Creating database tables...
+  ✅ roles table created
+  ✅ permissions table created
+  … (23 tables total) …
+  ✅ analytics_events table created
+
+🌱 Seeding default data...
+  ✅ Roles seeded
+  ✅ Categories seeded
+  ✅ Manufacturers seeded
+✅ Default data seeded successfully!
+
+==================================================
+✅ All migrations completed successfully!
+==================================================
+
+✅ Database initialised — repositories connected to PostgreSQL
 ```
 
-> If you see "Database not available" instead, check that PostgreSQL is running
-> and your `.env` settings are correct.
+> On subsequent starts, the tables already exist (CREATE TABLE IF NOT EXISTS),
+> so the output is the same but runs instantly.
 
 ### 5e — Verify database health
 
@@ -364,7 +400,7 @@ curl -s http://localhost:3001/health | python3 -m json.tool
 | Do I need PostgreSQL installed? | **Not for tests.** Tests run in in-memory mode. PostgreSQL is only needed for Step 5 (persistent data). |
 | Do I need `npm install`? | **No** — no new packages were added. The `pg` (PostgreSQL) driver was already installed in Phase 1. |
 | How many tests should pass? | **124 tests** across 4 suites. |
-| I see "Database not available" when starting the server? | **That's normal** if PostgreSQL isn't installed yet. The server works fine with in-memory storage. |
+| I see "PostgreSQL not reachable" or "database curia does not exist"? | **That's normal** if PostgreSQL isn't installed or the `curia` database hasn't been created yet. The server works fine with in-memory storage. |
 | I see "Force exiting Jest"? | **Normal.** Ignore it. |
 | Where do I paste the code blocks? | In the **Terminal** app on your Mac. |
 | Do I paste the whole grey block? | **Yes.** Copy the entire block including all lines and paste it once. |
