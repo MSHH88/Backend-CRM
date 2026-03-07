@@ -276,6 +276,8 @@ When you are done, go back to the **first tab** (the server) and press **Ctrl + 
 > With PostgreSQL, users, sessions, and all data persist permanently.
 > This is required before moving to Phase 2 Step 2.
 
+> **Already have PostgreSQL + PGAdmin with a "curia" database?** Skip straight to [Step 5c](#5c--configure-your-env-file) — you just need the `.env` file.
+
 ### 5a — Install PostgreSQL
 
 **Option 1 — Homebrew (recommended for Mac):**
@@ -294,7 +296,25 @@ brew services start postgresql@16
 
 Download from [https://postgresapp.com](https://postgresapp.com), install, and click "Start".
 
-### 5b — Create the database and user
+**Option 3 — PGAdmin (graphical, if you downloaded PostgreSQL installer from postgresql.org):**
+
+If you downloaded the official PostgreSQL installer from [postgresql.org](https://www.postgresql.org/download/), PGAdmin was included. During installation you chose a password for the `postgres` superuser — **remember this password**, you will need it for the `.env` file. PostgreSQL starts automatically as a service after installation.
+
+### 5b — Create the database
+
+**If you use PGAdmin (graphical):**
+
+1. Open **PGAdmin**
+2. In the left sidebar, expand **Servers** → your local server (usually "PostgreSQL 16" or "localhost")
+3. Enter your password if prompted (the one you set during PostgreSQL installation)
+4. Right-click **Databases** → **Create** → **Database…**
+5. Set **Database name** to `curia`
+6. Click **Save**
+7. You should see "curia" appear under Databases ✅
+
+> **Already see "curia" in PGAdmin?** You're done with this step — move to 5c.
+
+**If you prefer the Terminal:**
 
 ```bash
 psql postgres -c "CREATE DATABASE curia;" && \
@@ -309,27 +329,45 @@ echo "" && echo "✅ Database 'curia' created"
 
 ### 5c — Configure your .env file
 
+This is the **key step** — it tells the backend how to connect to your PostgreSQL database.
+
 ```bash
 cd ~/Desktop/curia/backend && \
 cp .env.example .env && \
 echo "" && echo "✅ .env file created from template"
 ```
 
-Then open the file and check these settings match your PostgreSQL setup:
+Then open the file:
 
 ```bash
 open -e ~/Desktop/curia/backend/.env
 ```
 
-The database settings should look like this (**change the password** to match what you set in Step 5b):
+Find the database settings section and update them:
 
 ```
 DB_HOST=localhost
 DB_PORT=5432
 DB_NAME=curia
 DB_USER=postgres
-DB_PASSWORD=REPLACE_WITH_YOUR_SECURE_PASSWORD
+DB_PASSWORD=YOUR_ACTUAL_PASSWORD_HERE
 ```
+
+**How to find the right values:**
+
+| Setting | Where to find it |
+|---------|-----------------|
+| `DB_HOST` | Almost always `localhost` for local development |
+| `DB_PORT` | Default is `5432`. In PGAdmin: right-click your server → Properties → Connection tab → Port |
+| `DB_NAME` | `curia` (the database you created) |
+| `DB_USER` | `postgres` (the default superuser). In PGAdmin: right-click your server → Properties → Connection tab → Username |
+| `DB_PASSWORD` | The password you set during PostgreSQL installation. In PGAdmin, it's the password you enter when connecting to the server |
+
+> **PGAdmin users:** If you're not sure what password you used, try connecting to your server in PGAdmin — it will ask for the password. That's the same password that goes in `DB_PASSWORD`.
+
+> **Homebrew users (Mac):** If you installed PostgreSQL via `brew`, there is often **no password** by default. In that case, leave `DB_PASSWORD=` empty (no value after the `=` sign).
+
+Save the file after editing (**Cmd + S**).
 
 ### 5d — Start the server with database
 
@@ -389,6 +427,17 @@ curl -s http://localhost:3001/health | python3 -m json.tool
 
 📋 **Copy the output and send it to me.**
 
+### 5f — Troubleshooting
+
+| Problem | Solution |
+|---------|----------|
+| `database "curia" does not exist` | Create the database in PGAdmin (right-click Databases → Create → Database → name it `curia`) or run `createdb curia` in Terminal |
+| `password authentication failed for user "postgres"` | The password in your `.env` file doesn't match. Check the password in PGAdmin: right-click your server → Properties → Connection tab. Update `DB_PASSWORD` in `.env` |
+| `connection refused` or `could not connect to server` | PostgreSQL is not running. In PGAdmin, check if your server shows a red X. On Mac: `brew services start postgresql@16` or start it from PGAdmin |
+| `role "postgres" does not exist` | Your PostgreSQL uses a different username. Check your macOS username with `whoami` in Terminal, then set `DB_USER=yourusername` in `.env` |
+| Server says `⚠️ PostgreSQL not reachable` even after setup | Did you save the `.env` file? Did you restart the server with `npm start`? The server reads `.env` only at startup |
+| I don't remember my PostgreSQL password | Uninstall and reinstall PostgreSQL, or reset the password: `psql postgres -c "ALTER USER postgres WITH PASSWORD 'newpassword';"` |
+
 ---
 
 ## Quick Reference
@@ -408,6 +457,8 @@ curl -s http://localhost:3001/health | python3 -m json.tool
 | Will these files change again? | **No.** The repository layer and auth migration are complete and stable. |
 | Why do I need two Terminal tabs? | One runs the server (Step 3/5d), the other sends test requests (Step 4). |
 | Can I still use the old auth endpoints? | **Yes.** All endpoints are the same: `/api/v1/auth/register`, `/login`, `/logout`, `/refresh`, `/me`. |
+| I have PGAdmin — do I need the Terminal commands? | **No.** You can create the database in PGAdmin's GUI. See Step 5b for PGAdmin instructions. You still need to create the `.env` file (Step 5c). |
+| I already created "curia" in PGAdmin — what now? | Jump to **Step 5c** — create the `.env` file, set your `DB_PASSWORD`, and restart the server with `npm start`. |
 
 ---
 

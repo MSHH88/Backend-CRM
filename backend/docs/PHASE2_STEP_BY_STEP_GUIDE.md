@@ -77,9 +77,14 @@ Step 8 — Full integration test & cleanup
 
 ### 1.2 PostgreSQL Setup (user action required)
 
-- [ ] Install PostgreSQL locally (or use Docker)
-- [ ] Create database `curia` and user per `.env.example`
+- [ ] Install PostgreSQL locally (Homebrew, Postgres.app, or postgresql.org installer with PGAdmin)
+- [ ] Create database `curia` (via PGAdmin GUI or `createdb curia` in Terminal)
+- [ ] Create `.env` from `.env.example`: `cp .env.example .env`
 - [ ] Update `.env` with real credentials (DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME)
+
+> **PGAdmin users:** The DB_PASSWORD is the password you set during PostgreSQL installation (the one PGAdmin asks when you connect to your server). DB_USER is typically `postgres`.
+>
+> **See `docs/TERMINAL_HEALTH_CHECK.md` Step 5** for detailed instructions with screenshots-style guidance.
 
 ### 1.3 Verify Database Connection
 
