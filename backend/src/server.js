@@ -20,10 +20,13 @@ process.emit = function (event, warning) {
 
 require('dotenv').config();
 const app = require('./app');
+const { initializeDatabase } = require('./config/dbInit');
+const { closePool } = require('./config/database');
 
 const PORT = process.env.PORT || 3001;
 
-const server = app.listen(PORT, () => {
+// ── Start server & initialise database ────────────────────────────────────────
+const server = app.listen(PORT, async () => {
   console.log('='.repeat(50));
   console.log('🚀 CURIA Backend Server Started');
   console.log('='.repeat(50));
@@ -32,12 +35,20 @@ const server = app.listen(PORT, () => {
   console.log(`❤️  Health Check: http://localhost:${PORT}/health`);
   console.log(`📚 API Docs: http://localhost:${PORT}/api/v1`);
   console.log('='.repeat(50));
+
+  // Attempt to connect to PostgreSQL (falls back to in-memory if unavailable)
+  await initializeDatabase();
 });
 
 // ── Graceful shutdown ─────────────────────────────────────────────────────────
 const gracefulShutdown = (signal) => {
   console.log(`\n⚠️  ${signal} received. Shutting down gracefully...`);
-  server.close(() => {
+  server.close(async () => {
+    try {
+      await closePool();
+    } catch (_) {
+      /* pool may not be connected */
+    }
     console.log('✅ HTTP server closed');
     process.exit(0);
   });
