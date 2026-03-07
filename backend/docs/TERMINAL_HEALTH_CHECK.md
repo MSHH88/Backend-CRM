@@ -45,10 +45,12 @@ curl -fsSL "$BASE/src/utils/responseFormatter.js"    -o src/utils/responseFormat
 curl -fsSL "$BASE/tests/api.test.js"             -o tests/api.test.js && \
 curl -fsSL "$BASE/tests/auth.test.js"            -o tests/auth.test.js && \
 curl -fsSL "$BASE/tests/priceCalculator.test.js" -o tests/priceCalculator.test.js && \
-curl -fsSL "$BASE/package.json"   -o package.json && \
-curl -fsSL "$BASE/.eslintrc.js"   -o .eslintrc.js && \
-curl -fsSL "$BASE/.env.example"   -o .env.example && \
-curl -fsSL "$BASE/.gitignore"     -o .gitignore && \
+curl -fsSL "$BASE/package.json"     -o package.json && \
+curl -fsSL "$BASE/.eslintrc.js"     -o .eslintrc.js && \
+curl -fsSL "$BASE/.prettierrc"      -o .prettierrc && \
+curl -fsSL "$BASE/.prettierignore"  -o .prettierignore && \
+curl -fsSL "$BASE/.env.example"     -o .env.example && \
+curl -fsSL "$BASE/.gitignore"       -o .gitignore && \
 npm install && \
 echo "" && echo "✅ All files downloaded and installed"
 ```
@@ -72,7 +74,7 @@ cd ~/Desktop/curia/backend && npm test
 **✅ What you should see at the bottom:**
 
 ```
-Tests:       95 passed, 95 total
+Tests:       100 passed, 100 total
 ```
 
 > The message "Force exiting Jest" may appear — **that is normal, ignore it.**
@@ -113,10 +115,10 @@ Copy and paste this into **the new tab**:
 ```bash
 curl http://localhost:3001/health && echo "" && \
 curl http://localhost:3001/api/v1 && echo "" && \
-curl -X POST "http://localhost:3001/ajax/berechnen/?format=json" \
+curl -X POST "http://localhost:3001/api/v1/pricing/calculate/?format=json" \
   -H "Content-Type: application/x-www-form-urlencoded" \
   -d 'tmp_obj={"breite":1000,"hoehe":1200,"profil":"p1","verglasung":"g1","aussenfarbe":"fs1_01","innenfarbe":"fi1_01","schallschutz":"ss1","sicherheitsverglasung":"sv0","griff":"gr1","sicherheit":"si1","sprossen":"sp0","vperfect":"vp0"}' && echo "" && \
-curl http://localhost:3001/ajax/getOptions/
+curl http://localhost:3001/api/v1/pricing/options/
 ```
 
 **✅ What you should see:** 4 lines of JSON data (text starting with `{`).
