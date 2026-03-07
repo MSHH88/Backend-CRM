@@ -61,49 +61,48 @@ Step 8 — Full integration test & cleanup
 
 ## Step 1 — Database Deployment & Auth Migration
 
-**Goal:** Move from in-memory storage to PostgreSQL. This is a Phase 1 Week 2 carry-over and the #1 blocker for all Phase 2 work.
+**Goal:** Move from in-memory storage to PostgreSQL. Repository Pattern implemented — code auto-detects PostgreSQL and falls back to in-memory for tests.
 
-### 1.1 PostgreSQL Setup
+### 1.1 Code Changes ✅ COMPLETE
+
+- [x] Create `src/config/dbInit.js` — database initialization with graceful fallback
+- [x] Create `src/repositories/userRepository.js` — user CRUD (in-memory + PostgreSQL dual-mode)
+- [x] Create `src/repositories/sessionRepository.js` — token blacklist, refresh tokens, session limits
+- [x] Update `src/server.js` — calls `initializeDatabase()` on startup, closes pool on shutdown
+- [x] Update `src/routes/auth.js` — uses `userRepository` instead of in-memory array
+- [x] Update `src/middleware/auth.js` — uses `sessionRepository` for token/session management
+- [x] Create `tests/repositories.test.js` — 24 tests for both repositories
+- [x] All 124 tests pass (was 100 in Phase 1)
+- [x] ESLint + Prettier — 0 errors, 0 warnings
+
+### 1.2 PostgreSQL Setup (user action required)
 
 - [ ] Install PostgreSQL locally (or use Docker)
 - [ ] Create database `curia` and user per `.env.example`
 - [ ] Update `.env` with real credentials (DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME)
 
-### 1.2 Run Schema Migrations
+### 1.3 Verify Database Connection
 
-- [ ] Execute `migrations.js` against the database
-- [ ] Verify all 23 tables are created (roles, permissions, users, products, orders, etc.)
-- [ ] Verify default seed data (8 roles, 4 categories, 4 manufacturers)
-- [ ] Verify indexes are created (22 indexes)
+- [ ] Start server with `npm start` — should show "Database connected"
+- [ ] Migrations auto-run on startup — 23 tables created automatically
+- [ ] Seed data loaded — 8 roles, 4 categories, 4 manufacturers
+- [ ] `GET /health` shows `"database": "connected"`
 
-### 1.3 Migrate Auth from In-Memory to Database
+### 1.4 Verify Auth with Database
 
-- [ ] Update `src/routes/auth.js` — replace `users` Map with database queries
-- [ ] Use `config/database.js` CRUD helpers (findOne, insert, etc.)
-- [ ] Store users in the `users` table
-- [ ] Store sessions in the `user_sessions` table
-- [ ] Store token blacklist in database (currently in-memory Set)
-- [ ] Verify: register → user appears in DB
-- [ ] Verify: login → session created in DB
-- [ ] Verify: logout → session invalidated in DB
-- [ ] Verify: refresh → new tokens issued, old invalidated
+- [ ] Register → user persists in DB (survives server restart)
+- [ ] Login → session tracked in DB
+- [ ] Logout → token blacklisted in DB
+- [ ] Refresh → new tokens issued, old invalidated
 
-### 1.4 Update Health Check
+### 1.5 Done Criteria
 
-- [ ] `GET /health` already checks DB connection — verify it works with real PostgreSQL
-- [ ] Confirm pool stats are accurate
+- [x] Repository Pattern implemented (dual-mode: in-memory + PostgreSQL)
+- [x] `npm test` — 124 tests pass
+- [x] `npm run lint` — 0 errors
+- [ ] PostgreSQL deployed locally and verified
 
-### 1.5 Tests
-
-- [ ] All 16 existing auth tests still pass (may need test DB setup)
-- [ ] Add tests for DB-backed auth (persistent sessions, concurrent users)
-- [ ] Add integration test: register → login → me → logout → login-fails-with-old-token
-
-### 1.6 Done Criteria
-
-- [ ] No in-memory data stores remain (no `Map()`, no `Set()` for user data)
-- [ ] `npm test` — all tests pass
-- [ ] `npm run lint` — 0 errors
+> **See `docs/TERMINAL_HEALTH_CHECK.md`** for the complete step-by-step terminal guide.
 
 ---
 
