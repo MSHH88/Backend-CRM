@@ -46,8 +46,9 @@ const gracefulShutdown = (signal) => {
   server.close(async () => {
     try {
       await closePool();
-    } catch (_) {
-      /* pool may not be connected */
+    } catch (error) {
+      /* pool may not be connected — safe to ignore */
+      void error;
     }
     console.log('✅ HTTP server closed');
     process.exit(0);

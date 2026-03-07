@@ -44,20 +44,16 @@ const isConnected = () => db !== null;
  * @param {number} [ttlMs=86400000]  – auto-cleanup delay (default 24 h)
  */
 const blacklistToken = (token, ttlMs = 24 * 60 * 60 * 1000) => {
-  if (db) {
-    // In DB mode we store in user_sessions or a dedicated revoked_tokens table.
-    // For now, keep the in-memory set as a fast lookup cache AND persist.
-    tokenBlacklist.add(token);
-    // DB persistence will be added when PostgreSQL is live.
-    return;
-  }
-
+  // Always add to in-memory set for fast lookup (serves as a cache when DB is active)
   tokenBlacklist.add(token);
 
   // Auto-cleanup after token would have expired anyway
   setTimeout(() => {
     tokenBlacklist.delete(token);
   }, ttlMs);
+
+  // TODO: When PostgreSQL is live, also persist to a `revoked_tokens` table
+  // so the blacklist survives server restarts.
 };
 
 /**
@@ -77,15 +73,15 @@ const isTokenBlacklisted = (token) => {
  * @param {string} tokenId  – the unique `tokenId` embedded in the JWT payload
  */
 const storeRefreshToken = (userId, tokenId) => {
-  if (db) {
-    // DB persistence will be added when PostgreSQL is live.
-    // For now keep using the in-memory map.
-  }
-
+  // Always maintain the in-memory map (serves as primary store without DB,
+  // or as a fast lookup cache when DB is active).
   if (!refreshTokens.has(userId)) {
     refreshTokens.set(userId, new Set());
   }
   refreshTokens.get(userId).add(tokenId);
+
+  // TODO: When PostgreSQL is live, also persist to `user_sessions` table
+  // so sessions survive server restarts.
 };
 
 /**
