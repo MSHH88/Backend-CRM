@@ -227,6 +227,7 @@ cd ~/Desktop/curia/backend && npm start
 ```
 🚀 CURIA Backend Server Started
 ...
+🔌 Connecting to PostgreSQL → postgres@localhost:5432/curia
 📗 New database connection established
 ✅ Database connected: curia
 ...
@@ -260,16 +261,45 @@ That's it. If you see `"connected"`, your database is working.
 
 ## Still getting errors? Read this
 
+### 🔍 First — run the diagnostic command
+
+This shows you **exactly** what settings the server is reading from your `.env` file:
+
+```bash
+cd ~/Desktop/curia/backend && node -e "require('dotenv').config(); console.log('DB_HOST=' + (process.env.DB_HOST || 'localhost')); console.log('DB_PORT=' + (process.env.DB_PORT || '5432')); console.log('DB_NAME=' + (process.env.DB_NAME || 'curia')); console.log('DB_USER=' + (process.env.DB_USER || 'postgres')); console.log('DB_PASSWORD=' + (process.env.DB_PASSWORD ? '✅ set (' + process.env.DB_PASSWORD.length + ' chars)' : '❌ EMPTY'));"
+```
+
+**Check the output:**
+- Does `DB_PORT` match what PGAdmin shows? (Step 3b)
+- Does `DB_PASSWORD` say `✅ set`? If it says `❌ EMPTY`, your `.env` file is missing or the password line is wrong.
+- Does `DB_NAME` say `curia`?
+
+> **If `DB_PASSWORD` says EMPTY:** You may have edited `.env.example` instead of `.env`. Run `ls ~/Desktop/curia/backend/.env` — if it says "No such file", go to Step 3c.
+
+---
+
 ### ❌ `database "curia" does not exist`
 
-This means the server IS reaching PostgreSQL, but on the **wrong port** — so it finds a different PostgreSQL instance that doesn't have your "curia" database.
+**Possible causes (check each one):**
 
-**Fix it:**
-
+**1. Wrong port** — your `.env` connects to a different PostgreSQL that doesn't have "curia":
 1. Open PGAdmin → right-click your server → **Properties** → **Connection** tab → check the **Port**
 2. Open your `.env` file: `open -e ~/Desktop/curia/backend/.env`
 3. Set `DB_PORT=` to that port number (e.g. `5433`)
 4. Save, then restart: press **Ctrl + C** in Terminal, run `npm start` again
+
+**2. Edited `.env.example` instead of `.env`** — the server only reads `.env` (without "example"):
+1. Check: `ls ~/Desktop/curia/backend/.env` — if it says "No such file", run: `cp .env.example .env`
+2. Then edit `.env` (not `.env.example`): `open -e ~/Desktop/curia/backend/.env`
+
+**3. Multiple PostgreSQL installations** — if you have both Homebrew and the official installer, there may be two PostgreSQL servers on different ports. The one on 5432 might not have your "curia" database:
+1. Run the diagnostic command above to see which port your server is using
+2. Check in PGAdmin which port has the "curia" database (Step 3b)
+3. Make sure they match in your `.env`
+
+**4. Database not actually created** — in PGAdmin, a **server** named "curia" is NOT a database. The database must appear *inside* the Databases folder:
+1. In PGAdmin, expand: Servers → your server → **Databases** → look for `curia`
+2. If it's not there: right-click **Databases** → **Create** → **Database…** → name it `curia` → **Save**
 
 ### ❌ `password authentication failed`
 
@@ -320,6 +350,18 @@ psql postgres -c "ALTER USER postgres WITH PASSWORD 'newpassword';"
 ```
 
 Then update `DB_PASSWORD=newpassword` in your `.env`.
+
+### ❓ Does the `.env` file need to be in PGAdmin?
+
+**No.** The `.env` file is ONLY for your backend project folder (`~/Desktop/curia/backend/`).
+
+PGAdmin is a completely separate tool — it's just a visual interface for looking at your database. PGAdmin has its own settings (you enter them when you create a server connection in PGAdmin). The `.env` file tells your **Node.js backend server** how to connect to PostgreSQL.
+
+Think of it this way:
+- **PGAdmin** = a window to look at the database (like a file browser)
+- **`.env` file** = the address your backend server uses to find the database
+
+They both connect to the same PostgreSQL, but they have separate settings. PGAdmin stores its settings internally. Your backend server reads its settings from `.env`.
 
 ---
 

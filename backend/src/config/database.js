@@ -126,6 +126,11 @@ const checkConnection = async () => {
     return true;
   } catch (error) {
     console.error('❌ Database connection failed:', error.message);
+    console.error(`   Attempted: ${config.database.user}@${config.database.host}:${config.database.port}/${config.database.name}`);
+    if (error.message.includes('does not exist')) {
+      console.error('   💡 Tip: Make sure DB_NAME in your .env matches the database name in PGAdmin (under Databases).');
+      console.error('   💡 Tip: The .env file must be in your backend project folder — NOT in PGAdmin.');
+    }
     return false;
   }
 };

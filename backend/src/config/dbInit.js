@@ -26,6 +26,11 @@ const sessionRepo = require('../repositories/sessionRepository');
  */
 const initializeDatabase = async () => {
   try {
+    // ── 0. Show connection target (helps diagnose .env issues) ────────────
+    const config = require('./index');
+    const { host, port, name, user } = config.database;
+    console.log(`🔌 Connecting to PostgreSQL → ${user}@${host}:${port}/${name}`);
+
     // ── 1. Check connectivity ─────────────────────────────────────────────
     const connected = await db.checkConnection();
     if (!connected) {
