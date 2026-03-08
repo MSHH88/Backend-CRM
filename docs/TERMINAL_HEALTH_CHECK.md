@@ -4,6 +4,9 @@
 > Every grey code block is something you **copy-paste into Terminal**, then press **Enter**.
 > Do the steps **in order**. Finish one before starting the next.
 
+> **Important:** The `.env` file is ONLY for the backend project folder (`~/Desktop/curia/backend/`).
+> It has nothing to do with PGAdmin. PGAdmin is just a visual tool to look at your database.
+
 ---
 
 ## Step 1 → Download the code files
@@ -104,7 +107,8 @@ Tests:       124 passed, 124 total
 ## Step 3 → Connect to your PostgreSQL database
 
 > **What this does:** Creates the `.env` config file so the server can find your database.
-> Do this BEFORE starting the server.
+> The `.env` file goes in `~/Desktop/curia/backend/` — NOT in PGAdmin.
+> PGAdmin doesn't need any files from you. It's just a visual tool to view your database.
 
 ### 3a — Make sure your database exists
 
@@ -125,37 +129,94 @@ Open **PGAdmin** and look in the left sidebar:
 
 > ⚠️ **The server name in PGAdmin (like "curia" or "PostgreSQL 18") is NOT a database.** It's just a connection bookmark. The **database** is what appears *under* that server, inside the **Databases** folder.
 
-### 3b — Create the .env file
+### 3b — Find your port number (IMPORTANT!)
+
+> ⚠️ **This is the #1 reason for "database does not exist" errors.** PostgreSQL 18 often uses port **5433** instead of 5432. If the port is wrong in your `.env`, the server connects to the wrong PostgreSQL and can't find your database.
+
+In PGAdmin:
+
+1. **Right-click** your server name (e.g. "curia" or "PostgreSQL 18") in the left sidebar
+2. Click **Properties**
+3. Click the **Connection** tab
+4. Look at the **Port** field — write down the number (e.g. `5432` or `5433`)
+
+```
+┌────────────────────────────────────┐
+│  Server Properties                 │
+│  ─────────────────                 │
+│  Connection tab:                   │
+│                                    │
+│  Host:  localhost                  │
+│  Port:  5433   ← WRITE THIS DOWN  │
+│  Username: postgres                │
+│                                    │
+└────────────────────────────────────┘
+```
+
+📝 **Remember this port number — you need it in the next step.**
+
+### 3c — Create the .env file
 
 ```bash
 cd ~/Desktop/curia/backend && cp .env.example .env && echo "✅ .env file created"
 ```
 
-### 3c — Edit the .env file — set your database password
+### 3d — Edit the .env file — set your password AND port
 
 ```bash
 open -e ~/Desktop/curia/backend/.env
 ```
 
-This opens the file in TextEdit. Find these lines and set your password:
+This opens the file in TextEdit. Find these lines and change **two things**:
 
 ```
 DB_HOST=localhost
 DB_PORT=5432
 DB_NAME=curia
 DB_USER=postgres
-DB_PASSWORD=YOUR_PASSWORD_HERE
+DB_PASSWORD=yourpassword
 ```
 
-**Replace `YOUR_PASSWORD_HERE`** with the password you enter when connecting to your server in PGAdmin. That's the same password you set when you installed PostgreSQL.
+**Change these:**
+
+1. **`DB_PORT`** — set this to the port from Step 3b (e.g. `5433` if that's what PGAdmin showed)
+2. **`DB_PASSWORD`** — set this to the password you use when connecting to your server in PGAdmin
+
+**Example** (if your port is 5433 and password is MyPass123):
+
+```
+DB_HOST=localhost
+DB_PORT=5433
+DB_NAME=curia
+DB_USER=postgres
+DB_PASSWORD=MyPass123
+```
 
 Save the file (**Cmd + S**) and close TextEdit.
 
 > **Not sure what password you used?** Open PGAdmin, try to expand your server — it asks for a password. That's the one.
 
-> **Installed PostgreSQL via Homebrew?** The default has no password. Leave it as `DB_PASSWORD=` (nothing after the `=`).
+> **Installed PostgreSQL via Homebrew?** The default has no password. Leave it as `DB_PASSWORD=` (nothing after the `=`). The port is usually `5432`.
 
-### 3d — Start the server
+### 3e — Verify your .env is correct (quick check)
+
+```bash
+grep -E "^DB_" ~/Desktop/curia/backend/.env
+```
+
+**✅ You should see something like:**
+
+```
+DB_HOST=localhost
+DB_PORT=5433
+DB_NAME=curia
+DB_USER=postgres
+DB_PASSWORD=yourActualPassword
+```
+
+Make sure `DB_PORT` matches what PGAdmin showed and `DB_PASSWORD` is not `yourpassword`.
+
+### 3f — Start the server
 
 ```bash
 cd ~/Desktop/curia/backend && npm start
@@ -172,17 +233,6 @@ cd ~/Desktop/curia/backend && npm start
 ✅ All migrations completed successfully!
 ✅ Database initialised — repositories connected to PostgreSQL
 ```
-
-**❌ Still seeing `database "curia" does not exist`?** Check these things:
-
-| Check this | How |
-|-----------|-----|
-| Does the database `curia` exist? | PGAdmin → expand server → look under **Databases** (not the server name) |
-| Does `.env` exist? (not `.env.example`) | Run: `ls ~/Desktop/curia/backend/.env` — should show the file |
-| Is `DB_NAME=curia` in the `.env`? | Run: `grep DB_NAME ~/Desktop/curia/backend/.env` |
-| Is the password correct? | Open PGAdmin → disconnect and reconnect to your server → use the same password in `.env` |
-| Is PostgreSQL running? | PGAdmin → your server should have a green icon (not red X) |
-| Did you restart the server? | Press **Ctrl + C** in Terminal, then run `npm start` again |
 
 ⚠️ **Leave this Terminal window open — the server must keep running.**
 
@@ -208,17 +258,68 @@ That's it. If you see `"connected"`, your database is working.
 
 ---
 
-## Troubleshooting
+## Still getting errors? Read this
 
-| Problem | Solution |
-|---------|----------|
-| `database "curia" does not exist` | The database hasn't been created yet. In PGAdmin: expand your server → right-click **Databases** → Create → Database → name it `curia`. A PGAdmin server name is NOT a database. |
-| `password authentication failed` | Wrong password in `.env`. Open PGAdmin, disconnect from your server, reconnect — the password it asks for is what goes in `DB_PASSWORD`. |
-| `connection refused` | PostgreSQL isn't running. In PGAdmin, check if your server has a red X icon. Restart PostgreSQL or your Mac. |
-| `role "postgres" does not exist` | Your PostgreSQL uses your Mac username instead. Run `whoami` in Terminal, then set `DB_USER=` to that name in `.env`. |
-| Server says `PostgreSQL not reachable` | 1) Check `.env` file exists (not just `.env.example`). 2) Check password is correct. 3) Restart the server with `npm start`. |
-| I don't have a `.env` file | Run: `cd ~/Desktop/curia/backend && cp .env.example .env` then edit it (Step 3c). |
-| I forgot my PostgreSQL password | In Terminal: `psql postgres -c "ALTER USER postgres WITH PASSWORD 'newpassword';"` then update `.env`. |
+### ❌ `database "curia" does not exist`
+
+This means the server IS reaching PostgreSQL, but on the **wrong port** — so it finds a different PostgreSQL instance that doesn't have your "curia" database.
+
+**Fix it:**
+
+1. Open PGAdmin → right-click your server → **Properties** → **Connection** tab → check the **Port**
+2. Open your `.env` file: `open -e ~/Desktop/curia/backend/.env`
+3. Set `DB_PORT=` to that port number (e.g. `5433`)
+4. Save, then restart: press **Ctrl + C** in Terminal, run `npm start` again
+
+### ❌ `password authentication failed`
+
+Wrong password in `.env`.
+
+**Fix it:**
+
+1. Open PGAdmin → disconnect from your server → reconnect → the password it asks for is the one you need
+2. Open your `.env` file: `open -e ~/Desktop/curia/backend/.env`
+3. Set `DB_PASSWORD=` to that exact password
+4. Save, then restart: press **Ctrl + C** in Terminal, run `npm start` again
+
+### ❌ `connection refused`
+
+PostgreSQL isn't running.
+
+**Fix it:** In PGAdmin, check if your server has a red X icon. If yes, right-click → Connect. If that doesn't work, restart your Mac.
+
+### ❌ `role "postgres" does not exist`
+
+Your PostgreSQL uses your Mac username instead of "postgres".
+
+**Fix it:** Run `whoami` in Terminal, then set `DB_USER=` to that name in `.env`.
+
+### ❌ Server says `PostgreSQL not reachable` (no specific error)
+
+1. Check `.env` file exists (not just `.env.example`): `ls ~/Desktop/curia/backend/.env`
+2. Check password is correct
+3. Check port is correct (Step 3b)
+4. Restart the server with `npm start`
+
+### ❌ I don't have a `.env` file
+
+Run:
+
+```bash
+cd ~/Desktop/curia/backend && cp .env.example .env
+```
+
+Then go to Step 3d to edit it.
+
+### ❌ I forgot my PostgreSQL password
+
+In Terminal:
+
+```bash
+psql postgres -c "ALTER USER postgres WITH PASSWORD 'newpassword';"
+```
+
+Then update `DB_PASSWORD=newpassword` in your `.env`.
 
 ---
 
