@@ -239,7 +239,7 @@ This tests the complete authentication cycle: register → login → access prot
 
 > **Note:** The `| python3 -m json.tool` part formats JSON for readability. Python 3 is pre-installed on modern macOS. If it's missing, the commands still work — just remove the `| python3 -m json.tool` part and the output will be unformatted JSON.
 
-**Register a new user:**
+**Step 1 — Register a new user:**
 
 ```bash
 curl -s -X POST http://localhost:3001/api/v1/auth/register \
@@ -249,7 +249,7 @@ curl -s -X POST http://localhost:3001/api/v1/auth/register \
 
 **✅ You should see:** A JSON response with `user` object and `tokens` (accessToken + refreshToken).
 
-**Login with that user:**
+**Step 2 — Login with that user:**
 
 ```bash
 curl -s -X POST http://localhost:3001/api/v1/auth/login \
@@ -259,7 +259,7 @@ curl -s -X POST http://localhost:3001/api/v1/auth/login \
 
 **✅ You should see:** A JSON response with `user` and `tokens`.
 
-**Get your profile — option A (all-in-one, recommended):**
+**Step 3 — Get your profile (all-in-one command — just paste it):**
 
 Paste this **single block** — it logs in, extracts the token automatically, and fetches your profile:
 
@@ -274,26 +274,47 @@ curl -s http://localhost:3001/api/v1/auth/me \
 
 **✅ You should see:** Your user profile (id, email, firstName, lastName, role).
 
-**Get your profile — option B (manual token copy):**
+> **That's it!** Steps 1-3 above are all you need. The all-in-one command in Step 3 handles the token automatically.
 
-If option A doesn't work, do it in two steps:
+---
 
-1. Look at the login response from above. Find the `"accessToken"` value — it's the long string starting with `eyJ...`. **Copy that entire string** (without the quotes).
+<details>
+<summary>⚙️ Advanced — manual token copy (click to expand — only if Step 3 above doesn't work)</summary>
 
-2. Paste this command, replacing `PASTE_YOUR_TOKEN_HERE` with the token you copied:
+> ⚠️ **IMPORTANT: Access tokens are VERY LONG — about 200-300 characters!**
+>
+> A token looks like this (notice it's a single unbroken string with three parts separated by dots):
+>
+> ```
+> eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInJvbGUiOjEsInBlcm1pc3Npb25zIjpbInByb2R1Y3RzOnZpZXciXSwidHlwZSI6ImFjY2VzcyIsImlhdCI6MTc3Mjk2Nzg2OSwiZXhwIjoxNzcyOTY4NzY5fQ.D5xJCvhczzXyOupkql4FwKIlNXNF0v4juPZptBg4z_Q
+> ```
+>
+> ❌ **WRONG** — only the first 20 characters: `eyJhbGciOiJIUzI1NiIs` → gives "jwt malformed" error
+>
+> ✅ **RIGHT** — the ENTIRE string from `eyJ` all the way to the end (200+ characters, three dot-separated parts)
+
+**How to do it manually:**
+
+1. Look at the login response from Step 2. Find the `"accessToken"` value:
+
+   ```json
+   "tokens": {
+       "accessToken": "eyJhbGciOi...VERY_LONG_STRING...z_Q",
+       "refreshToken": "eyJhbGciOi...",
+   ```
+
+2. **Triple-click** the accessToken value to select the entire line, then copy it. Make sure you get the complete string — it has **three parts separated by dots** (`xxxxx.yyyyy.zzzzz`).
+
+3. Paste this command, replacing `PASTE_FULL_TOKEN_HERE` with the **complete** token:
 
 ```bash
 curl -s http://localhost:3001/api/v1/auth/me \
-  -H "Authorization: Bearer PASTE_YOUR_TOKEN_HERE" | python3 -m json.tool
+  -H "Authorization: Bearer PASTE_FULL_TOKEN_HERE" | python3 -m json.tool
 ```
 
-> **Where is the access token?** In the JSON response from register or login, look for:
-> ```json
-> "tokens": {
->     "accessToken": "eyJhbGciOi...",   ← THIS is your access token
->     "refreshToken": "eyJhbGciOi...",
-> ```
-> Copy the full `eyJ...` string after `"accessToken":`.
+> ⏰ **Tokens expire after 15 minutes!** If you get `"Token expired"`, just run the login command from Step 2 again to get a fresh token.
+
+</details>
 
 📋 **Copy all the output and send it to me.**
 
@@ -311,23 +332,29 @@ When you are done, go back to the **first tab** (the server) and press **Ctrl + 
 
 ### 5a — Install PostgreSQL
 
+> **Already have PostgreSQL installed (any version — 14, 15, 16, 17, 18)?** Skip to [Step 5b](#5b--create-the-database).
+
 **Option 1 — Homebrew (recommended for Mac):**
 
 ```bash
-brew install postgresql@16
+brew install postgresql
 ```
+
+> This installs the latest version. If you want a specific version, use e.g. `brew install postgresql@16`.
 
 Then start the service:
 
 ```bash
-brew services start postgresql@16
+brew services start postgresql
 ```
+
+> If you installed a specific version, use e.g. `brew services start postgresql@18`.
 
 **Option 2 — Postgres.app (graphical):**
 
 Download from [https://postgresapp.com](https://postgresapp.com), install, and click "Start".
 
-**Option 3 — PGAdmin (graphical, if you downloaded PostgreSQL installer from postgresql.org):**
+**Option 3 — Official installer from postgresql.org (this also installs PGAdmin):**
 
 If you downloaded the official PostgreSQL installer from [postgresql.org](https://www.postgresql.org/download/), PGAdmin was included. During installation you chose a password for the `postgres` superuser — **remember this password**, you will need it for the `.env` file. PostgreSQL starts automatically as a service after installation.
 
