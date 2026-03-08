@@ -74,7 +74,9 @@ cd ~/Desktop/curia/backend && npm test
 
 ---
 
-## Step 4 → Create .env file (already filled in — just run it)
+## Step 4 → Create .env file
+
+> This creates the .env file. You only need to change ONE line after.
 
 ```bash
 cd ~/Desktop/curia/backend && \
@@ -85,7 +87,7 @@ DB_HOST=localhost
 DB_PORT=5432
 DB_NAME=curia
 DB_USER=postgres
-DB_PASSWORD=Curia.1312
+DB_PASSWORD=CHANGE_ME
 JWT_SECRET=dev-secret-change-in-production-minimum-32-chars
 JWT_EXPIRES_IN=24h
 JWT_REFRESH_EXPIRES_IN=7d
@@ -102,8 +104,16 @@ DEFAULT_CURRENCY=EUR
 DEFAULT_DISCOUNT_RATE=0
 QUANTITY_TIERS=[]
 ENVFILE
-echo "✅ .env created with your settings"
+echo "✅ .env created — now set your password (one line to change)"
 ```
+
+Now open it and set your password:
+
+```bash
+open -e ~/Desktop/curia/backend/.env
+```
+
+Change `CHANGE_ME` to your password. Save (Cmd+S). Close.
 
 ---
 
@@ -181,7 +191,7 @@ curl -s http://localhost:3001/health | python3 -m json.tool
 
 ```bash
 cd ~/Desktop/curia/backend && \
-PGPASSWORD=Curia.1312 \
+PGPASSWORD=$(grep DB_PASSWORD .env | cut -d= -f2) \
 /Library/PostgreSQL/18/bin/psql -U postgres -h localhost -c "DROP DATABASE IF EXISTS curia;" && \
 echo "✅ Dropped — npm start will recreate it"
 ```

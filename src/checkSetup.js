@@ -69,7 +69,7 @@ console.log('');
 
 check(password.length > 0, 'DB_PASSWORD is set', 'DB_PASSWORD is EMPTY — set it in .env');
 
-const placeholders = ['yourpassword', 'PUT_YOUR_PASSWORD_HERE', 'your_password', 'password'];
+const placeholders = ['yourpassword', 'PUT_YOUR_PASSWORD_HERE', 'your_password', 'password', 'CHANGE_ME'];
 const isPlaceholder = placeholders.includes(password);
 check(!isPlaceholder, 'DB_PASSWORD is not a placeholder',
   `DB_PASSWORD is still "${password}" — change it to your real PostgreSQL password in .env`);
@@ -118,8 +118,7 @@ async function runChecks() {
 
     if (error.message.includes('password authentication failed')) {
       check(false, '', `Wrong password for user "${user}"`);
-      console.log(`\n     Your .env has DB_PASSWORD=${password}`);
-      console.log('     But PostgreSQL rejected it.');
+      console.log(`\n     Your .env has DB_PASSWORD set (${password.length} chars) but PostgreSQL rejected it.`);
       console.log('     The password you need is the one PGAdmin asks when you connect to "PostgreSQL 18".');
       console.log('     Fix it in .env:  open -e .env\n');
     } else if (error.code === 'ECONNREFUSED') {
