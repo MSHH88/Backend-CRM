@@ -4,6 +4,24 @@
 
 ---
 
+## Step 0 → Drop the old database (fresh start)
+
+> **Do NOT delete the server "PostgreSQL 18"** — that's your PostgreSQL installation.
+> You only delete the **database** called "curia" inside it. `npm start` will recreate it fresh.
+
+**In PGAdmin:**
+
+1. Open **PGAdmin**
+2. In the left sidebar, expand **PostgreSQL 18**
+3. Expand **Databases**
+4. Right-click **curia** → **Delete/Drop**
+5. Tick **Force** if it asks → Click **OK**
+6. Done — the "curia" database is gone
+
+> If "curia" doesn't exist or you already deleted it, skip this step — `npm start` creates it.
+
+---
+
 ## Step 1 → Delete old files
 
 ```bash
