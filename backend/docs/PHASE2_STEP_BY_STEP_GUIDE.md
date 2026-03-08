@@ -84,7 +84,7 @@ Step 8 — Full integration test & cleanup
 
 > **PGAdmin users:** The DB_PASSWORD is the password you set during PostgreSQL installation (the one PGAdmin asks when you connect to your server). DB_USER is typically `postgres`.
 >
-> **See `docs/TERMINAL_HEALTH_CHECK.md` Step 5** for detailed instructions with screenshots-style guidance.
+> **See `docs/STEP_BY_STEP_GUIDE.md` Step 4–5** for detailed instructions with screenshots-style guidance.
 
 ### 1.3 Verify Database Connection
 
@@ -107,7 +107,7 @@ Step 8 — Full integration test & cleanup
 - [x] `npm run lint` — 0 errors
 - [ ] PostgreSQL deployed locally and verified
 
-> **See `docs/TERMINAL_HEALTH_CHECK.md`** for the complete step-by-step terminal guide.
+> **See `docs/STEP_BY_STEP_GUIDE.md`** for the complete step-by-step terminal guide.
 
 ---
 
@@ -476,7 +476,7 @@ sellingPrice = costPrice × (1 + marginPercentage / 100)
 - [ ] Update README.md — mark Phase 2 items as ✅
 - [ ] Update `GET /api/v1` response to list all new endpoints
 - [ ] Update Swagger docs with new endpoints (margins, discounts, configurations)
-- [ ] Update TERMINAL_HEALTH_CHECK.md with new test commands if needed
+- [ ] Update STEP_BY_STEP_GUIDE.md with new test commands if needed
 - [ ] Update PHASE1_CODEBASE_ANALYSIS.md or create PHASE2_CODEBASE_ANALYSIS.md
 
 ### 8.5 Test Coverage Summary

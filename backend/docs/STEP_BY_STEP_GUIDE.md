@@ -1,4 +1,4 @@
-# Phase 2 Step 1 — Setup Guide
+# Phase 2 Step 1 — Step-by-Step Setup Guide
 
 > **What is this?** A step-by-step guide. Each step does ONE thing.
 > Every grey code block is something you **copy-paste into Terminal**, then press **Enter**.
@@ -9,36 +9,28 @@
 
 ---
 
-## Step 1 → Download the code files
+## Step 1 → Delete old files
 
-> **What this does:** Gets the 7 new/updated source files onto your Mac.
-
-Paste this **one block** into Terminal:
+> **What this does:** Removes all old source files, tests, config, and the old `.env` so you start clean.
+> ⚠️ This does NOT touch `node_modules/` — you don't need to re-download packages.
 
 ```bash
 cd ~/Desktop/curia/backend && \
-mkdir -p src/repositories && \
-BASE="https://raw.githubusercontent.com/MSHH88/Backend-CRM/copilot/analyze-project-phase-1/backend" && \
-curl -fsSL "$BASE/src/config/dbInit.js"                    -o src/config/dbInit.js && \
-curl -fsSL "$BASE/src/repositories/userRepository.js"      -o src/repositories/userRepository.js && \
-curl -fsSL "$BASE/src/repositories/sessionRepository.js"   -o src/repositories/sessionRepository.js && \
-curl -fsSL "$BASE/tests/repositories.test.js"              -o tests/repositories.test.js && \
-curl -fsSL "$BASE/src/server.js"                           -o src/server.js && \
-curl -fsSL "$BASE/src/routes/auth.js"                      -o src/routes/auth.js && \
-curl -fsSL "$BASE/src/middleware/auth.js"                   -o src/middleware/auth.js && \
-echo "" && echo "✅ 7 files downloaded (4 new + 3 updated)"
+rm -f .env && \
+rm -rf src/ tests/ && \
+echo "✅ Old files deleted (src/, tests/, .env removed)"
 ```
 
-**✅ You should see:** `✅ 7 files downloaded (4 new + 3 updated)`
+**✅ You should see:** `✅ Old files deleted (src/, tests/, .env removed)`
 
-> **If you get errors**, use the full reinstall below instead.
+---
 
-<details>
-<summary>🔄 Full reinstall — click here ONLY if the above didn't work</summary>
+## Step 2 → Download the new files
+
+> **What this does:** Downloads ALL source files, tests, and config files from GitHub and places them in the correct folders.
 
 ```bash
 cd ~/Desktop/curia/backend && \
-rm -rf src/ tests/ && \
 mkdir -p src/config src/data src/db src/engine src/middleware src/repositories src/routes src/utils tests && \
 BASE="https://raw.githubusercontent.com/MSHH88/Backend-CRM/copilot/analyze-project-phase-1/backend" && \
 curl -fsSL "$BASE/src/app.js"                              -o src/app.js && \
@@ -79,11 +71,11 @@ npm install && \
 echo "" && echo "✅ All files downloaded and installed"
 ```
 
-</details>
+**✅ You should see:** `✅ All files downloaded and installed`
 
 ---
 
-## Step 2 → Run the tests
+## Step 3 → Run the tests
 
 > **What this does:** Checks that all the code works. No database needed — tests use in-memory mode.
 
@@ -100,32 +92,43 @@ Tests:       124 passed, 124 total
 
 > "Force exiting Jest" or "worker process has failed to exit gracefully" → **normal, ignore it.**
 
-📋 **Copy the last 10 lines and send them to me. Then move to Step 3.**
+📋 **Copy the last 10 lines and send them to me. Then move to Step 4.**
 
 ---
 
-## Step 3 → Connect to your PostgreSQL database
+## Step 4 → Make sure PostgreSQL is running
 
-> **What this does:** Creates the `.env` config file so the server can find your database.
-> The `.env` file goes in `~/Desktop/curia/backend/` — NOT in PGAdmin.
-> PGAdmin doesn't need any files from you. It's just a visual tool to view your database.
+> **What this does:** Checks that your PostgreSQL server is running and finds the correct port.
+> ℹ️ **You do NOT need to create the `curia` database manually.** The server creates it automatically.
 
-### 3a — Database is auto-created
+### 4a — Check PostgreSQL is running (pick ONE option)
 
-> ✅ **You do NOT need to create the database manually.** When you start the server, it will automatically create the `curia` database if it doesn't exist yet. Just make sure PostgreSQL is running (you can check in PGAdmin — your server should have a green icon, not a red X).
+**Option A — Using PGAdmin (recommended if you have PGAdmin):**
 
-> ℹ️ **The server name in PGAdmin (like "curia" or "PostgreSQL 18") is NOT a database.** It's just a connection bookmark. The **database** is what appears *under* that server, inside the **Databases** folder. The server will create it for you.
+1. Open **PGAdmin** from your Applications folder
+2. In the left sidebar, look at your server (e.g. "PostgreSQL 18" or "curia")
+3. If the icon is **green** → PostgreSQL is running ✅
+4. If the icon has a **red X** → right-click → **Connect** → enter your password
 
-### 3b — Find your port number (IMPORTANT!)
+**Option B — Using Terminal:**
 
-> ⚠️ **This is the #1 reason for "database does not exist" errors.** PostgreSQL 18 often uses port **5433** instead of 5432. If the port is wrong in your `.env`, the server connects to the wrong PostgreSQL and can't find your database.
+```bash
+pg_isready
+```
 
-In PGAdmin:
+✅ You should see: `accepting connections`
+❌ If you see `no response` or `could not connect` → PostgreSQL is not running. Open PGAdmin and connect to your server, or restart your Mac.
 
-1. **Right-click** your server name (e.g. "curia" or "PostgreSQL 18") in the left sidebar
+### 4b — Find your port number ⚠️ IMPORTANT
+
+> This is the **#1 reason** for connection errors. PostgreSQL 18 often uses port **5433** instead of 5432.
+
+**Option A — Using PGAdmin:**
+
+1. **Right-click** your server name (e.g. "PostgreSQL 18") in the left sidebar
 2. Click **Properties**
 3. Click the **Connection** tab
-4. Look at the **Port** field — write down the number (e.g. `5432` or `5433`)
+4. Look at the **Port** field — write down that number
 
 ```
 ┌────────────────────────────────────┐
@@ -134,27 +137,53 @@ In PGAdmin:
 │  Connection tab:                   │
 │                                    │
 │  Host:  localhost                  │
-│  Port:  5433   ← WRITE THIS DOWN  │
+│  Port:  5432   ← WRITE THIS DOWN  │
 │  Username: postgres                │
 │                                    │
 └────────────────────────────────────┘
 ```
 
+**Option B — Using Terminal (if you don't have PGAdmin open):**
+
+```bash
+psql postgres -c "SHOW port;" 2>/dev/null || psql -U $(whoami) postgres -c "SHOW port;" 2>/dev/null || echo "Could not detect port — check PGAdmin instead"
+```
+
 📝 **Remember this port number — you need it in the next step.**
 
-### 3c — Create the .env file
+### 4c — Find your password
+
+> The password you need is the one PostgreSQL was set up with during installation.
+
+If you're **not sure** what the password is, try this in Terminal:
+
+```bash
+psql postgres -U postgres -c "SELECT 1;" 2>&1
+```
+
+- If it says `1 row` → password might be empty or saved in your system
+- If it says `password authentication failed` → you need to enter the correct password
+- If it asks for a password → type it and press Enter
+
+> **PGAdmin users:** When you expand your server in PGAdmin, it asks for a password. That's the one you need.
+
+---
+
+## Step 5 → Create the .env file and start the server
+
+### 5a — Create .env from the template
 
 ```bash
 cd ~/Desktop/curia/backend && cp .env.example .env && echo "✅ .env file created"
 ```
 
-### 3d — Edit the .env file — set your password AND port
+### 5b — Edit .env — set your PORT and PASSWORD
 
 ```bash
 open -e ~/Desktop/curia/backend/.env
 ```
 
-This opens the file in TextEdit. Find these lines and change **two things**:
+This opens the file in TextEdit. Find these lines:
 
 ```
 DB_HOST=localhost
@@ -164,52 +193,52 @@ DB_USER=postgres
 DB_PASSWORD=yourpassword
 ```
 
-**Change these:**
+**Change two things:**
 
-1. **`DB_PORT`** — set this to the port from Step 3b (e.g. `5433` if that's what PGAdmin showed)
-2. **`DB_PASSWORD`** — set this to the password you use when connecting to your server in PGAdmin
+| Setting | What to change | How to find the value |
+|---------|---------------|----------------------|
+| `DB_PORT` | Set to the port from Step 4b | PGAdmin → right-click server → Properties → Connection → Port |
+| `DB_PASSWORD` | Set to your PostgreSQL password | The password PGAdmin asks when you expand your server |
 
-**Example** (if your port is 5433 and password is MyPass123):
+**Example** (if your port is 5432 and password is Curia.1312):
 
 ```
 DB_HOST=localhost
-DB_PORT=5433
+DB_PORT=5432
 DB_NAME=curia
 DB_USER=postgres
-DB_PASSWORD=MyPass123
+DB_PASSWORD=Curia.1312
 ```
 
 Save the file (**Cmd + S**) and close TextEdit.
 
-> **Not sure what password you used?** Open PGAdmin, try to expand your server — it asks for a password. That's the one.
-
-> **Installed PostgreSQL via Homebrew?** The default has no password. Leave it as `DB_PASSWORD=` (nothing after the `=`). The port is usually `5432`.
-
-### 3e — Verify your .env is correct (quick check)
+### 5c — Verify .env is correct
 
 ```bash
 grep -E "^DB_" ~/Desktop/curia/backend/.env
 ```
 
-**✅ You should see something like:**
+**✅ You should see your actual values:**
 
 ```
 DB_HOST=localhost
-DB_PORT=5433
+DB_PORT=5432
 DB_NAME=curia
 DB_USER=postgres
 DB_PASSWORD=yourActualPassword
 ```
 
-Make sure `DB_PORT` matches what PGAdmin showed and `DB_PASSWORD` contains your actual password (not the example text "yourpassword").
+Make sure:
+- `DB_PORT` matches what you found in Step 4b
+- `DB_PASSWORD` has your real password (not "yourpassword")
 
-### 3f — Start the server
+### 5d — Start the server
 
 ```bash
 cd ~/Desktop/curia/backend && npm start
 ```
 
-**✅ What you should see:**
+**✅ What you should see (first time — database gets auto-created):**
 
 ```
 🚀 CURIA Backend Server Started
@@ -224,17 +253,18 @@ cd ~/Desktop/curia/backend && npm start
 ✅ Database initialised — repositories connected to PostgreSQL
 ```
 
-> ℹ️ If the database already exists, you won't see the "creating it now" line — that's fine, it just skips straight to connecting.
+> ℹ️ The database **auto-creates** — you do NOT need to create it in PGAdmin or Terminal.
+> If it already exists from a previous run, you'll skip straight to "Database connected".
 
 ⚠️ **Leave this Terminal window open — the server must keep running.**
 
-📋 **Copy what you see and send it to me. Then move to Step 4.**
+📋 **Copy what you see and send it to me. Then move to Step 6.**
 
 ---
 
-## Step 4 → Verify everything works
+## Step 6 → Verify everything works
 
-> **What this does:** Sends a quick test to make sure the server and database are running.
+> **What this does:** Sends a test request to confirm the server and database are connected.
 
 Press **Cmd + T** to open a **second Terminal tab**. Then paste:
 
@@ -244,13 +274,13 @@ curl -s http://localhost:3001/health | python3 -m json.tool
 
 **✅ You should see** `"database": "connected"` in the response.
 
-That's it. If you see `"connected"`, your database is working.
+That's it! If you see `"connected"`, your database is working. 🎉
 
 📋 **Copy the output and send it to me.**
 
 ---
 
-## Still getting errors? Read this
+## 🔧 Still getting errors?
 
 ### 🔍 First — run the diagnostic command
 
@@ -261,11 +291,9 @@ cd ~/Desktop/curia/backend && node -e "require('dotenv').config(); console.log('
 ```
 
 **Check the output:**
-- Does `DB_PORT` match what PGAdmin shows? (Step 3b)
+- Does `DB_PORT` match what PGAdmin shows? (Step 4b)
 - Does `DB_PASSWORD` say `✅ set`? If it says `❌ EMPTY`, your `.env` file is missing or the password line is wrong.
 - Does `DB_NAME` say `curia`?
-
-> **If `DB_PASSWORD` says EMPTY:** You may have edited `.env.example` instead of `.env`. Run `ls ~/Desktop/curia/backend/.env` — if it says "No such file", go to Step 3c.
 
 ---
 
@@ -273,30 +301,20 @@ cd ~/Desktop/curia/backend && node -e "require('dotenv').config(); console.log('
 
 > ℹ️ **This should be rare now.** The server auto-creates the `curia` database on startup. If you still see this error, it means the auto-create also failed.
 
-**Possible causes (check each one):**
+**Most likely cause: wrong password or wrong port.** The auto-create connects to PostgreSQL's default `postgres` database first. If the password or port in `.env` is wrong, it can't connect at all.
 
-**1. Wrong password** — the auto-create connects to PostgreSQL's default `postgres` database first. If the password in `.env` is wrong, it can't connect at all:
-1. Open PGAdmin → disconnect from your server → reconnect → the password it asks for is the one you need
-2. Open your `.env` file: `open -e ~/Desktop/curia/backend/.env`
-3. Set `DB_PASSWORD=` to that exact password
-4. Save, then restart: press **Ctrl + C** in Terminal, run `npm start` again
-
-**2. Wrong port** — your `.env` connects to a different PostgreSQL instance:
-1. Open PGAdmin → right-click your server → **Properties** → **Connection** tab → check the **Port**
-2. Open your `.env` file: `open -e ~/Desktop/curia/backend/.env`
-3. Set `DB_PORT=` to that port number (e.g. `5433`)
-4. Save, then restart: press **Ctrl + C** in Terminal, run `npm start` again
-
-**3. Edited `.env.example` instead of `.env`** — the server only reads `.env` (without "example"):
-1. Check: `ls ~/Desktop/curia/backend/.env` — if it says "No such file", run: `cp .env.example .env`
-2. Then edit `.env` (not `.env.example`): `open -e ~/Desktop/curia/backend/.env`
+**Fix:**
+1. Run the diagnostic command above — check `DB_PORT` and `DB_PASSWORD`
+2. Open PGAdmin → right-click your server → **Properties** → **Connection** tab → check **Port**
+3. Open your `.env`: `open -e ~/Desktop/curia/backend/.env`
+4. Fix `DB_PORT` and `DB_PASSWORD`
+5. Save, then restart: press **Ctrl + C** in Terminal, then `npm start`
 
 ### ❌ `password authentication failed`
 
 Wrong password in `.env`.
 
-**Fix it:**
-
+**Fix:**
 1. Open PGAdmin → disconnect from your server → reconnect → the password it asks for is the one you need
 2. Open your `.env` file: `open -e ~/Desktop/curia/backend/.env`
 3. Set `DB_PASSWORD=` to that exact password
@@ -306,30 +324,28 @@ Wrong password in `.env`.
 
 PostgreSQL isn't running.
 
-**Fix it:** In PGAdmin, check if your server has a red X icon. If yes, right-click → Connect. If that doesn't work, restart your Mac.
+**Fix:** Open PGAdmin → if your server has a red X icon, right-click → Connect. If that doesn't work, restart your Mac.
 
 ### ❌ `role "postgres" does not exist`
 
 Your PostgreSQL uses your Mac username instead of "postgres".
 
-**Fix it:** Run `whoami` in Terminal, then set `DB_USER=` to that name in `.env`.
+**Fix:** Run `whoami` in Terminal, then set `DB_USER=` to that name in `.env`.
 
-### ❌ Server says `PostgreSQL not reachable` (no specific error)
+### ❌ Server says `PostgreSQL not reachable`
 
-1. Check `.env` file exists (not just `.env.example`): `ls ~/Desktop/curia/backend/.env`
-2. Check password is correct
-3. Check port is correct (Step 3b)
+1. Check `.env` file exists: `ls ~/Desktop/curia/backend/.env`
+2. Check password is correct (see diagnostic command above)
+3. Check port is correct (Step 4b)
 4. Restart the server with `npm start`
 
 ### ❌ I don't have a `.env` file
-
-Run:
 
 ```bash
 cd ~/Desktop/curia/backend && cp .env.example .env
 ```
 
-Then go to Step 3d to edit it.
+Then go to Step 5b to edit it.
 
 ### ❌ I forgot my PostgreSQL password
 
@@ -345,13 +361,10 @@ Then update `DB_PASSWORD=newpassword` in your `.env`.
 
 **No.** The `.env` file is ONLY for your backend project folder (`~/Desktop/curia/backend/`).
 
-PGAdmin is a completely separate tool — it's just a visual interface for looking at your database. PGAdmin has its own settings (you enter them when you create a server connection in PGAdmin). The `.env` file tells your **Node.js backend server** how to connect to PostgreSQL.
+PGAdmin is a separate tool — it's just a visual interface for looking at your database. The `.env` file tells your **Node.js backend server** how to connect to PostgreSQL. They both connect to the same PostgreSQL, but they have separate settings.
 
-Think of it this way:
-- **PGAdmin** = a window to look at the database (like a file browser)
+- **PGAdmin** = a window to look at the database
 - **`.env` file** = the address your backend server uses to find the database
-
-They both connect to the same PostgreSQL, but they have separate settings. PGAdmin stores its settings internally. Your backend server reads its settings from `.env`.
 
 ---
 
@@ -364,7 +377,7 @@ They both connect to the same PostgreSQL, but they have separate settings. PGAdm
 
 | File | What it does |
 |------|-------------|
-| `src/config/dbInit.js` | Database initialization — tests PostgreSQL, runs migrations, wires repositories. Falls back to in-memory if DB unavailable. |
+| `src/config/dbInit.js` | Database initialization — auto-creates database, runs migrations, wires repositories. Falls back to in-memory if DB unavailable. |
 | `src/repositories/userRepository.js` | User CRUD — `create`, `findByEmail`, `findById`, `update`, `remove`, `count`. Works with both in-memory and PostgreSQL. |
 | `src/repositories/sessionRepository.js` | Session management — token blacklist, refresh tokens, session limits. Works with both in-memory and PostgreSQL. |
 | `tests/repositories.test.js` | 24 tests for both repositories. |
@@ -383,7 +396,7 @@ They both connect to the same PostgreSQL, but they have separate settings. PGAdm
 Express Routes  →  userRepository.js / sessionRepository.js
                             ↓
                       dbInit.js
-                   (connects to DB or falls back to in-memory)
+                   (auto-creates DB, connects, or falls back to in-memory)
                             ↓
                 PostgreSQL (23 tables, migrations, seeds)
 ```
