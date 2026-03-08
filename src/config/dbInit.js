@@ -50,8 +50,10 @@ const ensureDatabase = async (dbConfig) => {
 
     if (result.rowCount === 0) {
       // Database does not exist — create it
-      // Note: CREATE DATABASE cannot use parameterised queries, but `name`
+      // Note: CREATE DATABASE cannot use parameterized queries, but `name`
       // comes from our own config (not user input). We validate it here.
+      // Mixed case is intentionally allowed — PostgreSQL folds unquoted
+      // identifiers to lowercase, so "Curia" and "curia" both work.
       if (!/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(name)) {
         console.error(`❌ Invalid database name: "${name}"`);
         return false;
