@@ -179,7 +179,7 @@ cd ~/Desktop/curia/backend && npm start
 |-----------|-----|
 | Does the database `curia` exist? | PGAdmin → expand server → look under **Databases** (not the server name) |
 | Does `.env` exist? (not `.env.example`) | Run: `ls ~/Desktop/curia/backend/.env` — should show the file |
-| Is `DB_NAME=curia` in the `.env`? | Run: `cat ~/Desktop/curia/backend/.env \| grep DB_NAME` |
+| Is `DB_NAME=curia` in the `.env`? | Run: `grep DB_NAME ~/Desktop/curia/backend/.env` |
 | Is the password correct? | Open PGAdmin → disconnect and reconnect to your server → use the same password in `.env` |
 | Is PostgreSQL running? | PGAdmin → your server should have a green icon (not red X) |
 | Did you restart the server? | Press **Ctrl + C** in Terminal, then run `npm start` again |
