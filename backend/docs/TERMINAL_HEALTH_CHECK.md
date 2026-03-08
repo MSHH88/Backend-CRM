@@ -214,7 +214,7 @@ DB_USER=postgres
 DB_PASSWORD=yourActualPassword
 ```
 
-Make sure `DB_PORT` matches what PGAdmin showed and `DB_PASSWORD` is not `yourpassword`.
+Make sure `DB_PORT` matches what PGAdmin showed and `DB_PASSWORD` contains your actual password (not the example text "yourpassword").
 
 ### 3f — Start the server
 
