@@ -110,24 +110,11 @@ Tests:       124 passed, 124 total
 > The `.env` file goes in `~/Desktop/curia/backend/` — NOT in PGAdmin.
 > PGAdmin doesn't need any files from you. It's just a visual tool to view your database.
 
-### 3a — Make sure your database exists
+### 3a — Database is auto-created
 
-Open **PGAdmin** and look in the left sidebar:
+> ✅ **You do NOT need to create the database manually.** When you start the server, it will automatically create the `curia` database if it doesn't exist yet. Just make sure PostgreSQL is running (you can check in PGAdmin — your server should have a green icon, not a red X).
 
-```
-▼ Servers
-  ▼ your server (e.g. "curia" or "PostgreSQL 18")
-    ▼ Databases
-        curia  ← THIS must exist
-        postgres
-```
-
-**Do you see `curia` under Databases?**
-
-- **YES** → go to **Step 3b**
-- **NO** → right-click **Databases** → **Create** → **Database…** → name it `curia` → **Save**
-
-> ⚠️ **The server name in PGAdmin (like "curia" or "PostgreSQL 18") is NOT a database.** It's just a connection bookmark. The **database** is what appears *under* that server, inside the **Databases** folder.
+> ℹ️ **The server name in PGAdmin (like "curia" or "PostgreSQL 18") is NOT a database.** It's just a connection bookmark. The **database** is what appears *under* that server, inside the **Databases** folder. The server will create it for you.
 
 ### 3b — Find your port number (IMPORTANT!)
 
@@ -228,12 +215,16 @@ cd ~/Desktop/curia/backend && npm start
 🚀 CURIA Backend Server Started
 ...
 🔌 Connecting to PostgreSQL → postgres@localhost:5432/curia
+📦 Database "curia" not found — creating it now…
+✅ Database "curia" created successfully!
 📗 New database connection established
 ✅ Database connected: curia
 ...
 ✅ All migrations completed successfully!
 ✅ Database initialised — repositories connected to PostgreSQL
 ```
+
+> ℹ️ If the database already exists, you won't see the "creating it now" line — that's fine, it just skips straight to connecting.
 
 ⚠️ **Leave this Terminal window open — the server must keep running.**
 
@@ -280,26 +271,25 @@ cd ~/Desktop/curia/backend && node -e "require('dotenv').config(); console.log('
 
 ### ❌ `database "curia" does not exist`
 
+> ℹ️ **This should be rare now.** The server auto-creates the `curia` database on startup. If you still see this error, it means the auto-create also failed.
+
 **Possible causes (check each one):**
 
-**1. Wrong port** — your `.env` connects to a different PostgreSQL that doesn't have "curia":
+**1. Wrong password** — the auto-create connects to PostgreSQL's default `postgres` database first. If the password in `.env` is wrong, it can't connect at all:
+1. Open PGAdmin → disconnect from your server → reconnect → the password it asks for is the one you need
+2. Open your `.env` file: `open -e ~/Desktop/curia/backend/.env`
+3. Set `DB_PASSWORD=` to that exact password
+4. Save, then restart: press **Ctrl + C** in Terminal, run `npm start` again
+
+**2. Wrong port** — your `.env` connects to a different PostgreSQL instance:
 1. Open PGAdmin → right-click your server → **Properties** → **Connection** tab → check the **Port**
 2. Open your `.env` file: `open -e ~/Desktop/curia/backend/.env`
 3. Set `DB_PORT=` to that port number (e.g. `5433`)
 4. Save, then restart: press **Ctrl + C** in Terminal, run `npm start` again
 
-**2. Edited `.env.example` instead of `.env`** — the server only reads `.env` (without "example"):
+**3. Edited `.env.example` instead of `.env`** — the server only reads `.env` (without "example"):
 1. Check: `ls ~/Desktop/curia/backend/.env` — if it says "No such file", run: `cp .env.example .env`
 2. Then edit `.env` (not `.env.example`): `open -e ~/Desktop/curia/backend/.env`
-
-**3. Multiple PostgreSQL installations** — if you have both Homebrew and the official installer, there may be two PostgreSQL servers on different ports. The one on 5432 might not have your "curia" database:
-1. Run the diagnostic command above to see which port your server is using
-2. Check in PGAdmin which port has the "curia" database (Step 3b)
-3. Make sure they match in your `.env`
-
-**4. Database not actually created** — in PGAdmin, a **server** named "curia" is NOT a database. The database must appear *inside* the Databases folder:
-1. In PGAdmin, expand: Servers → your server → **Databases** → look for `curia`
-2. If it's not there: right-click **Databases** → **Create** → **Database…** → name it `curia` → **Save**
 
 ### ❌ `password authentication failed`
 
