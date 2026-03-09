@@ -52,6 +52,7 @@ const toSnake = (obj) => {
     companyName: 'company_name',
     vatId: 'vat_id',
     phoneNumber: 'phone_number',
+    role: 'role_id',
   };
 
   const result = {};
@@ -78,6 +79,7 @@ const toCamel = (row) => {
     company_name: 'companyName',
     vat_id: 'vatId',
     phone_number: 'phoneNumber',
+    role_id: 'role',
   };
 
   const result = {};
