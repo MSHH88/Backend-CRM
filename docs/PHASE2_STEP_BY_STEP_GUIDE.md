@@ -1,6 +1,6 @@
 # Phase 2 — Step-by-Step Guide
 
-> **Status:** Step 1.4 in progress — verifying auth persistence with PostgreSQL  
+> **Status:** Step 1 COMPLETE ✅ — all auth persistence verified with PostgreSQL  
 > **Last updated:** 2026-03-09  
 > **Prerequisite:** Phase 1 ✅ (100 tests passing, all endpoints working)
 
@@ -59,11 +59,11 @@ Step 8 — Full integration test & cleanup
 
 ---
 
-## Step 1 — Database Deployment & Auth Migration ✅ NEARLY COMPLETE
+## Step 1 — Database Deployment & Auth Migration ✅ COMPLETE
 
 **Goal:** Move from in-memory storage to PostgreSQL. Repository Pattern implemented — code auto-detects PostgreSQL and falls back to in-memory for tests.
 
-**Status:** All code, database setup, and connection verified. Only auth persistence verification (1.4) remains.
+**Status:** All code complete, database deployed, auth persistence fully verified.
 
 ### 1.1 Code Changes ✅ COMPLETE
 
@@ -87,26 +87,25 @@ Step 8 — Full integration test & cleanup
 ### 1.3 Verify Database Connection ✅ COMPLETE
 
 - [x] Server starts with `npm start` — "Database connected"
-- [x] Migrations auto-run on startup — 23 tables created automatically
+- [x] Migrations auto-run on startup — 23 tables + `revoked_tokens` table created automatically
 - [x] Seed data loaded — 8 roles, 4 categories, 4 manufacturers
 - [x] `GET /health` shows `"database": "connected"`
 
-### 1.4 Verify Auth with Database ⬜ REMAINING
+### 1.4 Verify Auth with Database ✅ COMPLETE
 
-- [ ] Register → user persists in DB (survives server restart)
-- [ ] Login → session tracked in DB
-- [ ] Logout → token blacklisted in DB
-- [ ] Refresh → new tokens issued, old invalidated
+- [x] Register → user persists in DB (survives server restart)
+- [x] Login → session tracked in DB (`user_sessions` table)
+- [x] Logout → token blacklisted in DB (`revoked_tokens` table)
+- [x] Refresh → new tokens issued, old invalidated in DB
 
-> **This is the only remaining item in Step 1.** It requires running curl commands to test auth endpoints while the server is running.
-
-### 1.5 Done Criteria
+### 1.5 Done Criteria ✅ ALL MET
 
 - [x] Repository Pattern implemented (dual-mode: in-memory + PostgreSQL)
+- [x] Session persistence implemented (write-through cache: memory + PostgreSQL)
 - [x] `npm test` — 124 tests pass
 - [x] `npm run lint` — 0 errors
 - [x] PostgreSQL deployed locally and verified
-- [ ] Auth persistence verified (see 1.4 above)
+- [x] Auth persistence verified (register, login, logout, refresh all persist to DB)
 
 > **See `docs/STEP_BY_STEP_GUIDE.md`** for daily-use commands and quick fixes.
 

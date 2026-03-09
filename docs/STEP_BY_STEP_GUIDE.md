@@ -1,101 +1,58 @@
-# Phase 2 Step 1.4 — Fix & Verify Auth with Database
+# Phase 2 Step 1 — COMPLETE ✅
 
-## ⬇️ UPDATED FILE — download required
+## ⬇️ NEW FILES — download required
 
 | # | File | What changed | Download to |
 |---|------|-------------|-------------|
-| 1 | `userRepository.js` | **Bug fix:** added `role` ↔ `role_id` column mapping | `backend/src/repositories/userRepository.js` |
+| 1 | `sessionRepository.js` | **Session persistence:** logout blacklist + refresh tokens now save to PostgreSQL | `backend/src/repositories/sessionRepository.js` |
+| 2 | `migrations.js` | **New table:** `revoked_tokens` added for token blacklist persistence | `backend/src/config/migrations.js` |
+| 3 | `dbInit.js` | **Async init:** session cache loads from DB on startup | `backend/src/config/dbInit.js` |
 
-> **What was the bug?** The database column is called `role_id` but the code was sending `role`. The INSERT failed with `column "role" of relation "users" does not exist`.
->
-> **What was fixed?** Two lines added to `userRepository.js` — `role: 'role_id'` in `toSnake()` and `role_id: 'role'` in `toCamel()`.
+> **What changed?** Sessions and token blacklists were only in memory — lost on every server restart. Now they persist to PostgreSQL (`user_sessions` + `revoked_tokens` tables). The in-memory stores act as a fast cache.
 
 ---
 
-## Step 1 — Download the updated file
+## Step 1 — Download the 3 updated files
 
-Download **`userRepository.js`** from the PR and replace:
+Download these files from the PR and replace your local copies:
 
 ```
-backend/src/repositories/userRepository.js
+backend/src/repositories/sessionRepository.js
+backend/src/config/migrations.js
+backend/src/config/dbInit.js
 ```
 
-(Your local path: `~/Desktop/curia/backend/src/repositories/userRepository.js`)
+(Your local paths: `~/Desktop/curia/backend/src/repositories/sessionRepository.js`, etc.)
 
 ---
 
-## Step 2 — Drop the old test user (clean slate)
-
-The previous failed register may have left bad data. In **PGAdmin**:
-
-1. Open **PGAdmin** → **PostgreSQL 18** → **Databases** → **curia**
-2. Click **Schemas** → **public** → **Tables** → right-click **users** → **View/Edit Data** → **All Rows**
-3. If you see any rows, select them and delete them (or just leave it — if the old register failed, the table is empty)
-
-Or skip this step — if the INSERT failed, nothing was saved.
-
----
-
-## Step 3 — Stop the server if running
+## Step 2 — Stop the server if running
 
 Go to the Terminal where the server is running and press **Ctrl+C**.
 
 ---
 
-## Step 4 — Start the server
+## Step 3 — Start the server
 
 ```bash
 cd ~/Desktop/curia/backend && npm start
 ```
 
-⚠️ **Leave this Terminal open.** The server runs in it.
+You should see:
+- `✅ revoked_tokens table created` (new table!)
+- `✅ Database initialised — repositories connected to PostgreSQL`
 
-You should see `✅ Database initialised — repositories connected to PostgreSQL`.
+⚠️ **Leave this Terminal open.**
 
 ---
 
-## Step 5 — Open a new Terminal tab
+## Step 4 — Open a new Terminal tab
 
 Press **Cmd+T** to open a new tab. All curl commands go here.
 
 ---
 
-## Step 6 — Register a test user
-
-```bash
-curl -s -X POST http://localhost:3001/api/v1/auth/register \
-  -H "Content-Type: application/json" \
-  -d '{"email":"test@curia.com","password":"MyPass123!","firstName":"Test","lastName":"User"}' \
-  | python3 -m json.tool
-```
-
-**✅ Expected output:**
-
-```json
-{
-    "success": true,
-    "message": "Registration successful",
-    "user": {
-        "id": "...",
-        "email": "test@curia.com",
-        "firstName": "Test",
-        "lastName": "User",
-        "role": 1
-    },
-    "tokens": {
-        "accessToken": "eyJ...",
-        "refreshToken": "eyJ...",
-        "expiresIn": "15m",
-        "tokenType": "Bearer"
-    }
-}
-```
-
-If you see `"success": true` → the bug is fixed and the user was created in the database. 🎉
-
----
-
-## Step 7 — Verify the user exists by logging in
+## Step 5 — Login (your existing user still works)
 
 ```bash
 curl -s -X POST http://localhost:3001/api/v1/auth/login \
@@ -106,27 +63,72 @@ curl -s -X POST http://localhost:3001/api/v1/auth/login \
 
 **✅ Expected:** `"success": true` and `"Login successful"`.
 
----
-
-## Step 8 — Stop the server
-
-Go back to the **first Terminal tab** (where the server is running) and press **Ctrl+C** to stop it.
+**Save the `accessToken` and `refreshToken` from the output** — you'll need them for the next steps.
 
 ---
 
-## Step 9 — Start the server again
+## Step 6 — Test logout (token gets blacklisted in DB)
+
+Replace `YOUR_ACCESS_TOKEN` with the `accessToken` from Step 5:
 
 ```bash
-npm start
+curl -s -X POST http://localhost:3001/api/v1/auth/logout \
+  -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+  | python3 -m json.tool
 ```
 
-Wait for `✅ Database initialised — repositories connected to PostgreSQL`.
+**✅ Expected:** `"success": true` and `"Logout successful"`.
 
 ---
 
-## Step 10 — Login again (proves user survived restart)
+## Step 7 — Verify the token is blacklisted
 
-Go to the **second Terminal tab** and paste:
+Try using the same token again:
+
+```bash
+curl -s -X GET http://localhost:3001/api/v1/auth/me \
+  -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+  | python3 -m json.tool
+```
+
+**✅ Expected:** Error message — the token was revoked and cannot be used.
+
+---
+
+## Step 8 — Test refresh token rotation
+
+Use the `refreshToken` from Step 5:
+
+```bash
+curl -s -X POST http://localhost:3001/api/v1/auth/refresh \
+  -H "Content-Type: application/json" \
+  -d '{"refreshToken":"YOUR_REFRESH_TOKEN"}' \
+  | python3 -m json.tool
+```
+
+**✅ Expected:** New `accessToken` and `refreshToken` pair. The old refresh token is now invalid.
+
+---
+
+## Step 9 — Check PGAdmin for session data
+
+1. Open **PGAdmin** → **PostgreSQL 18** → **Databases** → **curia**
+2. **Schemas** → **public** → **Tables** → right-click **user_sessions** → **View/Edit Data** → **All Rows**
+3. You should see session rows with `is_valid` = `true` (active) and `false` (revoked)
+4. Also check **revoked_tokens** table — right-click → **View/Edit Data** → **All Rows**
+5. You should see the blacklisted token hash from Step 6
+
+---
+
+## Step 10 — Stop and restart the server
+
+1. Go to the **first Terminal tab** and press **Ctrl+C**
+2. Start again: `npm start`
+3. Wait for `✅ Database initialised — repositories connected to PostgreSQL`
+
+---
+
+## Step 11 — Login again (proves everything survives restart)
 
 ```bash
 curl -s -X POST http://localhost:3001/api/v1/auth/login \
@@ -135,24 +137,19 @@ curl -s -X POST http://localhost:3001/api/v1/auth/login \
   | python3 -m json.tool
 ```
 
-**✅ Expected:** Same `"success": true` and `"Login successful"` — the user was NOT lost when the server restarted.
-
-**❌ If it says "Invalid email or password":** The user was lost — that means the database is not persisting. Let me know and we will debug.
+**✅ Expected:** `"success": true` — user, sessions, and blacklist all survived the restart.
 
 ---
 
-## Step 11 — Check the user in PGAdmin
+## ✅ Phase 2 Step 1 — COMPLETE!
 
-1. Open **PGAdmin**
-2. Click on **PostgreSQL 18** → **Databases** → **curia**
-3. Click on **Schemas** → **public** → **Tables** → right-click **users** → **View/Edit Data** → **All Rows**
-4. You should see your user `test@curia.com` in the table
+Everything persists to PostgreSQL:
+- ✅ Users (register/login survive restart)
+- ✅ Sessions (refresh tokens tracked in `user_sessions` table)
+- ✅ Token blacklist (revoked tokens in `revoked_tokens` table)
+- ✅ Refresh token rotation (old tokens invalidated in DB)
 
----
-
-## ✅ Done!
-
-If Step 10 shows `"Login successful"` after the restart, then **Step 1.4 (Register → user persists in DB)** is verified.
+**Next up: Step 2 — Gealan PVC Integration** (no downloads needed yet — will announce when files change)
 
 ---
 
@@ -160,8 +157,25 @@ If Step 10 shows `"Login successful"` after the restart, then **Step 1.4 (Regist
 
 | Error | Fix |
 |-------|-----|
-| `column "role" of relation "users" does not exist` | You are still using the old `userRepository.js`. Download the updated file from Step 1. |
-| `"A user with this email already exists"` | Good — means you already registered. Skip to Step 7. |
+| `"A user with this email already exists"` | Good — you already registered. Just login (Step 5). |
 | `password authentication failed` | Wrong password in `.env`. Open `.env`, fix `DB_PASSWORD`, restart. |
 | `connection refused` | PostgreSQL not running. Open PGAdmin, click on **PostgreSQL 18** to connect. |
-| `Cannot POST /api/v1/auth/register` | Server not running. Go to first tab, run `npm start`. |
+| `Cannot POST /api/v1/auth/login` | Server not running. Go to first tab, run `npm start`. |
+
+---
+
+## 🖥️ Daily-use commands
+
+```bash
+# Start server (Terminal 1)
+cd ~/Desktop/curia/backend && npm start
+
+# Health check (Terminal 2)
+curl -s http://localhost:3001/health | python3 -m json.tool
+
+# Login
+curl -s -X POST http://localhost:3001/api/v1/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"test@curia.com","password":"MyPass123!"}' \
+  | python3 -m json.tool
+```

@@ -123,6 +123,17 @@ const createTables = async () => {
   `);
   console.log('  ✅ user_sessions table created');
 
+  // 5b. REVOKED_TOKENS TABLE (token blacklist — survives server restarts)
+  await db.query(`
+    CREATE TABLE IF NOT EXISTS revoked_tokens (
+      id SERIAL PRIMARY KEY,
+      token_hash VARCHAR(64) NOT NULL,
+      expires_at TIMESTAMP NOT NULL,
+      created_at TIMESTAMP DEFAULT NOW()
+    )
+  `);
+  console.log('  ✅ revoked_tokens table created');
+
   // 6. AUDIT_LOGS TABLE
   await db.query(`
     CREATE TABLE IF NOT EXISTS audit_logs (
@@ -707,6 +718,10 @@ const createIndexes = async () => {
   // Sessions indexes
   await db.query('CREATE INDEX IF NOT EXISTS idx_sessions_user ON user_sessions(user_id)');
   await db.query('CREATE INDEX IF NOT EXISTS idx_sessions_token ON user_sessions(token_hash)');
+
+  // Revoked tokens indexes
+  await db.query('CREATE INDEX IF NOT EXISTS idx_revoked_token ON revoked_tokens(token_hash)');
+  await db.query('CREATE INDEX IF NOT EXISTS idx_revoked_expires ON revoked_tokens(expires_at)');
 
   // Products indexes
   await db.query('CREATE INDEX IF NOT EXISTS idx_products_category ON products(category_id)');

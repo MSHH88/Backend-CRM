@@ -109,7 +109,7 @@ const initializeDatabase = async () => {
 
     // ── 3. Wire repositories ──────────────────────────────────────────────
     userRepo.connectDatabase(db);
-    sessionRepo.connectDatabase(db);
+    await sessionRepo.connectDatabase(db);
 
     console.log('✅ Database initialised — repositories connected to PostgreSQL');
     return true;
