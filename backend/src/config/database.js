@@ -40,7 +40,7 @@ pool.on('error', (err, _client) => {
 });
 
 pool.on('remove', (_client) => {
-  console.log('📕 Database connection removed from pool');
+  // Normal pool behaviour — connections are recycled after idle timeout
 });
 
 /**
