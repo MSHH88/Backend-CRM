@@ -1,7 +1,7 @@
 # Phase 2 — Step-by-Step Guide
 
-> **Status:** Planning Complete — Ready to Begin  
-> **Created:** 2026-03-07  
+> **Status:** Step 1 nearly complete — only auth persistence verification (1.4) remains  
+> **Last updated:** 2026-03-09  
 > **Prerequisite:** Phase 1 ✅ (100 tests passing, all endpoints working)
 
 ---
@@ -59,9 +59,11 @@ Step 8 — Full integration test & cleanup
 
 ---
 
-## Step 1 — Database Deployment & Auth Migration
+## Step 1 — Database Deployment & Auth Migration ✅ NEARLY COMPLETE
 
 **Goal:** Move from in-memory storage to PostgreSQL. Repository Pattern implemented — code auto-detects PostgreSQL and falls back to in-memory for tests.
+
+**Status:** All code, database setup, and connection verified. Only auth persistence verification (1.4) remains.
 
 ### 1.1 Code Changes ✅ COMPLETE
 
@@ -75,39 +77,38 @@ Step 8 — Full integration test & cleanup
 - [x] All 124 tests pass (was 100 in Phase 1)
 - [x] ESLint + Prettier — 0 errors, 0 warnings
 
-### 1.2 PostgreSQL Setup (user action required)
+### 1.2 PostgreSQL Setup ✅ COMPLETE
 
-- [ ] Install PostgreSQL locally (Homebrew, Postgres.app, or postgresql.org installer with PGAdmin)
-- [ ] Create database `curia` (via PGAdmin GUI or `createdb curia` in Terminal)
-- [ ] Create `.env` from `.env.example`: `cp .env.example .env`
-- [ ] Update `.env` with real credentials (DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME)
+- [x] Install PostgreSQL locally (official installer with PGAdmin)
+- [x] Database `curia` created and running (visible + green in PGAdmin)
+- [x] `.env` file created with real credentials
+- [x] Pre-flight check passes (`npm run check`)
 
-> **PGAdmin users:** The DB_PASSWORD is the password you set during PostgreSQL installation (the one PGAdmin asks when you connect to your server). DB_USER is typically `postgres`.
->
-> **See `docs/STEP_BY_STEP_GUIDE.md` Step 4–5** for detailed instructions with screenshots-style guidance.
+### 1.3 Verify Database Connection ✅ COMPLETE
 
-### 1.3 Verify Database Connection
+- [x] Server starts with `npm start` — "Database connected"
+- [x] Migrations auto-run on startup — 23 tables created automatically
+- [x] Seed data loaded — 8 roles, 4 categories, 4 manufacturers
+- [x] `GET /health` shows `"database": "connected"`
 
-- [ ] Start server with `npm start` — should show "Database connected"
-- [ ] Migrations auto-run on startup — 23 tables created automatically
-- [ ] Seed data loaded — 8 roles, 4 categories, 4 manufacturers
-- [ ] `GET /health` shows `"database": "connected"`
-
-### 1.4 Verify Auth with Database
+### 1.4 Verify Auth with Database ⬜ REMAINING
 
 - [ ] Register → user persists in DB (survives server restart)
 - [ ] Login → session tracked in DB
 - [ ] Logout → token blacklisted in DB
 - [ ] Refresh → new tokens issued, old invalidated
 
+> **This is the only remaining item in Step 1.** It requires running curl commands to test auth endpoints while the server is running.
+
 ### 1.5 Done Criteria
 
 - [x] Repository Pattern implemented (dual-mode: in-memory + PostgreSQL)
 - [x] `npm test` — 124 tests pass
 - [x] `npm run lint` — 0 errors
-- [ ] PostgreSQL deployed locally and verified
+- [x] PostgreSQL deployed locally and verified
+- [ ] Auth persistence verified (see 1.4 above)
 
-> **See `docs/STEP_BY_STEP_GUIDE.md`** for the complete step-by-step terminal guide.
+> **See `docs/STEP_BY_STEP_GUIDE.md`** for daily-use commands and quick fixes.
 
 ---
 
