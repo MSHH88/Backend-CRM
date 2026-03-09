@@ -91,9 +91,9 @@ cd ~/Desktop/curia/backend && npm test
 > This creates the .env file **and** sets your PostgreSQL password in one go.
 > When you paste the command below, it will ask you to type your password (hidden for security).
 
-```bash
+```zsh
 cd ~/Desktop/curia/backend && \
-read -sp "Enter your PostgreSQL password: " DBPW && echo "" && \
+printf "Enter your PostgreSQL password: " && read -s DBPW && echo "" && \
 cat > .env << ENVFILE
 PORT=3001
 NODE_ENV=development
