@@ -148,15 +148,44 @@ cd ~/Desktop/curia/backend && npm start
 
 ---
 
-## Step 7 → Verify
+## Step 7 → Verify everything is working
+
+### 7a) Health check in Terminal
+
+Open a **new Terminal tab** (Cmd+T) and paste:
 
 ```bash
 curl -s http://localhost:3001/health | python3 -m json.tool
 ```
 
-**✅ Expected:** `"database": "connected"`
+**✅ Expected output:**
 
-**Done.** 🎉
+```json
+{
+    "status": "ok",
+    "message": "CURIA Backend is running",
+    "timestamp": "...",
+    "environment": "development",
+    "uptime": 12.345,
+    "database": "connected"
+}
+```
+
+**What to check:**
+
+- `"status": "ok"` → the server is running
+- `"database": "connected"` → PostgreSQL is connected and the "curia" database is working
+
+### 7b) Check the database in PGAdmin
+
+1. Open **PGAdmin**
+2. Right-click **Databases** (under PostgreSQL 18) → **Refresh**
+3. You should now see **curia** in the list
+4. Click on **curia** — it should turn green (active)
+
+> If you don't see "curia", right-click **Databases** → **Refresh** first. It was auto-created by `npm start`.
+
+**Done — everything is working!** 🎉
 
 ---
 
