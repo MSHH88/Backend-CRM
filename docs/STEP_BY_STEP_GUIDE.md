@@ -89,7 +89,7 @@ cd ~/Desktop/curia/backend && npm test
 ## Step 5 → Create .env and set your password
 
 > This creates the .env file **and** sets your PostgreSQL password in one go.
-> Replace `YOUR_PASSWORD` below with the password you use when connecting to PostgreSQL 18 in PGAdmin.
+> When you paste the command below, it will ask you to type your password (hidden for security).
 
 ```bash
 cd ~/Desktop/curia/backend && \
