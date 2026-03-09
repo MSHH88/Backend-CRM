@@ -118,7 +118,48 @@ DB_PASSWORD=MyActualPassword123
 
 ---
 
-## Step 6 → Start the server
+## Step 6 → Run pre-flight check
+
+```bash
+cd ~/Desktop/curia/backend && npm run check
+```
+
+**What it checks:**
+
+- ✅ `.env` file exists
+- ✅ `DB_PASSWORD` is set (not empty or a placeholder)
+- ✅ PostgreSQL is reachable at `localhost:5432`
+- ✅ Database `"curia"` exists
+
+**✅ Expected output:**
+
+```
+=== CURIA Pre-flight Check ===
+
+1) Checking .env file…
+  ✅ .env file found
+
+2) Checking .env values…
+  ✅ DB_PASSWORD is set
+  ✅ DB_PASSWORD is not a placeholder
+
+3) Testing PostgreSQL connection…
+  ✅ Connected to PostgreSQL at localhost:5432
+  ✅ Database "curia" exists
+
+4) Testing connection to "curia" database…
+  ✅ Connected to database "curia"
+
+========================================
+✅ ALL CHECKS PASSED — run  npm start
+========================================
+```
+
+> If any check fails, the output tells you exactly what to fix. Fix it, then run `npm run check` again.
+
+---
+
+## Step 7 → Start the server
 
 ```bash
 cd ~/Desktop/curia/backend && npm start
@@ -144,13 +185,13 @@ cd ~/Desktop/curia/backend && npm start
 ✅ Database initialised — repositories connected to PostgreSQL
 ```
 
-⚠️ **Leave this Terminal open.** Open a new tab (Cmd+T) for Step 7.
+⚠️ **Leave this Terminal open.** Open a new tab (Cmd+T) for Step 8.
 
 ---
 
-## Step 7 → Verify everything is working
+## Step 8 → Verify everything is working
 
-### 7a) Health check in Terminal
+### 8a) Health check in Terminal
 
 Open a **new Terminal tab** (Cmd+T) and paste:
 
@@ -176,7 +217,7 @@ curl -s http://localhost:3001/health | python3 -m json.tool
 - `"status": "ok"` → the server is running
 - `"database": "connected"` → PostgreSQL is connected and the "curia" database is working
 
-### 7b) Check the database in PGAdmin
+### 8b) Check the database in PGAdmin
 
 1. Open **PGAdmin**
 2. Right-click **Databases** (under PostgreSQL 18) → **Refresh**
