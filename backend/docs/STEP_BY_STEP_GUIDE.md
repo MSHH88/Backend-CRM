@@ -88,38 +88,31 @@ cd ~/Desktop/curia/backend && npm test
 
 ## Step 5 → Create .env and set your password
 
-> This creates the .env file **and** sets your PostgreSQL password in one go.
-> When you paste the command below, it will ask you to type your password (hidden for security).
+**5a)** Copy the template:
 
-```zsh
-cd ~/Desktop/curia/backend && \
-printf "Enter your PostgreSQL password: " && read -s DBPW && echo "" && \
-cat > .env << ENVFILE
-PORT=3001
-NODE_ENV=development
-DB_HOST=localhost
-DB_PORT=5432
-DB_NAME=curia
-DB_USER=postgres
-DB_PASSWORD=${DBPW}
-JWT_SECRET=dev-secret-change-in-production-minimum-32-chars
-JWT_EXPIRES_IN=24h
-JWT_REFRESH_EXPIRES_IN=7d
-CORS_ORIGINS=http://localhost:3000,http://localhost:3001
-FRONTEND_URL=http://localhost:3000
-BCRYPT_ROUNDS=12
-RATE_LIMIT_WINDOW_MS=900000
-RATE_LIMIT_MAX=100
-LOG_LEVEL=info
-DEFAULT_MARGIN=0.50
-DEFAULT_VAT_RATE=0.19
-SHOW_VAT=true
-DEFAULT_CURRENCY=EUR
-DEFAULT_DISCOUNT_RATE=0
-QUANTITY_TIERS=[]
-ENVFILE
-echo "✅ .env created with your password"
+```bash
+cd ~/Desktop/curia/backend && cp .env.example .env && echo "✅ .env created"
 ```
+
+**5b)** Open the file in TextEdit:
+
+```bash
+open -e ~/Desktop/curia/backend/.env
+```
+
+**5c)** In the file that opens, find this line:
+
+```
+DB_PASSWORD=PUT_YOUR_PASSWORD_HERE
+```
+
+Replace `PUT_YOUR_PASSWORD_HERE` with your real PostgreSQL password. Example:
+
+```
+DB_PASSWORD=MyActualPassword123
+```
+
+**Save** (Cmd+S) and **close** TextEdit.
 
 > The password is the one PGAdmin asks when you click on **PostgreSQL 18** (the server password, not a database password).
 
