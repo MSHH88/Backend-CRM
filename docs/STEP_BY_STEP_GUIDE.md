@@ -1,28 +1,22 @@
-# Phase 2 Step 1 — Step-by-Step Setup Guide
+# Phase 2 Step 1 — Setup Guide
 
-> Copy-paste each grey box into Terminal and press Enter. Do them in order.
+> Copy-paste each grey box into Terminal. Do them in order.
 
 ---
 
-## Step 0 → Drop the old database (fresh start)
-
-> **Do NOT delete the server "PostgreSQL 18"** — that's your PostgreSQL installation.
-> You only delete the **database** called "curia" inside it. `npm start` will recreate it fresh.
+## Step 1 → Drop old database (fresh start)
 
 **In PGAdmin:**
 
 1. Open **PGAdmin**
-2. In the left sidebar, expand **PostgreSQL 18**
-3. Expand **Databases**
-4. Right-click **curia** → **Delete/Drop**
-5. Tick **Force** if it asks → Click **OK**
-6. Done — the "curia" database is gone
+2. Expand **PostgreSQL 18** → **Databases**
+3. Right-click **curia** → **Delete/Drop** → tick **Force** → **OK**
 
-> If "curia" doesn't exist or you already deleted it, skip this step — `npm start` creates it.
+> If "curia" doesn't exist yet, skip this — `npm start` creates it automatically.
 
 ---
 
-## Step 1 → Delete old files
+## Step 2 → Delete old files
 
 ```bash
 cd ~/Desktop/curia/backend && \
@@ -33,7 +27,7 @@ echo "✅ Old files deleted"
 
 ---
 
-## Step 2 → Download new files
+## Step 3 → Download new files
 
 ```bash
 cd ~/Desktop/curia/backend && \
@@ -80,7 +74,7 @@ echo "" && echo "✅ All files downloaded and installed"
 
 ---
 
-## Step 3 → Run tests
+## Step 4 → Run tests
 
 ```bash
 cd ~/Desktop/curia/backend && npm test
@@ -88,24 +82,26 @@ cd ~/Desktop/curia/backend && npm test
 
 **✅ Expected:** `Tests: 124 passed, 124 total`
 
-> "Force exiting Jest" / "worker process has failed to exit gracefully" → normal, ignore.
+> "Force exiting Jest" / "worker process has failed to exit gracefully" → normal, ignore it.
 
 ---
 
-## Step 4 → Create .env file
+## Step 5 → Create .env and set your password
 
-> This creates the .env file. You only need to change ONE line after.
+> This creates the .env file **and** sets your PostgreSQL password in one go.
+> Replace `YOUR_PASSWORD` below with the password you use when connecting to PostgreSQL 18 in PGAdmin.
 
 ```bash
 cd ~/Desktop/curia/backend && \
-cat > .env << 'ENVFILE'
+read -sp "Enter your PostgreSQL password: " DBPW && echo "" && \
+cat > .env << ENVFILE
 PORT=3001
 NODE_ENV=development
 DB_HOST=localhost
 DB_PORT=5432
 DB_NAME=curia
 DB_USER=postgres
-DB_PASSWORD=CHANGE_ME
+DB_PASSWORD=${DBPW}
 JWT_SECRET=dev-secret-change-in-production-minimum-32-chars
 JWT_EXPIRES_IN=24h
 JWT_REFRESH_EXPIRES_IN=7d
@@ -122,45 +118,10 @@ DEFAULT_CURRENCY=EUR
 DEFAULT_DISCOUNT_RATE=0
 QUANTITY_TIERS=[]
 ENVFILE
-echo "✅ .env created — now set your password (one line to change)"
+echo "✅ .env created with your password"
 ```
 
-Now open it and set your password:
-
-```bash
-open -e ~/Desktop/curia/backend/.env
-```
-
-Change `CHANGE_ME` to your password. Save (Cmd+S). Close.
-
----
-
-## Step 5 → Run the pre-flight check
-
-```bash
-cd ~/Desktop/curia/backend && npm run check
-```
-
-**✅ All good looks like:**
-
-```
-=== CURIA Pre-flight Check ===
-
-1) Checking .env file…
-  ✅ .env file found
-
-2) Checking .env values…
-  ✅ DB_PASSWORD is set
-  ✅ DB_PASSWORD is not a placeholder
-
-3) Testing PostgreSQL connection…
-  ✅ Connected to PostgreSQL at localhost:5432
-  ✅ Database "curia" exists
-
-========================================
-✅ ALL CHECKS PASSED — run  npm start
-========================================
-```
+> The password is the one PGAdmin asks when you click on **PostgreSQL 18** (the server password, not a database password).
 
 ---
 
@@ -170,12 +131,21 @@ cd ~/Desktop/curia/backend && npm run check
 cd ~/Desktop/curia/backend && npm start
 ```
 
-**✅ Expected:**
+> `npm start` now **automatically** runs a pre-flight check first.
+> If anything is wrong (bad password, PostgreSQL not running, missing .env), it tells you **before** the server tries to start.
+
+**✅ Expected output:**
 
 ```
+=== CURIA Pre-flight Check ===
+  ✅ .env file found
+  ✅ DB_PASSWORD is set
+  ✅ Connected to PostgreSQL at localhost:5432
+  ✅ Database "curia" exists
+✅ ALL CHECKS PASSED — run  npm start
+
 🚀 CURIA Backend Server Started
 🔌 Connecting to PostgreSQL → postgres@localhost:5432/curia
-📗 New database connection established
 ✅ Database connected: curia
 ✅ All migrations completed successfully!
 ✅ Database initialised — repositories connected to PostgreSQL
@@ -197,34 +167,14 @@ curl -s http://localhost:3001/health | python3 -m json.tool
 
 ---
 
-## 🔥 Nuclear Option — Start completely fresh
-
-### In PGAdmin:
-
-1. Expand **PostgreSQL 18** → **Databases**
-2. Right-click **curia** → **Delete/Drop** → confirm
-3. Run `npm start` — it auto-creates a fresh `curia` database
-
-### Or via Terminal:
-
-```bash
-cd ~/Desktop/curia/backend && \
-PGPASSWORD=$(grep DB_PASSWORD .env | cut -d= -f2) \
-/Library/PostgreSQL/18/bin/psql -U postgres -h localhost -c "DROP DATABASE IF EXISTS curia;" && \
-echo "✅ Dropped — npm start will recreate it"
-```
-
----
-
 ## 🔧 Quick fixes
 
 | Error | Fix |
 |-------|-----|
-| `password authentication failed` | Wrong password in `.env`. Fix `DB_PASSWORD`, restart. |
-| `connection refused` | PostgreSQL not running. Open PGAdmin, connect to server. |
-| `role "postgres" does not exist` | Run `whoami`, set `DB_USER` to that in `.env`. |
-| `pg_isready: command not found` | Normal with official installer. Ignore it. |
-| `PostgreSQL not reachable` | Run `npm run check` — it shows exactly what's wrong. |
+| `password authentication failed` | Wrong password in `.env`. Open `.env`, fix `DB_PASSWORD`, restart. |
+| `connection refused` | PostgreSQL not running. Open PGAdmin, click on **PostgreSQL 18** to connect. |
+| `role "postgres" does not exist` | Run `whoami` in Terminal. Set `DB_USER` to that value in `.env`. |
+| `pg_isready: command not found` | Normal with official installer. Ignore — use `npm run check` instead. |
 
 ---
 
