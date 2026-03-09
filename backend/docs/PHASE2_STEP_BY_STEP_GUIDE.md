@@ -1,6 +1,6 @@
 # Phase 2 — Step-by-Step Guide
 
-> **Status:** Step 1 nearly complete — only auth persistence verification (1.4) remains  
+> **Status:** Step 1.4 in progress — verifying auth persistence with PostgreSQL  
 > **Last updated:** 2026-03-09  
 > **Prerequisite:** Phase 1 ✅ (100 tests passing, all endpoints working)
 
