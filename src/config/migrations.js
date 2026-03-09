@@ -127,7 +127,7 @@ const createTables = async () => {
   await db.query(`
     CREATE TABLE IF NOT EXISTS revoked_tokens (
       id SERIAL PRIMARY KEY,
-      token_hash VARCHAR(64) NOT NULL,
+      token_hash VARCHAR(64) NOT NULL UNIQUE,
       expires_at TIMESTAMP NOT NULL,
       created_at TIMESTAMP DEFAULT NOW()
     )
