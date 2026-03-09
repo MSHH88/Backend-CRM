@@ -1,197 +1,36 @@
-# Phase 2 Step 1 — Setup Guide
+# Phase 2 Step 1 — Status ✅ COMPLETE
 
-> Copy-paste each grey box into Terminal. Do them in order.
-
----
-
-## Step 1 → Drop old database (fresh start)
-
-**In PGAdmin:**
-
-1. Open **PGAdmin**
-2. Expand **PostgreSQL 18** → **Databases**
-3. Right-click **curia** → **Delete/Drop** → tick **Force** → **OK**
-
-> If "curia" doesn't exist yet, skip this — `npm start` creates it automatically.
+> **No new files to download.** No backend code has changed since your last download.
+> If files change in the future, this guide will say **⬇️ NEW FILES — download required** at the top.
 
 ---
 
-## Step 2 → Delete old files
+## Current status
 
-```bash
-cd ~/Desktop/curia/backend && \
-rm -f .env && \
-rm -rf src/ tests/ && \
-echo "✅ Old files deleted"
-```
-
----
-
-## Step 3 → Download new files
-
-```bash
-cd ~/Desktop/curia/backend && \
-mkdir -p src/config src/data src/db src/engine src/middleware src/repositories src/routes src/utils tests && \
-BASE="https://raw.githubusercontent.com/MSHH88/Backend-CRM/copilot/analyze-project-phase-1/backend" && \
-curl -fsSL "$BASE/src/app.js"                              -o src/app.js && \
-curl -fsSL "$BASE/src/server.js"                           -o src/server.js && \
-curl -fsSL "$BASE/src/config/dbInit.js"                    -o src/config/dbInit.js && \
-curl -fsSL "$BASE/src/config/database.js"                  -o src/config/database.js && \
-curl -fsSL "$BASE/src/config/index.js"                     -o src/config/index.js && \
-curl -fsSL "$BASE/src/config/migrations.js"                -o src/config/migrations.js && \
-curl -fsSL "$BASE/src/config/swagger.js"                   -o src/config/swagger.js && \
-curl -fsSL "$BASE/src/data/basePrices.js"                  -o src/data/basePrices.js && \
-curl -fsSL "$BASE/src/data/profileMultipliers.js"          -o src/data/profileMultipliers.js && \
-curl -fsSL "$BASE/src/data/surcharges.js"                  -o src/data/surcharges.js && \
-curl -fsSL "$BASE/src/db/schema.sql"                       -o src/db/schema.sql && \
-curl -fsSL "$BASE/src/engine/priceCalculator.js"           -o src/engine/priceCalculator.js && \
-curl -fsSL "$BASE/src/engine/surchargeCalculator.js"       -o src/engine/surchargeCalculator.js && \
-curl -fsSL "$BASE/src/middleware/auth.js"                   -o src/middleware/auth.js && \
-curl -fsSL "$BASE/src/middleware/errorHandler.js"           -o src/middleware/errorHandler.js && \
-curl -fsSL "$BASE/src/middleware/security.js"               -o src/middleware/security.js && \
-curl -fsSL "$BASE/src/repositories/userRepository.js"      -o src/repositories/userRepository.js && \
-curl -fsSL "$BASE/src/repositories/sessionRepository.js"   -o src/repositories/sessionRepository.js && \
-curl -fsSL "$BASE/src/routes/auth.js"                      -o src/routes/auth.js && \
-curl -fsSL "$BASE/src/routes/berechnen.js"                 -o src/routes/berechnen.js && \
-curl -fsSL "$BASE/src/routes/options.js"                   -o src/routes/options.js && \
-curl -fsSL "$BASE/src/routes/warenkorb.js"                 -o src/routes/warenkorb.js && \
-curl -fsSL "$BASE/src/utils/logger.js"                     -o src/utils/logger.js && \
-curl -fsSL "$BASE/src/utils/responseFormatter.js"          -o src/utils/responseFormatter.js && \
-curl -fsSL "$BASE/src/checkSetup.js"                       -o src/checkSetup.js && \
-curl -fsSL "$BASE/tests/api.test.js"                       -o tests/api.test.js && \
-curl -fsSL "$BASE/tests/auth.test.js"                      -o tests/auth.test.js && \
-curl -fsSL "$BASE/tests/priceCalculator.test.js"           -o tests/priceCalculator.test.js && \
-curl -fsSL "$BASE/tests/repositories.test.js"              -o tests/repositories.test.js && \
-curl -fsSL "$BASE/package.json"     -o package.json && \
-curl -fsSL "$BASE/.eslintrc.js"     -o .eslintrc.js && \
-curl -fsSL "$BASE/.prettierrc"      -o .prettierrc && \
-curl -fsSL "$BASE/.prettierignore"  -o .prettierignore && \
-curl -fsSL "$BASE/.env.example"     -o .env.example && \
-curl -fsSL "$BASE/.gitignore"       -o .gitignore && \
-npm install && \
-echo "" && echo "✅ All files downloaded and installed"
-```
+| Item | Status |
+|------|--------|
+| Database **curia** | ✅ Created and running |
+| `.env` file | ✅ Configured with your password |
+| Pre-flight check | ✅ All checks passed |
+| Server (`npm start`) | ✅ Running on `localhost:3001` |
+| Health check | ✅ `"status": "ok"`, `"database": "connected"` |
+| PGAdmin | ✅ Database visible and green |
 
 ---
 
-## Step 4 → Run tests
+## Daily use — starting the server
 
-```bash
-cd ~/Desktop/curia/backend && npm test
-```
-
-**✅ Expected:** `Tests: 124 passed, 124 total`
-
-> "Force exiting Jest" / "worker process has failed to exit gracefully" → normal, ignore it.
-
----
-
-## Step 5 → Create .env and set your password
-
-**5a)** Copy the template:
-
-```bash
-cd ~/Desktop/curia/backend && cp .env.example .env && echo "✅ .env created"
-```
-
-**5b)** Open the file in TextEdit:
-
-```bash
-open -e ~/Desktop/curia/backend/.env
-```
-
-**5c)** In the file that opens, find this line:
-
-```
-DB_PASSWORD=PUT_YOUR_PASSWORD_HERE
-```
-
-Replace `PUT_YOUR_PASSWORD_HERE` with your real PostgreSQL password. Example:
-
-```
-DB_PASSWORD=MyActualPassword123
-```
-
-**Save** (Cmd+S) and **close** TextEdit.
-
-> The password is the one PGAdmin asks when you click on **PostgreSQL 18** (the server password, not a database password).
-
----
-
-## Step 6 → Run pre-flight check
-
-```bash
-cd ~/Desktop/curia/backend && npm run check
-```
-
-**What it checks:**
-
-- ✅ `.env` file exists
-- ✅ `DB_PASSWORD` is set (not empty or a placeholder)
-- ✅ PostgreSQL is reachable at `localhost:5432`
-- ✅ Database `"curia"` exists
-
-**✅ Expected output:**
-
-```
-=== CURIA Pre-flight Check ===
-
-1) Checking .env file…
-  ✅ .env file found
-
-2) Checking .env values…
-  ✅ DB_PASSWORD is set
-  ✅ DB_PASSWORD is not a placeholder
-
-3) Testing PostgreSQL connection…
-  ✅ Connected to PostgreSQL at localhost:5432
-  ✅ Database "curia" exists
-
-4) Testing connection to "curia" database…
-  ✅ Connected to database "curia"
-
-========================================
-✅ ALL CHECKS PASSED — run  npm start
-========================================
-```
-
-> If any check fails, the output tells you exactly what to fix. Fix it, then run `npm run check` again.
-
----
-
-## Step 7 → Start the server
+If you closed Terminal or restarted your Mac, start the server again:
 
 ```bash
 cd ~/Desktop/curia/backend && npm start
 ```
 
-> `npm start` now **automatically** runs a pre-flight check first.
-> If anything is wrong (bad password, PostgreSQL not running, missing .env), it tells you **before** the server tries to start.
-
-**✅ Expected output:**
-
-```
-=== CURIA Pre-flight Check ===
-  ✅ .env file found
-  ✅ DB_PASSWORD is set
-  ✅ Connected to PostgreSQL at localhost:5432
-  ✅ Database "curia" exists
-✅ ALL CHECKS PASSED — run  npm start
-
-🚀 CURIA Backend Server Started
-🔌 Connecting to PostgreSQL → postgres@localhost:5432/curia
-✅ Database connected: curia
-✅ All migrations completed successfully!
-✅ Database initialised — repositories connected to PostgreSQL
-```
-
-⚠️ **Leave this Terminal open.** Open a new tab (Cmd+T) for Step 8.
+⚠️ **Leave this Terminal open.** The server runs in it.
 
 ---
 
-## Step 8 → Verify everything is working
-
-### 8a) Health check in Terminal
+## Health check — verify everything works
 
 Open a **new Terminal tab** (Cmd+T) and paste:
 
@@ -212,21 +51,8 @@ curl -s http://localhost:3001/health | python3 -m json.tool
 }
 ```
 
-**What to check:**
-
-- `"status": "ok"` → the server is running
-- `"database": "connected"` → PostgreSQL is connected and the "curia" database is working
-
-### 8b) Check the database in PGAdmin
-
-1. Open **PGAdmin**
-2. Right-click **Databases** (under PostgreSQL 18) → **Refresh**
-3. You should now see **curia** in the list
-4. Click on **curia** — it should turn green (active)
-
-> If you don't see "curia", right-click **Databases** → **Refresh** first. It was auto-created by `npm start`.
-
-**Done — everything is working!** 🎉
+- `"status": "ok"` → server is running
+- `"database": "connected"` → PostgreSQL + curia database working
 
 ---
 
