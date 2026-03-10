@@ -26,9 +26,19 @@ const {
   AuthenticationError,
   ConflictError,
 } = require('../middleware/errorHandler');
+const {
+  authLimiter,
+  trackFailedLogin,
+  resetFailedLogins,
+} = require('../middleware/security');
 const userRepo = require('../repositories/userRepository');
 
 const router = express.Router();
+
+// Skip rate limiting in test environment so tests can run rapidly
+const applyAuthLimiter = process.env.NODE_ENV === 'test'
+  ? (req, res, next) => next()
+  : authLimiter;
 
 /**
  * Clear all users (for testing)
@@ -41,9 +51,11 @@ function clearUsers() {
  * POST /api/v1/auth/register
  * Register a new user account.
  */
-router.post('/register', async (req, res, next) => {
+router.post('/register', applyAuthLimiter, async (req, res, next) => {
   try {
-    const { email, password, firstName, lastName } = req.body;
+    const { email, password } = req.body;
+    const firstName = (req.body.firstName || '').trim();
+    const lastName = (req.body.lastName || '').trim();
 
     // ── Validate input ────────────────────────────────────────────────────
     if (!email || !password) {
@@ -56,6 +68,13 @@ router.post('/register', async (req, res, next) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       throw new ValidationError('Invalid email format');
+    }
+
+    if (firstName.length > 100) {
+      throw new ValidationError('First name must be under 100 characters');
+    }
+    if (lastName.length > 100) {
+      throw new ValidationError('Last name must be under 100 characters');
     }
 
     const passwordCheck = validatePasswordStrength(password);
@@ -75,8 +94,8 @@ router.post('/register', async (req, res, next) => {
     const newUser = await userRepo.create({
       email: normalizedEmail,
       passwordHash: hashedPassword,
-      firstName: firstName || '',
-      lastName: lastName || '',
+      firstName: firstName,
+      lastName: lastName,
       role: ROLES.CUSTOMER,
       isActive: true,
     });
@@ -105,7 +124,7 @@ router.post('/register', async (req, res, next) => {
  * POST /api/v1/auth/login
  * Authenticate user and return token pair.
  */
-router.post('/login', async (req, res, next) => {
+router.post('/login', applyAuthLimiter, async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
@@ -116,6 +135,7 @@ router.post('/login', async (req, res, next) => {
     // ── Find user ─────────────────────────────────────────────────────────
     const user = await userRepo.findByEmail(email);
     if (!user) {
+      trackFailedLogin(req.ip, email);
       throw new AuthenticationError('Invalid email or password');
     }
 
@@ -123,10 +143,37 @@ router.post('/login', async (req, res, next) => {
       throw new AuthenticationError('Account is deactivated');
     }
 
+    // ── Check account lockout ─────────────────────────────────────────────
+    if (user.lockedUntil && new Date(user.lockedUntil) > new Date()) {
+      throw new AuthenticationError('Account temporarily locked. Please try again later.');
+    }
+
     // ── Verify password ───────────────────────────────────────────────────
     const isValid = await comparePassword(password, user.passwordHash);
     if (!isValid) {
+      trackFailedLogin(req.ip, email);
+
+      // Track in DB for persistent lockout
+      const failedAttempts = (user.failedLoginAttempts || 0) + 1;
+      const updates = { failedLoginAttempts: failedAttempts };
+      if (failedAttempts >= 5) {
+        updates.lockedUntil = new Date(Date.now() + 30 * 60 * 1000); // 30 min lockout
+      }
+      await userRepo.update(user.id, updates);
+
       throw new AuthenticationError('Invalid email or password');
+    }
+
+    // ── Reset failed login attempts on success ────────────────────────────
+    resetFailedLogins(req.ip, email);
+    if (user.failedLoginAttempts > 0) {
+      await userRepo.update(user.id, {
+        failedLoginAttempts: 0,
+        lockedUntil: null,
+        lastLoginAt: new Date(),
+      });
+    } else {
+      await userRepo.update(user.id, { lastLoginAt: new Date() });
     }
 
     // ── Generate tokens ───────────────────────────────────────────────────
@@ -198,27 +245,31 @@ router.post('/refresh', async (req, res, next) => {
  * GET /api/v1/auth/me
  * Return the currently authenticated user's info.
  */
-router.get('/me', authenticate, async (req, res) => {
-  const user = await userRepo.findById(req.user.userId);
+router.get('/me', authenticate, async (req, res, next) => {
+  try {
+    const user = await userRepo.findById(req.user.userId);
 
-  if (!user) {
-    return res.status(404).json({
-      success: false,
-      error: 'User not found',
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        error: 'User not found',
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      user: {
+        id: user.id,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        role: user.role,
+        createdAt: user.createdAt,
+      },
     });
+  } catch (err) {
+    next(err);
   }
-
-  res.status(200).json({
-    success: true,
-    user: {
-      id: user.id,
-      email: user.email,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      role: user.role,
-      createdAt: user.createdAt,
-    },
-  });
 });
 
 // Export both the router and test helper

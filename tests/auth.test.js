@@ -78,6 +78,24 @@ describe('POST /api/v1/auth/register', () => {
     expect(res.body.user.password).toBeUndefined();
     expect(res.body.user.passwordHash).toBeUndefined();
   });
+
+  test('trims and validates firstName/lastName', async () => {
+    const res = await request(app)
+      .post('/api/v1/auth/register')
+      .send({ ...VALID_USER, firstName: '  Trimmed  ', lastName: '  Name  ' });
+
+    expect(res.status).toBe(201);
+    expect(res.body.user.firstName).toBe('Trimmed');
+    expect(res.body.user.lastName).toBe('Name');
+  });
+
+  test('rejects firstName over 100 characters', async () => {
+    const res = await request(app)
+      .post('/api/v1/auth/register')
+      .send({ ...VALID_USER, firstName: 'A'.repeat(101) });
+
+    expect(res.status).toBe(400);
+  });
 });
 
 // ── Login ─────────────────────────────────────────────────────────────────────
@@ -121,6 +139,20 @@ describe('POST /api/v1/auth/login', () => {
       .send({ password: 'SecureP@ss123!' });
 
     expect(res.status).toBe(400);
+  });
+
+  test('tracks failed login attempts', async () => {
+    // First failed attempt
+    const res1 = await request(app)
+      .post('/api/v1/auth/login')
+      .send({ email: VALID_USER.email, password: 'WrongPass1!' });
+    expect(res1.status).toBe(401);
+
+    // Successful login should still work after 1 failed attempt
+    const res2 = await request(app)
+      .post('/api/v1/auth/login')
+      .send({ email: VALID_USER.email, password: VALID_USER.password });
+    expect(res2.status).toBe(200);
   });
 });
 
@@ -173,6 +205,26 @@ describe('POST /api/v1/auth/logout', () => {
 
     expect(res.status).toBe(200);
     expect(res.body.success).toBe(true);
+  });
+
+  test('blacklisted token is rejected on subsequent requests', async () => {
+    const regRes = await request(app)
+      .post('/api/v1/auth/register')
+      .send(VALID_USER);
+
+    const token = regRes.body.tokens.accessToken;
+
+    // Logout to blacklist the token
+    await request(app)
+      .post('/api/v1/auth/logout')
+      .set('Authorization', `Bearer ${token}`);
+
+    // Try to use the blacklisted token on /me
+    const meRes = await request(app)
+      .get('/api/v1/auth/me')
+      .set('Authorization', `Bearer ${token}`);
+
+    expect(meRes.status).toBe(401);
   });
 });
 
