@@ -397,6 +397,88 @@ data/
 
 ---
 
+## 🔬 CALCULATION STRUCTURE NOTES — What's Same vs Different
+
+> **IMPORTANT:** This section documents the proven patterns across manufacturers.
+> It must be kept updated as new manufacturer data arrives.
+
+### Universal 10-Step Calculation (SAME for ALL manufacturers)
+
+```
+STEP 1:  grundpreis         = lookup base price for profile + dimensions
+STEP 2:  profileAdjusted    = grundpreis × multiplier (Drutex) OR direct lookup (others)
+STEP 3:  surchargesTotal    = Σ(all selected option surcharges in EUR)
+STEP 4:  preisempfehlung    = profileAdjusted + surchargesTotal
+STEP 5:  discountRate       = 0.40 (40% off for ALL manufacturers so far)
+STEP 6:  ersparnis          = preisempfehlung × discountRate
+STEP 7:  angebotspreis      = preisempfehlung − ersparnis  (= preisempfehlung × 0.60)
+STEP 8:  quantityDiscount   = tier-based volume discount (if applicable)
+STEP 9:  unitPrice          = angebotspreis × (1 − quantityDiscount)
+STEP 10: totalWithVat       = unitPrice × quantity × 1.19  (19% MwSt)
+```
+
+### ✅ CONFIRMED SAME Across ALL Analyzed Manufacturers
+
+| Aspect | Detail | Verified With |
+|--------|--------|--------------|
+| **Master Formula** | `angebotspreis = (base_price + surcharges) × 0.60` | Drutex, Gealan, Holz, Alu — ALL 4 |
+| **Discount Factor** | 0.60 (40% off Preisempfehlung) | ALL 4 manufacturers identical |
+| **Surcharge Type** | Fixed EUR amounts, additive (not percentages, not multiplicative) | ALL 4 manufacturers |
+| **Size Independence** | Surcharges do NOT change with window/door size | ALL 4 manufacturers |
+| **VAT Rate** | 19% MwSt added at final step | ALL products |
+| **Calculation Order** | Base → Profile → Surcharges → Discount → VAT | ALL manufacturers |
+
+### ✅ SAME Structure, DIFFERENT Values
+
+| Aspect | Structure (SAME) | Values (DIFFERENT) |
+|--------|-----------------|-------------------|
+| **Base Price** | All use dimension-based pricing (W×H lookup) | Different matrix sizes: 7×9 (Holz) to 21×21 (Drutex) |
+| **Profiles** | All have 3-6 profiles per manufacturer | Names differ: Iglo5/S8000/Softline/MB-70 etc. |
+| **Profile Price Impact** | All profiles change the base price | Method differs: Drutex=multiplier, others=separate matrix |
+| **Color Surcharges** | All offer RAL + foil colors as fixed EUR | Anthrazit: €6.44 (Gealan) vs €43.68 (Drutex) vs €69.88 (Alu) vs €80.50 (Holz) |
+| **Glazing Options** | All offer 2-fach/3-fach glass | 3-fach Premium: €4.76 (Gealan) vs €39.81 (Alu) |
+| **Security Options** | All offer RC1/RC2 levels | Prices vary per manufacturer |
+| **Opening Types** | All offer Dreh, Kipp, Dreh-Kipp | Some charge extra (Holz: +€121-153), some include |
+| **Surcharge Categories** | All use category→option→EUR structure | Count: 9 (Drutex) to 28 (Alu) categories |
+
+### ❌ CONFIRMED DIFFERENT Between Manufacturers
+
+| Aspect | How It Differs | Impact on Engine |
+|--------|---------------|-----------------|
+| **Surcharge EUR Prices** | EVERY manufacturer has DIFFERENT prices for the same-named option | Must load per-manufacturer surcharge catalog |
+| **Surcharge Category Count** | Drutex: 9 categories, Gealan: 22, Holz: 25, Alu: 28 | UI must dynamically show/hide categories per manufacturer |
+| **Profile Multiplier Method** | Drutex: `base × multiplier` (0.95-1.29), Others: separate price table per profile | Engine needs two code paths for profile pricing |
+| **Dimension Range** | Each manufacturer has different min/max sizes | Must validate per-manufacturer dimension limits |
+| **Dimension Step Size** | Drutex: 100mm regular, Holz: irregular (330,530,680...) | Interpolation logic must handle irregular grids |
+| **Product-Specific Logic** | Haustüren: width-dominant (+€37.77/100mm W vs +€1.64/100mm H) | Door pricing needs separate formula from windows |
+| **Rollladen Box Height** | Kastenhoehe changes entire price table | Roller shutters use component-based pricing (not matrix) |
+
+### Three Pricing Architectures Identified
+
+| Architecture | Products Using It | How It Works |
+|-------------|-------------------|-------------|
+| **MATRIX** (most common) | Fenster, Holz Fenster, Alu Balkontür | 2D table: `matrix[width_step][height_step]` → EUR |
+| **FORMULA** | Haustüren, PSK | `base + (width × factor) + (height × factor) + model_tier` |
+| **ADDITIVE** | Rollladen | `grundpreis + component1 + component2 + ... + component6` |
+
+> **Note for new manufacturers:** When CEO provides new catalogs, check which architecture applies.
+> Windows and balcony doors almost certainly use MATRIX.
+> Front doors likely use FORMULA.
+> Roller shutters and accessories likely use ADDITIVE.
+
+### ❓ Questions That Need Confirmation With New Data
+
+| Question | Current Assumption | Needs Verification |
+|----------|-------------------|-------------------|
+| Is discount factor ALWAYS 0.60? | Yes (all 4 analyzed) | Confirm for each new manufacturer |
+| Do Holz-Alu windows use same formula? | Assume yes | Need first Holz-Alu dataset to confirm |
+| Are Schüco/VEKA/Rehau surcharges additive EUR? | Assume yes | Need first catalog to confirm |
+| Do non-Drutex doors use formula-based pricing? | Unknown | Need second door manufacturer catalog |
+| Is Rollladen pricing consistent across brands? | Have only Drutex data | Need second Rollladen brand |
+| What is our purchase price / margin? | Don't know | CEO must specify |
+
+---
+
 ## ✅ SUMMARY — Action Items
 
 ### What We Know:
@@ -406,6 +488,8 @@ data/
 4. ✅ **Size pricing uses matrices** — Same concept but different data per manufacturer
 5. ✅ **We have enough data for 6 product/manufacturer combinations** to build the engine now
 6. ✅ **Different product types (Türen, Rolladen, etc.) have different surcharge catalogs**
+7. ✅ **Three pricing architectures** — Matrix (windows), Formula (doors), Additive (shutters)
+8. ✅ **Profile handling differs** — Drutex uses multipliers, others use per-profile matrices
 
 ### What the CEO Needs to Provide:
 1. 📋 **Manufacturer price catalogs** (Grundpreislisten) for each new manufacturer
@@ -413,6 +497,10 @@ data/
 3. 📋 **Door design catalogs** with model prices for each door manufacturer
 4. 📋 **Complete PSK data** to finish terrace door support
 5. 📋 **Any additional product types** (HST, Smart-Slide, etc.)
+6. 📋 **Our margin/purchase price** — so we can calculate website selling prices
+7. 📋 **Confirmation** that discount factor is 0.60 for new manufacturers
+
+> **See also:** `docs/CEO_DATA_CHECKLIST.md` for the complete per-product data request list
 
 ### Next Engineering Steps:
 1. 🔧 Integrate Gealan PVC, Holz, and Alu data into the pricing engine
