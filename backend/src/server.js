@@ -53,6 +53,10 @@ const gracefulShutdown = (signal) => {
     console.log('✅ HTTP server closed');
     process.exit(0);
   });
+  // Force-close keep-alive connections so shutdown is immediate (Node ≥18.2)
+  if (typeof server.closeAllConnections === 'function') {
+    server.closeAllConnections();
+  }
   setTimeout(() => {
     console.error('❌ Forced shutdown after timeout');
     process.exit(1);
