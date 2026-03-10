@@ -139,22 +139,46 @@ STEP 10: totalWithVat       = unitPrice × quantity × (1 + vatRate)
 
 ---
 
+## ⚠️ SURCHARGE ANALYSIS (Step 2 — Added March 10, 2026)
+
+> **Full detail:** See `docs/SURCHARGE_ANALYSIS.md`
+
+### Key Finding: Surcharges are MANUFACTURER-SPECIFIC
+
+While the **calculation formula** is the same across all manufacturers, the **surcharge EUR amounts** are completely different per manufacturer. Same option, different prices:
+
+| Option (Anthrazit color) | Gealan PVC | Drutex PVC | Alu | Holz |
+|---|---|---|---|---|
+| EUR price | €6.44 | €43.68 | €69.88 | €80.50 |
+
+**This means:**
+- Each manufacturer needs its own surcharge dataset
+- Same material (PVC) does NOT mean same surcharges (Drutex ≠ Gealan)
+- Surcharges follow a catalog/scheme pattern (fixed EUR per option, not size-dependent)
+- Windows, doors, terrace doors, roller shutters each have their own surcharge catalogs
+
+---
+
 ## ✅ Conclusion & Next Steps
 
 ### What we learned:
 1. **Same formula, different data** — One engine handles all manufacturers
 2. **All surcharges are additive EUR** — No manufacturer uses percentage-based surcharges
 3. **Discount factor is universal (0.6)** — Configurable per request, but default is 40% off for all
-4. **No additional datasets needed** — All 4 manufacturer datasets are already fully extracted
+4. **Surcharges are manufacturer-specific** — Each manufacturer has its own fixed EUR surcharge catalog
+5. **Material does NOT determine surcharges** — Two PVC manufacturers have completely different prices
+6. **Surcharges are catalog-based** — Fixed EUR amounts per option, organized in tiers
 
 ### What to do next (Phase 2 Steps 2–4):
 1. **Extend `basePrices.js`** — Add Gealan/Holz/Alu price matrices (per-profile lookup)
-2. **Extend `surcharges.js`** — Add manufacturer-specific surcharge categories
+2. **Extend `surcharges.js`** — Add manufacturer-specific surcharge categories (each manufacturer has its own surcharge table)
 3. **Update `priceCalculator.js`** — Add `manufacturer` parameter, route to correct data
 4. **Add manufacturer validation** — Ensure valid manufacturer + profile combinations
 5. **Update API endpoints** — Accept `hersteller` (manufacturer) in request body
 6. **Add tests** — Per-manufacturer price verification tests
 
 ### Data collection status:
-- ❌ No additional datasets needed for calculation analysis
-- ✅ All extracted data is sufficient to implement multi-manufacturer pricing
+- ✅ All 4 manufacturer surcharge datasets fully extracted and analyzed
+- ✅ All price matrices available
+- ✅ Surcharge catalogs documented per manufacturer
+- 📋 For new manufacturers: Need both price matrix + surcharge catalog per manufacturer

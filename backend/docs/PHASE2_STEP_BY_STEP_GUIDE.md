@@ -129,11 +129,15 @@ Step 8 — Full integration test & cleanup
 
 ### 2.1 Analyze ALL Datasets ✅ COMPLETE
 
-> **Full analysis:** See `docs/DATASET_ANALYSIS.md`
+> **Full analysis:** See `docs/DATASET_ANALYSIS.md`  
+> **Surcharge deep-dive:** See `docs/SURCHARGE_ANALYSIS.md`
 >
-> **Key finding:** All 4 manufacturers (Drutex, Gealan, Holz, Alu) use the **SAME calculation formula**.
-> Same formula, same surcharge pattern (additive EUR), same discount factor (0.6).
-> Only the DATA differs — one engine serves all. No additional datasets needed.
+> **Key findings:**
+> 1. All 4 manufacturers use the **SAME calculation formula** (base + surcharges × 0.6)
+> 2. **Surcharges are MANUFACTURER-SPECIFIC** — same option = different EUR price per manufacturer
+> 3. Drutex PVC ≠ Gealan PVC surcharges (same material does NOT mean same prices)
+> 4. Surcharges follow a catalog/scheme pattern (fixed EUR per option, not size-dependent)
+> 5. Each new manufacturer needs its own surcharge dataset
 
 - [x] Read `Gealen-Kunstoff-PM/gealan_pvc_complete_data.json`
 - [x] Read `Gealen-Kunstoff-PM/gealan_pvc_alle_profile_preismatrix.csv`
@@ -146,6 +150,9 @@ Step 8 — Full integration test & cleanup
 - [x] Compare surcharge categories across ALL manufacturers
 - [x] Compare calculation formulas — **RESULT: ALL IDENTICAL**
 - [x] Compare discount factors — **RESULT: ALL 0.6 (40% off)**
+- [x] **Surcharge cross-manufacturer comparison** — **RESULT: ALL DIFFERENT per manufacturer**
+- [x] **Surcharge catalog/scheme pattern identified** — Fixed EUR per option, tiered within each manufacturer
+- [x] **Drutex PVC vs Gealan PVC surcharges compared** — **RESULT: COMPLETELY DIFFERENT prices**
 
 ### 2.2 Extend basePrices.js
 
