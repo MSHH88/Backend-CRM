@@ -154,6 +154,26 @@ describe('POST /api/v1/auth/login', () => {
       .send({ email: VALID_USER.email, password: VALID_USER.password });
     expect(res2.status).toBe(200);
   });
+
+  test('locks account after 5 consecutive failed attempts', async () => {
+    // Perform 5 failed login attempts
+    for (let i = 0; i < 5; i++) {
+      const res = await request(app)
+        .post('/api/v1/auth/login')
+        .send({ email: VALID_USER.email, password: 'WrongPass1!' });
+      expect(res.status).toBe(401);
+    }
+
+    // 6th attempt with CORRECT password should be rejected (account locked)
+    const lockedRes = await request(app)
+      .post('/api/v1/auth/login')
+      .send({ email: VALID_USER.email, password: VALID_USER.password });
+    expect(lockedRes.status).toBe(401);
+    const errMsg = typeof lockedRes.body.error === 'string'
+      ? lockedRes.body.error
+      : lockedRes.body.error?.message || lockedRes.body.message || '';
+    expect(errMsg).toMatch(/locked/i);
+  });
 });
 
 // ── Get Current User ──────────────────────────────────────────────────────────
