@@ -41,8 +41,22 @@ const server = app.listen(PORT, async () => {
 });
 
 // ── Graceful shutdown ─────────────────────────────────────────────────────────
+let isShuttingDown = false;
+
 const gracefulShutdown = (signal) => {
+  if (isShuttingDown) {
+    console.log('\n❌ Forced exit (second Ctrl+C)');
+    process.exit(1);
+  }
+  isShuttingDown = true;
+
   console.log(`\n⚠️  ${signal} received. Shutting down gracefully...`);
+
+  // Force-close keep-alive connections FIRST so server.close() resolves fast
+  if (typeof server.closeAllConnections === 'function') {
+    server.closeAllConnections();
+  }
+
   server.close(async () => {
     try {
       await closePool();
@@ -53,14 +67,11 @@ const gracefulShutdown = (signal) => {
     console.log('✅ HTTP server closed');
     process.exit(0);
   });
-  // Force-close keep-alive connections so shutdown is immediate (Node ≥18.2)
-  if (typeof server.closeAllConnections === 'function') {
-    server.closeAllConnections();
-  }
+
   setTimeout(() => {
     console.error('❌ Forced shutdown after timeout');
     process.exit(1);
-  }, 10000);
+  }, 5000);
 };
 
 process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
