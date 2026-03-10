@@ -29,18 +29,18 @@ There are **two separate things** we need:
 
 | What | Source | Status |
 |------|--------|--------|
-| **CALCULATIONS** (formulas, logic, how prices are computed) | Analyzing fenstermaxx24.com / manufacturer websites / API reverse-engineering | **~76% complete** (updated with 7B Alu data) |
+| **CALCULATIONS** (formulas, logic, how prices are computed) | Analyzing fenstermaxx24.com / manufacturer websites / API reverse-engineering | **~80% complete** (updated with 7B Alu data + Falt-Schiebe-Tür data) |
 | **CATALOG DATA** (actual EUR prices, surcharge amounts, base price tables) | Your catalogs from manufacturers | **~15% complete** (6 of ~40 combos) |
 
 **Key Insight:** Once all calculations are known, the system can accept catalog data and automatically generate pricing. The calculations are the ENGINE — the catalog data is the FUEL.
 
 ### Current Score
 
-- **Calculations we HAVE:** Fenster (100%), Balkontür (~97%), Haustüren (~92%), Rollladen (Aufsatz ~95%), PSK (~70%)
-- **Calculations we NEED:** HST, Smart-Slide, Falt-Schiebe-Tür, Vorsatzrollladen, Raffstore, Insektenschutz, Fensterbänke
+- **Calculations we HAVE:** Fenster (100%), Balkontür (~97%), Haustüren (~92%), Rollladen (Aufsatz ~95%), Falt-Schiebe-Tür (~75%), PSK (~70%)
+- **Calculations we NEED:** HST, Smart-Slide, Vorsatzrollladen, Raffstore, Insektenschutz, Fensterbänke
 - **Catalog data we HAVE:** 6 complete + 1 partial (Drutex PVC, Gealan PVC, Holz, Alu Balkontür, Drutex Haustür, Rollladen, PSK partial)
 - **Catalog data we NEED:** ~30+ more manufacturer/material combinations
-- **Recent update:** 7B Alu dataset analyzed (March 10, 2026) — see `docs/7B_DATASET_ANALYSIS.md`
+- **Recent update:** Falt-Schiebe-Tür dataset analyzed (March 10, 2026) — see `docs/FALT_SCHIEBE_TUER_ANALYSIS.md`
 
 ---
 
@@ -209,12 +209,31 @@ total = (base_price + surcharges) × 0.60
 | All aspects | ❌ UNKNOWN | No data extracted yet |
 | **Overall Smart-Slide Calc** | **❌ 0% COMPLETE** | **Need to analyze from fenstermaxx24.com** |
 
-### 4G. FALT-SCHIEBE-TÜR — ❌ NO DATA
+### 4G. FALT-SCHIEBE-TÜR — ⚠️ ~75% COMPLETE (was 0%)
+
+> **UPDATE (March 10, 2026):** CEO uploaded 3 Aluminum datasets. Full analysis in `docs/FALT_SCHIEBE_TUER_ANALYSIS.md`.
 
 | Calculation Aspect | Status | Notes |
 |---|---|---|
-| All aspects | ❌ UNKNOWN | No data extracted yet |
-| **Overall Falt-Schiebe Calc** | **❌ 0% COMPLETE** | **Need to analyze from fenstermaxx24.com** |
+| Base pricing (element-count based) | ✅ COMPLETE | 4 configurations (3-6 parts) with base prices: €4,985 to €8,772 |
+| Size-based scaling | ✅ COMPLETE | Width+height impact documented; non-linear near limits |
+| Element count pricing | ✅ COMPLETE | Each additional part adds ~€800-1,200 to base |
+| Discount factor | ✅ COMPLETE | 0.60 confirmed (same as all products) |
+| Dimension constraints | ✅ COMPLETE | Width 2280-6000mm, Height 1900-2500mm, 100kg/leaf weight |
+| Threshold surcharges | ✅ KNOWN | 3 types: Standard (€0), Flache (€150-250), Barrierefrei (€350-550) |
+| Folding direction surcharge | ✅ KNOWN | Inside (€0), Outside (+€120-220) |
+| Lock hardware surcharges | ✅ KNOWN | 3 tiers from €0 to €120-180 |
+| Frame extension pricing | ✅ KNOWN | €35-85 per meter |
+| Glass surcharges (per m²) | ⚠️ PARTIAL | Triple: €45-75/m², ESG/VSG: €60-120/m², Warme Kante: €25-45/m² |
+| Color surcharges | ❌ INCOMPLETE | Percentage-based "15-25%" — needs verification if fixed EUR or % |
+| Exact EUR values | ❌ INCOMPLETE | All prices are approximate ranges |
+| Non-linear scaling formula | ⚠️ PARTIAL | Behavior described, exact formula not yet derived |
+| Glass weight auto-limits | ⚠️ PARTIAL | Described but exact thresholds not quantified |
+| **Overall Falt-Schiebe Calc** | **⚠️ ~75% COMPLETE** | **NEW architecture: ELEMENT-FORMULA. Logic can be built. Exact prices from catalog.** |
+
+**Architecture:** NEW — **ELEMENT-FORMULA (Architecture D)** — element count × area-based scaling + additive surcharges
+**Manufacturers with catalog data:** Aluprof Aluminium (partial, ranges only)
+**Manufacturers MISSING catalog data:** ALL PVC, ALL Holz, ALL Holz-Alu Falt-Schiebe-Türen
 
 ### 4H. ROLLLADEN — Aufsatz (Integrated Shutters)
 
@@ -325,7 +344,7 @@ These calculations we do NOT have yet and need to reverse-engineer from the webs
 |---------|-------------|----------|--------|-------|
 | **HST (Hebe-Schiebe-Tür)** | Likely Formula-based (B) | HIGH | Medium | Check if similar to PSK |
 | **Smart-Slide** | Likely Formula-based (B) | MEDIUM | Medium | May be variant of HST |
-| **Falt-Schiebe-Tür** | Unknown | LOW | Medium | Unique folding mechanism |
+| ~~**Falt-Schiebe-Tür**~~ | ~~Unknown~~ | ~~LOW~~ | ~~Medium~~ | ✅ **MOVED to 7B** — data received, now ~75% complete. See `docs/FALT_SCHIEBE_TUER_ANALYSIS.md` |
 | **Vorsatzrollladen** | Likely Additive (C) | MEDIUM | Small | Likely similar to Aufsatzrollladen |
 | **Raffstore** | Unknown | LOW | Medium | External blind, new product type |
 | **Insektenschutz** | Likely Simple additive | LOW | Small | Probably simple W×H formula |
@@ -335,12 +354,15 @@ These calculations we do NOT have yet and need to reverse-engineer from the webs
 
 > **UPDATE (March 10, 2026):** CEO uploaded 3 Aluminium datasets addressing these gaps.
 > Full analysis in `docs/7B_DATASET_ANALYSIS.md`.
+> **UPDATE (March 10, 2026):** CEO uploaded 3 Falt-Schiebe-Tür Aluminium datasets.
+> Full analysis in `docs/FALT_SCHIEBE_TUER_ANALYSIS.md`.
 
 | Product | What Was Missing | Data Received? | New Status | Remaining Gap |
 |---------|-----------------|----------------|------------|---------------|
 | **PSK** | Complete surcharge catalog, verify extreme size pricing | ✅ YES — 5 surcharge options + extreme size rules + 4 profiles | **~70%** (was 60%) | Full surcharge catalog depth (5 options received, ~20+ expected), exact EUR prices |
 | **Haustüren** | Side panel (Seitenteil) pricing, Transom (Oberlicht) pricing | ✅ YES — 7 Bautyp variants with price ranges | **~92%** (was 85%) | Exact EUR prices, verify if side panel surcharges are size-dependent |
 | **Balkontüren** | Verify threshold-specific surcharges | ✅ YES — 4 threshold types confirmed | **~97%** (was 95%) | Exact EUR prices |
+| **Falt-Schiebe-Tür** | ALL calculation data (was 0%) | ✅ YES — 3 files: calculation logic + size pricing + surcharges | **~75%** (was 0%) | Exact EUR values, verify % colors, derive non-linear formula, quantify glass weight limits |
 
 **New data received per product:**
 
@@ -359,9 +381,19 @@ These calculations we do NOT have yet and need to reverse-engineer from the webs
 - 5 surcharges: Auto-Getriebe UP (€150-250), Sicherheitsbeschläge RC2 (€80-120), Reedkontakt (€45/unit), Rahmenverbreiterung (€25-60/m), HS-Master Elektroantrieb (€1,200+)
 - NEW: Extreme size pricing is non-linear near 3000×2400mm limit; auto ESG/VSG surcharge above area threshold
 
+**Falt-Schiebe-Tür (NEW — March 10, 2026):**
+- 3 files: Calculation Logic, Size-Based Price Changes, Surcharge Catalog
+- 4 element configurations: 3-teilig (€4,986), 4-teilig (€6,101), 5-teilig (€8,012), 6-teilig (€8,772)
+- NEW Architecture D: ELEMENT-FORMULA — element count × area-based scaling + surcharges
+- Surcharges: 3 threshold types, folding direction, lock hardware, per-m² glass surcharges
+- Discount: 0.60 confirmed; Dimension limits: 2280-6000mm W × 1900-2500mm H
+- Full analysis in `docs/FALT_SCHIEBE_TUER_ANALYSIS.md`
+
 **⚠️ Note:** All prices are approximate ranges. Exact EUR values come from the final manufacturer catalog. For testing, use midpoint of each range.
 
-### 7C. Calculations That Are FULLY COMPLETE ✅
+**⚠️ Drutex Surcharge Note:** CEO observed Drutex surcharges may be higher due to analysis using a larger window size. Will be verified when surcharge catalog is provided. This does NOT affect the calculation logic — only the catalog data values. See `docs/FALT_SCHIEBE_TUER_ANALYSIS.md` Section 5 for details.
+
+### 7C. Calculations That Are FULLY or MOSTLY COMPLETE ✅
 
 | Product | Status | Can Accept New Catalog Data? |
 |---------|--------|-----|
@@ -369,6 +401,7 @@ These calculations we do NOT have yet and need to reverse-engineer from the webs
 | **Balkontüren** | ✅ ~97% | YES — threshold types now confirmed, exact prices from catalog |
 | **Haustüren** | ✅ ~92% | YES — side panels + transoms now known, exact prices from catalog |
 | **Rollladen (Aufsatz)** | ✅ ~95% | YES — just add catalog data |
+| **Falt-Schiebe-Tür** | ⚠️ ~75% | MOSTLY — element-count logic known, need exact EUR + verify color method |
 
 ---
 
@@ -494,9 +527,29 @@ For a product where the calculation is complete (e.g., Fenster):
 
 **We need to analyze fenstermaxx24.com FIRST.**
 
-#### Falt-Schiebe-Tür — Calculation ❌ 0% COMPLETE
+#### Falt-Schiebe-Tür — Calculation ⚠️ ~75% COMPLETE (was 0%)
 
-**We need to analyze fenstermaxx24.com FIRST.**
+> **UPDATE (March 10, 2026):** CEO provided 3 Aluminum datasets. Full analysis in `docs/FALT_SCHIEBE_TUER_ANALYSIS.md`.
+
+**Architecture:** NEW — ELEMENT-FORMULA (Architecture D). Element count (3-6 parts) × area-based scaling + additive surcharges.
+
+| Manufacturer/Material | Have? | What You Need to Provide |
+|---|---|---|
+| Aluprof Aluminium | ⚠️ PARTIAL | Exact EUR prices (ranges provided, not single values) |
+| PVC (any mfg) | ❌ NEED | Full catalog — IF you plan to offer PVC Falt-Schiebe |
+| Holz-Alu (any mfg) | ❌ NEED | Full catalog — IF you plan to offer Holz-Alu Falt-Schiebe |
+
+**What's still needed from analysis:**
+- Verify if color surcharges are percentage-based (15-25%) or fixed EUR
+- Derive precise non-linear scaling formula (more data points or deeper website analysis)
+- Quantify glass weight auto-limit thresholds
+
+**What you need to provide (from catalog):**
+- [ ] Exact base prices per element count (3, 4, 5, 6 parts)
+- [ ] Complete surcharge catalog with exact EUR values
+- [ ] Color surcharge catalog (verify if percentage or fixed)
+- [ ] Glass type pricing (triple, ESG/VSG, Warme Kante)
+- [ ] Profile list (if multiple profiles exist beyond MB-86 Fold Line)
 
 ### 9E. FOR ROLLLADEN (Shutters) — Calculation ✅ ~95% COMPLETE (Aufsatz only)
 
@@ -535,7 +588,7 @@ These need to be done before catalog data is useful:
 | A3 | Haustüren — side panel + transom | Medium | MEDIUM |
 | A4 | Smart-Slide — calculation analysis | Medium | MEDIUM |
 | A5 | Vorsatzrollladen — calculation analysis | Small | MEDIUM |
-| A6 | Falt-Schiebe-Tür — calculation analysis | Medium | LOW |
+| ~~A6~~ | ~~Falt-Schiebe-Tür — calculation analysis~~ | ~~Medium~~ | ✅ **~75% DONE** — verify color % + derive formula |
 | A7 | Raffstore — calculation analysis | Medium | LOW |
 | A8 | Insektenschutz — calculation analysis | Small | LOW |
 | A9 | Fensterbänke — calculation analysis | Small | LOW |
