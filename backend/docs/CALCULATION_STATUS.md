@@ -29,17 +29,18 @@ There are **two separate things** we need:
 
 | What | Source | Status |
 |------|--------|--------|
-| **CALCULATIONS** (formulas, logic, how prices are computed) | Analyzing fenstermaxx24.com / manufacturer websites / API reverse-engineering | **~70% complete** |
+| **CALCULATIONS** (formulas, logic, how prices are computed) | Analyzing fenstermaxx24.com / manufacturer websites / API reverse-engineering | **~76% complete** (updated with 7B Alu data) |
 | **CATALOG DATA** (actual EUR prices, surcharge amounts, base price tables) | Your catalogs from manufacturers | **~15% complete** (6 of ~40 combos) |
 
 **Key Insight:** Once all calculations are known, the system can accept catalog data and automatically generate pricing. The calculations are the ENGINE — the catalog data is the FUEL.
 
 ### Current Score
 
-- **Calculations we HAVE:** Fenster (all materials), Balkontür, Haustüren, Rollladen (Aufsatz), PSK (partial)
+- **Calculations we HAVE:** Fenster (100%), Balkontür (~97%), Haustüren (~92%), Rollladen (Aufsatz ~95%), PSK (~70%)
 - **Calculations we NEED:** HST, Smart-Slide, Falt-Schiebe-Tür, Vorsatzrollladen, Raffstore, Insektenschutz, Fensterbänke
 - **Catalog data we HAVE:** 6 complete + 1 partial (Drutex PVC, Gealan PVC, Holz, Alu Balkontür, Drutex Haustür, Rollladen, PSK partial)
 - **Catalog data we NEED:** ~30+ more manufacturer/material combinations
+- **Recent update:** 7B Alu dataset analyzed (March 10, 2026) — see `docs/7B_DATASET_ANALYSIS.md`
 
 ---
 
@@ -146,8 +147,8 @@ total = (base_price + surcharges) × 0.60
 | Profile system pricing | ✅ COMPLETE | Same as Fenster |
 | All surcharges | ✅ COMPLETE | Same architecture as Fenster |
 | Opening direction (specific) | ✅ COMPLETE | More options than Fenster (links/rechts/etc.) |
-| Threshold options | ⚠️ NEEDS VERIFICATION | May have Balkontür-specific threshold surcharges |
-| **Overall Balkontür Calc** | **✅ ~95% COMPLETE** | **Same engine as Fenster, verify threshold** |
+| Threshold options | ✅ VERIFIED (7B data) | 4 types confirmed: Standard (€0), Flache (€120-180), Magnet (€250-350), Rollstuhlgerecht (€150-220) |
+| **Overall Balkontür Calc** | **✅ ~97% COMPLETE** | **Threshold verified via 7B Alu data. Exact prices from catalog.** |
 
 **Manufacturers with catalog data:** Aluprof Aluminium ✅
 **Manufacturers MISSING catalog data:** ALL PVC, ALL Holz, ALL Holz-Alu Balkontüren
@@ -166,9 +167,10 @@ total = (base_price + surcharges) × 0.60
 | Handle surcharges | ✅ COMPLETE | Cosmetic only (€0 for most) |
 | Hinge color surcharges | ✅ COMPLETE | 0–€96.54 |
 | Threshold surcharges | ⚠️ NEEDS VERIFICATION | May vary per manufacturer |
-| Side panels (Seitenteil) | ❌ UNKNOWN | Need to analyze if/how side panels affect pricing |
-| Transom (Oberlicht) | ❌ UNKNOWN | Need to analyze pricing for transom options |
-| **Overall Haustür Calc** | **✅ ~85% COMPLETE** | **Core formula known, side panel/transom pricing TBD** |
+| Side panels (Seitenteil) | ✅ KNOWN (7B data) | 7 Bautyp variants: +€600-900 per side panel, +€350-550 for transom, +€1500-2200 for double door |
+| Transom (Oberlicht) | ✅ KNOWN (7B data) | Included in Bautyp surcharges: Oberlicht +€350-550, OL+SL combo +€950-1450 |
+| Security/Access options | ✅ KNOWN (7B data) | Verriegelung 3-fach, Elektroöffner, Fingerprint (€450-750), Türschließer, Hinterbandsicherung |
+| **Overall Haustür Calc** | **✅ ~92% COMPLETE** | **Side panels + transoms now known via 7B. Exact prices from catalog.** |
 
 **Manufacturers with catalog data:** Drutex PVC ✅
 **Manufacturers MISSING catalog data:** ALL other Haustür manufacturers/materials
@@ -181,12 +183,14 @@ total = (base_price + surcharges) × 0.60
 | Height pricing | ⚠️ PARTIAL | Progressive 1800-2400mm, data anomalies at 2500mm+ |
 | Profile options | ✅ COMPLETE | 5 profiles (p1-p5), price range 1177-1350 EUR |
 | Opening types | ✅ COMPLETE | 4 variants (ks_fest, fest_ks, ks_ff, ff_ks) |
-| Color surcharges | ⚠️ PARTIAL | Base colors known, full surcharge catalog MISSING |
-| Glass surcharges | ⚠️ PARTIAL | 6 types known, need complete catalog |
-| Surcharge catalog | ❌ INCOMPLETE | Missing most surcharge categories |
-| **Overall PSK Calc** | **⚠️ ~60% COMPLETE** | **Need complete surcharge catalog + verify extreme sizes** |
+| Color surcharges | ⚠️ PARTIAL | Base colors known, full surcharge catalog MISSING. Alu uses "15-25%" — may be percentage-based (needs verification) |
+| Glass surcharges | ⚠️ PARTIAL | 6 types known, need complete catalog. Auto ESG/VSG above area threshold (7B data) |
+| Surcharge catalog | ⚠️ PARTIAL (was INCOMPLETE) | 5 Alu surcharges known via 7B (Auto-Getriebe, RC2, Reedkontakt, Rahmenverbreiterung, Elektroantrieb). Need full depth. |
+| Extreme size pricing | ✅ KNOWN (7B data) | Non-linear scaling near 3000×2400mm; auto ESG/VSG surcharge above glass area threshold |
+| Alu profiles | ✅ KNOWN (7B data) | 4 Alu profiles: MB-70 (€2,396.21), MB-70 HI, MB-86 SI, MB-79N SI |
+| **Overall PSK Calc** | **⚠️ ~70% COMPLETE** | **Improved with 7B data. Still need full surcharge catalog depth + exact EUR.** |
 
-**Manufacturers with catalog data:** Drutex PVC (PARTIAL) ⚠️
+**Manufacturers with catalog data:** Drutex PVC (PARTIAL) ⚠️, Aluprof Aluminium (7B PARTIAL) ⚠️
 **Manufacturers MISSING catalog data:** ALL others
 
 ### 4E. HST (Hebe-Schiebe-Tür) — ❌ NO DATA
@@ -329,19 +333,41 @@ These calculations we do NOT have yet and need to reverse-engineer from the webs
 
 ### 7B. Calculations That Need COMPLETION
 
-| Product | What's Missing | Priority | Effort |
-|---------|---------------|----------|--------|
-| **PSK** | Complete surcharge catalog, verify extreme size pricing | HIGH | Small |
-| **Haustüren** | Side panel (Seitenteil) pricing, Transom (Oberlicht) pricing | MEDIUM | Medium |
-| **Balkontüren** | Verify threshold-specific surcharges | LOW | Small |
+> **UPDATE (March 10, 2026):** CEO uploaded 3 Aluminium datasets addressing these gaps.
+> Full analysis in `docs/7B_DATASET_ANALYSIS.md`.
+
+| Product | What Was Missing | Data Received? | New Status | Remaining Gap |
+|---------|-----------------|----------------|------------|---------------|
+| **PSK** | Complete surcharge catalog, verify extreme size pricing | ✅ YES — 5 surcharge options + extreme size rules + 4 profiles | **~70%** (was 60%) | Full surcharge catalog depth (5 options received, ~20+ expected), exact EUR prices |
+| **Haustüren** | Side panel (Seitenteil) pricing, Transom (Oberlicht) pricing | ✅ YES — 7 Bautyp variants with price ranges | **~92%** (was 85%) | Exact EUR prices, verify if side panel surcharges are size-dependent |
+| **Balkontüren** | Verify threshold-specific surcharges | ✅ YES — 4 threshold types confirmed | **~97%** (was 95%) | Exact EUR prices |
+
+**New data received per product:**
+
+**Balkontüren (Alu):**
+- 4 threshold types: Standard (€0), Flache Schwelle (€120-180), Magnet-Schwelle (€250-350), Rollstuhlgerecht (€150-220)
+- 11 hardware surcharge options (Kämpfer, Griffe variants, Aufbohrschutz, Sicherheitsbeschläge, Verdeckte Beschläge, Reedkontakt, Schnäpper, Lüftung, Rahmenverbreiterung)
+- Dimension constraints: Single 440-1200mm W × 1700-2400mm H; Double 760-2000mm W
+
+**Haustüren (Alu):**
+- 7 Bautyp variants: 1 Flügel (€0), +Seitenteil links/rechts (€600-900 each), +2 Seitenteile (€1200-1800), +Oberlicht (€350-550), +OL+SL (€950-1450), 2 Flügel (€1500-2200)
+- 5 security options: Verriegelung 3-fach (€80-150), Elektroöffner (€45-75), Fingerprint (€450-750), Türschließer (€120-220), Hinterbandsicherung (€35/unit)
+- Side panel width range: 300-1000mm; Max total height with transom: 3000mm
+
+**PSK (Alu):**
+- 4 profiles: MB-70 (€2,396.21 base), MB-70 HI, MB-86 SI, MB-79N SI
+- 5 surcharges: Auto-Getriebe UP (€150-250), Sicherheitsbeschläge RC2 (€80-120), Reedkontakt (€45/unit), Rahmenverbreiterung (€25-60/m), HS-Master Elektroantrieb (€1,200+)
+- NEW: Extreme size pricing is non-linear near 3000×2400mm limit; auto ESG/VSG surcharge above area threshold
+
+**⚠️ Note:** All prices are approximate ranges. Exact EUR values come from the final manufacturer catalog. For testing, use midpoint of each range.
 
 ### 7C. Calculations That Are FULLY COMPLETE ✅
 
 | Product | Status | Can Accept New Catalog Data? |
 |---------|--------|-----|
 | **Fenster (all materials)** | ✅ 100% | YES — just add base prices + surcharge catalog |
-| **Balkontüren** | ✅ ~95% | YES (after threshold verification) |
-| **Haustüren** | ✅ ~85% | YES for basic doors (side panels TBD) |
+| **Balkontüren** | ✅ ~97% | YES — threshold types now confirmed, exact prices from catalog |
+| **Haustüren** | ✅ ~92% | YES — side panels + transoms now known, exact prices from catalog |
 | **Rollladen (Aufsatz)** | ✅ ~95% | YES — just add catalog data |
 
 ---
