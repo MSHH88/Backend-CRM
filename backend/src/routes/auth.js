@@ -144,7 +144,8 @@ router.post('/login', applyAuthLimiter, async (req, res, next) => {
     }
 
     // ── Check account lockout ─────────────────────────────────────────────
-    if (user.lockedUntil && new Date(user.lockedUntil) > new Date()) {
+    const now = new Date();
+    if (user.lockedUntil && new Date(user.lockedUntil) > now) {
       throw new AuthenticationError('Account temporarily locked. Please try again later.');
     }
 
@@ -157,7 +158,7 @@ router.post('/login', applyAuthLimiter, async (req, res, next) => {
       const failedAttempts = (user.failedLoginAttempts || 0) + 1;
       const updates = { failedLoginAttempts: failedAttempts };
       if (failedAttempts >= 5) {
-        updates.lockedUntil = new Date(Date.now() + 30 * 60 * 1000); // 30 min lockout
+        updates.lockedUntil = new Date(now.getTime() + 30 * 60 * 1000); // 30 min lockout
       }
       await userRepo.update(user.id, updates);
 
@@ -170,10 +171,10 @@ router.post('/login', applyAuthLimiter, async (req, res, next) => {
       await userRepo.update(user.id, {
         failedLoginAttempts: 0,
         lockedUntil: null,
-        lastLoginAt: new Date(),
+        lastLoginAt: now,
       });
     } else {
-      await userRepo.update(user.id, { lastLoginAt: new Date() });
+      await userRepo.update(user.id, { lastLoginAt: now });
     }
 
     // ── Generate tokens ───────────────────────────────────────────────────
