@@ -154,6 +154,33 @@ Step 8 — Full integration test & cleanup
 - [x] **Surcharge catalog/scheme pattern identified** — Fixed EUR per option, tiered within each manufacturer
 - [x] **Drutex PVC vs Gealan PVC surcharges compared** — **RESULT: COMPLETELY DIFFERENT prices**
 
+> ### ✅ SAME vs ❌ DIFFERENT — Cross-Manufacturer Notes
+>
+> **Full calculation status & data inventory:** See `docs/CALCULATION_STATUS.md`
+>
+> #### ✅ CONFIRMED SAME FOR ALL MANUFACTURERS:
+> - Master Formula: `angebotspreis = (base_price + surcharges) × 0.60`
+> - Discount Factor: 0.60 for ALL (40% off Preisempfehlung)
+> - Surcharge Method: Additive fixed EUR (never percentages)
+> - Surcharges do NOT depend on window/door size
+> - VAT: 19% MwSt
+> - API Pattern: POST /confapp/{Manufacturer}/{Product}/ajax/berechnen/
+> - Configurator Steps: Profil → Maße → Farbe → Glas → Sprossen → Rollladen → Sonstiges
+>
+> #### ❌ CONFIRMED DIFFERENT BETWEEN MANUFACTURERS:
+> - Surcharge EUR amounts (Anthrazit: €6.44 Gealan vs €43.68 Drutex vs €69.88 Alu vs €80.50 Holz)
+> - Surcharge category count (Drutex: 9, Gealan: 22, Holz: 25, Alu: 28)
+> - Profile pricing method (Drutex: multiplier 0.95-1.29; Others: absolute per-profile matrix)
+> - Base price matrix dimensions (Drutex 21×21, Gealan 26×26, Holz varies)
+> - Dimension ranges and step sizes
+> - Available profiles, colors, and options
+>
+> #### 🔑 KEY INSIGHT — Calculations vs Catalog Data:
+> - **Calculations** (formulas, logic) = ~70% complete, from website analysis
+> - **Catalog data** (actual EUR prices) = ~15% complete, from manufacturer catalogs
+> - Once calculations are 100%, adding a new manufacturer = just providing catalog data
+> - Three calculation architectures: MATRIX (Fenster/Balkontür), FORMULA (Haustür/PSK), ADDITIVE (Rollladen)
+
 ### 2.2 Extend basePrices.js
 
 - [ ] Add Gealan base price matrix (15×15 per profile)
