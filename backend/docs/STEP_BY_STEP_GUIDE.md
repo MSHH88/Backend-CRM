@@ -1,12 +1,6 @@
 # Phase 2 Step 1 — COMPLETE ✅
 
-## ⬇️ NEW FILES — download required
-
-| # | File | What changed | Download to |
-|---|------|-------------|-------------|
-| 1 | `server.js` | **Improved Ctrl+C:** double Ctrl+C forces immediate exit, keep-alive connections closed first | `backend/src/server.js` |
-
-> **What changed?** Ctrl+C now works more reliably on Mac. If the first Ctrl+C appears stuck, press it again to force-exit immediately. Keep-alive connections are now closed before the server shuts down (fixes the hang).
+> **No new files to download.** When future steps change files, we'll say: "⬇️ NEW FILES — download required"
 
 ---
 
@@ -44,7 +38,12 @@ curl -s -X POST http://localhost:3001/api/v1/auth/login \
 | Session tracking | ✅ `user_sessions` table |
 | Token revocation | ✅ `revoked_tokens` table |
 | Data survives restart | ✅ Verified |
+| Rate limiting on auth | ✅ 5 attempts/min per IP+email |
+| Failed login tracking | ✅ Account locks after 5 failures (30 min) |
+| Name validation | ✅ Trimmed, max 100 chars |
+| Error handling | ✅ All endpoints have try-catch |
 | Ctrl+C stops server | ✅ Fixed (double Ctrl+C = force exit) |
+| 128 tests passing | ✅ All green |
 
 ---
 
@@ -54,8 +53,9 @@ curl -s -X POST http://localhost:3001/api/v1/auth/login \
 |-------|-----|
 | `password authentication failed` | Wrong password in `.env`. Open `.env`, fix `DB_PASSWORD`, restart. |
 | `connection refused` | PostgreSQL not running. Open PGAdmin, click on **PostgreSQL 18** to connect. |
-| Ctrl+C doesn't stop server | Download the new `server.js`. Or press Ctrl+C a second time. Or close the Terminal tab. |
+| Ctrl+C doesn't stop server | Press Ctrl+C a second time. Or close the Terminal tab. |
 | `Cannot POST /api/v1/auth/login` | Server not running. Go to first tab, run `npm start`. |
+| `Account temporarily locked` | Too many failed login attempts. Wait 30 minutes or check DB. |
 
 ---
 

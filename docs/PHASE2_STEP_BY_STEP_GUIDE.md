@@ -1,8 +1,8 @@
 # Phase 2 — Step-by-Step Guide
 
-> **Status:** Step 1 COMPLETE ✅ — all auth persistence verified with PostgreSQL  
-> **Last updated:** 2026-03-09  
-> **Prerequisite:** Phase 1 ✅ (100 tests passing, all endpoints working)
+> **Status:** Step 1 COMPLETE ✅ — all auth persistence verified, security gaps fixed  
+> **Last updated:** 2026-03-10  
+> **Prerequisite:** Phase 1 ✅ (128 tests passing, all endpoints working)
 
 ---
 
@@ -74,7 +74,7 @@ Step 8 — Full integration test & cleanup
 - [x] Update `src/routes/auth.js` — uses `userRepository` instead of in-memory array
 - [x] Update `src/middleware/auth.js` — uses `sessionRepository` for token/session management
 - [x] Create `tests/repositories.test.js` — 24 tests for both repositories
-- [x] All 124 tests pass (was 100 in Phase 1)
+- [x] All 128 tests pass (was 100 in Phase 1, now includes security gap fixes)
 - [x] ESLint + Prettier — 0 errors, 0 warnings
 
 ### 1.2 PostgreSQL Setup ✅ COMPLETE
@@ -98,14 +98,26 @@ Step 8 — Full integration test & cleanup
 - [x] Logout → token blacklisted in DB (`revoked_tokens` table)
 - [x] Refresh → new tokens issued, old invalidated in DB
 
-### 1.5 Done Criteria ✅ ALL MET
+### 1.5 Security Hardening ✅ COMPLETE
+
+- [x] Rate limiting on auth endpoints (register/login) — 5 attempts per minute per IP+email
+- [x] Failed login attempt tracking — persists to DB, 30-minute account lockout after 5 failures
+- [x] Account lockout check on login — rejects locked accounts
+- [x] Successful login resets failed attempts counter
+- [x] GET /me error handling — proper try-catch with next(err)
+- [x] Input validation — firstName/lastName trimmed and limited to 100 chars
+
+### 1.6 Done Criteria ✅ ALL MET
 
 - [x] Repository Pattern implemented (dual-mode: in-memory + PostgreSQL)
 - [x] Session persistence implemented (write-through cache: memory + PostgreSQL)
-- [x] `npm test` — 124 tests pass
+- [x] `npm test` — 128 tests pass (124 original + 4 new security tests)
 - [x] `npm run lint` — 0 errors
 - [x] PostgreSQL deployed locally and verified
 - [x] Auth persistence verified (register, login, logout, refresh all persist to DB)
+- [x] Rate limiting applied to auth endpoints
+- [x] Failed login tracking with account lockout
+- [x] Token blacklist verified (test: blacklisted token rejected on /me)
 
 > **See `docs/STEP_BY_STEP_GUIDE.md`** for daily-use commands and quick fixes.
 
