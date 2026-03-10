@@ -1,15 +1,26 @@
 # MISSING DATA CHECKLIST
 
+> **Updated:** March 10, 2026
+> **Full analysis:** See `docs/PRICING_ENGINE_DATA_REQUIREMENTS.md`
+
 ## Daten die wir HABEN (Complete)
 
 ### Fenster
-- [x] Kunststoff - Drutex (base_prices.csv, surcharges.json, options.json, rules.js)
+- [x] Kunststoff - Drutex (base_prices.csv, surcharges.json, options.json, rules.js) — **INTEGRATED IN CODE**
+- [x] Kunststoff - Gealan (gealan_pvc_complete_data.json, aufpreise.csv) — **Ready to integrate**
+- [x] Holz (holz_complete_data.json, holz_aufpreise.json, aufpreise.csv) — **Ready to integrate**
 
-### Hausturen
-- [x] Kunststoff (PVC) - Drutex (haustuer_calculations.json, haustuer_deep_data.json)
+### Balkontüren
+- [x] Alu (alu_balkontuer_complete_data.json, aufpreise.csv) — **Ready to integrate**
+
+### Haustüren
+- [x] Kunststoff (PVC) - Drutex (haustuer_calculations.json, haustuer_deep_data.json) — **Ready to integrate**
+
+### Terassentüren
+- [x] PSK - Drutex PVC (psk_calculations.json) — **PARTIAL: needs complete surcharge catalog**
 
 ### Rollladen
-- [x] Aufsatzrollladen - Drutex (rollladen_calculations.json)
+- [x] Aufsatzrollladen - Drutex (rollladen_calculations.json) — **Ready to integrate**
 
 ---
 
@@ -18,7 +29,7 @@
 ### FENSTER
 
 Kunststoff:
-- [ ] Gealan (base_prices, surcharges)
+- [x] ~~Gealan (base_prices, surcharges)~~ ✅ HAVE IT
 - [ ] Salamander (base_prices, surcharges)
 - [ ] Aluplast (base_prices, surcharges)
 - [ ] Rehau (base_prices, surcharges)
@@ -29,10 +40,11 @@ Kunststoff-Alu:
 - [ ] Andere Hersteller
 
 Alu:
-- [ ] Alle Hersteller (base_prices, surcharges)
+- [ ] Alu Fenster - Alle Hersteller (base_prices, surcharges) — **Note: We have Alu Balkontür only**
 
 Holz:
-- [ ] Alle Hersteller (base_prices, surcharges)
+- [x] ~~Holz Fenster (base_prices, surcharges)~~ ✅ HAVE IT
+- [ ] Additional Holz manufacturers
 
 Holz-Alu:
 - [ ] Alle Hersteller (base_prices, surcharges)
@@ -169,17 +181,19 @@ ONE engine with different data tables.
 
 ## PRIORITY DATA COLLECTION
 
-High Priority (to verify calculation pattern):
-1. [ ] Fenster Kunststoff - Gealan (verify same pattern as Drutex)
-2. [ ] Balkonturen Kunststoff - any manufacturer (verify same as Fenster)
-3. [ ] Fenster Holz - any manufacturer (verify pattern for different material)
+High Priority (to expand the engine):
+1. [x] ~~Fenster Kunststoff - Gealan (verify same pattern as Drutex)~~ ✅ DONE - Same pattern confirmed
+2. [x] ~~Balkontüren Alu (verify same as Fenster)~~ ✅ DONE - Same pattern confirmed
+3. [x] ~~Fenster Holz (verify pattern for different material)~~ ✅ DONE - Same pattern confirmed
+4. [ ] Complete PSK Terassentür surcharge catalog
+5. [ ] Fenster Kunststoff - Salamander, VEKA, Rehau, Schüco
 
 Medium Priority:
-4. [ ] Haustur Alu - any manufacturer
-5. [ ] Terrassentur PSK - complete data
-6. [ ] Additional Rollladen types
+6. [ ] Haustür Alu - any manufacturer
+7. [ ] Balkontür PVC - any manufacturer
+8. [ ] Additional Rollladen types (Vorsatz, Raffstore)
 
 Low Priority (after system works):
-7. [ ] Remaining manufacturers
-8. [ ] Remaining materials
-9. [ ] Remaining product types
+9. [ ] Remaining manufacturers
+10. [ ] Remaining materials (Holz-Alu, Kunststoff-Alu)
+11. [ ] Remaining product types (HST, Smart-Slide, Falt-Schiebe, Nebeneingangstüren)
