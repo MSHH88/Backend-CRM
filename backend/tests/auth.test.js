@@ -157,7 +157,7 @@ describe('POST /api/v1/auth/login', () => {
 
   test('locks account after 5 consecutive failed attempts', async () => {
     // Perform 5 failed login attempts
-    for (let i = 0; i < 5; i++) {
+    for (let attempt = 0; attempt < 5; attempt++) {
       const res = await request(app)
         .post('/api/v1/auth/login')
         .send({ email: VALID_USER.email, password: 'WrongPass1!' });
