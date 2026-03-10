@@ -127,15 +127,25 @@ Step 8 — Full integration test & cleanup
 
 **Goal:** Add Gealan PVC as the second supported manufacturer. This establishes the multi-manufacturer pattern that Step 3 and 4 will follow.
 
-### 2.1 Analyze Gealan Dataset
+### 2.1 Analyze ALL Datasets ✅ COMPLETE
 
-- [ ] Read `Gealen-Kunstoff-PM/gealan_pvc_complete_data.json`
-- [ ] Read `Gealen-Kunstoff-PM/gealan_pvc_alle_profile_preismatrix.csv`
-- [ ] Read `Gealen-Kunstoff-PM/gealan_pvc_aufpreise.csv`
-- [ ] Document: profiles available (S8000, S9000, LINEAR)
-- [ ] Document: dimension range (400–2000mm, 15 steps)
-- [ ] Document: all surcharge categories and option IDs
-- [ ] Compare surcharge categories with Drutex — note differences
+> **Full analysis:** See `docs/DATASET_ANALYSIS.md`
+>
+> **Key finding:** All 4 manufacturers (Drutex, Gealan, Holz, Alu) use the **SAME calculation formula**.
+> Same formula, same surcharge pattern (additive EUR), same discount factor (0.6).
+> Only the DATA differs — one engine serves all. No additional datasets needed.
+
+- [x] Read `Gealen-Kunstoff-PM/gealan_pvc_complete_data.json`
+- [x] Read `Gealen-Kunstoff-PM/gealan_pvc_alle_profile_preismatrix.csv`
+- [x] Read `Gealen-Kunstoff-PM/gealan_pvc_aufpreise.csv`
+- [x] Read `Holz-Fenster-PM/holz_complete_data.json` + CSV files
+- [x] Read `Balkon-Alu-PM/alu_balkontuer_complete_data.json` + CSV files
+- [x] Document: profiles available per manufacturer
+- [x] Document: dimension ranges per manufacturer
+- [x] Document: all surcharge categories and option IDs
+- [x] Compare surcharge categories across ALL manufacturers
+- [x] Compare calculation formulas — **RESULT: ALL IDENTICAL**
+- [x] Compare discount factors — **RESULT: ALL 0.6 (40% off)**
 
 ### 2.2 Extend basePrices.js
 
