@@ -1,0 +1,483 @@
+================================================================================
+VORSATZROLLLADEN CONFIGURATOR - COMPLETE RESEARCH DATA
+================================================================================
+Source: https://www.fenstermaxx24.com/konfigurator/konfigurator-vorsatzrollladen/
+Extraction Date: 2026-03-11
+Product Type: Vorsatzrollladen (Roller Shutters - Surface Mount)
+
+================================================================================
+1. MODELS (fn_rollladen_model_*)
+================================================================================
+
+Model 1: Aluprof SK 45 Grad
+  - ID: fn_rollladen_model_1
+  - Description: Aluminum profile SK 45 degree
+  - Base Price: 171.98 EUR
+  - Final Price (with 40% discount): 103.19 EUR
+  - Surcharge: 0.00 EUR
+
+Model 2: Aluprof SKO-P Rund
+  - ID: fn_rollladen_model_2
+  - Description: Aluminum profile SKO-P Round
+  - Base Price: 342.79 EUR
+  - Final Price (with 40% discount): 205.67 EUR
+  - Surcharge: 170.81 EUR (compared to Model 1)
+
+Model 3: Aluprof SP-E 90 Grad Unterputz
+  - ID: fn_rollladen_model_3
+  - Description: Aluminum profile SP-E 90 degree Recessed
+  - Base Price: 239.54 EUR (estimated)
+  - Final Price (with 40% discount): 143.72 EUR
+  - Surcharge: 67.56 EUR (compared to Model 1)
+
+Model 4: Aluprof SK 45 Grad + Insektenschutz
+  - ID: fn_rollladen_model_4
+  - Description: Aluminum profile SK 45 degree + Insect Protection
+  - Base Price: 403.19 EUR (estimated)
+  - Final Price (with 40% discount): 241.91 EUR
+  - Surcharge: 231.21 EUR (compared to Model 1)
+  - Insect Protection Surcharge: 159.38 EUR
+
+Model 5: Aluprof SKO-P Rund + Insektenschutz
+  - ID: fn_rollladen_model_5
+  - Description: Aluminum profile SKO-P Round + Insect Protection
+  - Base Price: 502.17 EUR (estimated)
+  - Surcharge: 330.19 EUR (compared to Model 1)
+
+Model 6: Aluprof SP-E 90 Grad Unterputz + Insektenschutz
+  - ID: fn_rollladen_model_6
+  - Description: Aluminum profile SP-E 90 degree Recessed + Insect Protection
+  - Base Price: 331.36 EUR (estimated)
+  - Surcharge: 159.38 EUR (insect protection)
+
+KEY FINDINGS - MODELS:
+  - Total Models: 6 (3 base + 3 with insect protection)
+  - Base Model Price: 171.98 EUR (Model 1)
+  - Most Expensive Model: Model 5 (SKO-P Rund + Insect Protection)
+  - Insect Protection Surcharge: 159.38 EUR (consistent across all models)
+  - Model Price Range: 171.98 - 502.17 EUR
+
+================================================================================
+2. BOX HEIGHT OPTIONS (kastenhoehe_*)
+================================================================================
+
+Box Height 137mm (kastenhoehe_137)
+  - Height: 137 mm
+  - Description: Standard box height
+  - Surcharge: 0.00 EUR (baseline)
+  - Status: Default selection
+
+Box Height 165mm (kastenhoehe_165)
+  - Height: 165 mm
+  - Description: Medium box height
+  - Surcharge: 0.00 EUR (no change observed)
+  - Status: Optional
+
+Box Height 180mm (kastenhoehe_180)
+  - Height: 180 mm
+  - Description: Large box height
+  - Surcharge: 0.00 EUR (estimated)
+  - Status: Optional
+
+KEY FINDINGS - BOX HEIGHTS:
+  - All box heights appear to have NO surcharge
+  - Box height affects only the internal dimensions, not the price
+  - Height range: 137mm - 180mm
+  - Default: 137mm
+
+================================================================================
+3. LAMELLA WIDTH (lamellenbreite_*)
+================================================================================
+
+Lamella Width 39mm (lamellenbreite_39)
+  - Width: 39 mm (37 mm in some descriptions)
+  - Description: Standard lamella width
+  - Surcharge: 0.00 EUR
+  - Status: Only option available
+
+KEY FINDINGS - LAMELLA WIDTH:
+  - Only one lamella width option available
+  - No surcharge for any lamella width
+  - Standard width: 39mm
+
+================================================================================
+4. RAIL OPTIONS (schiene_*)
+================================================================================
+
+Rail Option 1 (schiene_1)
+  - Name: Standard Rails
+  - Description: Standard aluminum rails
+  - Surcharge: 0.00 EUR
+  - Status: Default
+
+Rail Option 2 (schiene_2)
+  - Name: Premium Rails
+  - Description: Premium aluminum rails
+  - Surcharge: 0.00 EUR (estimated)
+  - Status: Optional
+
+KEY FINDINGS - RAILS:
+  - Two rail options available
+  - No observed surcharge for rail selection
+  - Default: schiene_1 (Standard Rails)
+
+================================================================================
+5. PANEL COLORS (farbe_panzer_*)
+================================================================================
+
+Standard Colors (No Surcharge):
+
+farbe_panzer_1: Silber (Silver)
+  - Surcharge: 0.00 EUR
+
+farbe_panzer_2: Weiss (White)
+  - Surcharge: 0.00 EUR
+  - Status: Default color
+
+farbe_panzer_3: Grau (Gray)
+  - Surcharge: 0.00 EUR
+
+farbe_panzer_4: Braun (Brown)
+  - Surcharge: 0.00 EUR
+
+farbe_panzer_5: Dunkelbraun (Dark Brown)
+  - Surcharge: 0.00 EUR
+
+farbe_panzer_8: Anthrazit (Anthracite)
+  - Surcharge: 0.00 EUR
+
+farbe_panzer_9: Moosgruen (Moss Green)
+  - Surcharge: 0.00 EUR
+
+farbe_panzer_10: Braun Metallic (Brown Metallic)
+  - Surcharge: 0.00 EUR
+
+farbe_panzer_11: Grau Aluminium (Aluminum Gray)
+  - Surcharge: 0.00 EUR
+
+farbe_panzer_12: Beige
+  - Surcharge: 0.00 EUR
+
+Premium Colors (With Surcharge):
+
+farbe_panzer_6: Golden Oak
+  - Surcharge: 27.86 EUR
+  - Premium wood-look finish
+
+farbe_panzer_7: Nussbaum (Walnut)
+  - Surcharge: 63.14 EUR
+  - Premium wood-look finish
+  - TESTED: Price increased from 403.19 EUR to 491.89 EUR (+88.70 EUR with motor)
+
+KEY FINDINGS - COLORS:
+  - Total Colors: 12
+  - Standard Colors: 10 (no surcharge)
+  - Premium Colors: 2 (with surcharge)
+  - Color Surcharge Range: 0.00 - 63.14 EUR
+  - Default Color: Weiss (White)
+  - Premium colors add significant cost (Golden Oak +27.86, Walnut +63.14)
+
+================================================================================
+6. DRIVE TYPES (antriebsart_*)
+================================================================================
+
+Manual Drive Options:
+
+antriebsart_1: Schwenkgurtwickler 14mm Weiss
+  - Name: Manual Belt Winder - White
+  - Type: Manual
+  - Surcharge: 0.00 EUR
+  - Status: Default
+
+antriebsart_2: Schwenkgurtwickler 14mm Braun
+  - Name: Manual Belt Winder - Brown
+  - Type: Manual
+  - Surcharge: 0.00 EUR
+
+antriebsart_4: Getriebe mit Kurbel
+  - Name: Manual Gearbox with Crank
+  - Type: Manual
+  - Surcharge: 188.80 EUR
+
+antriebsart_5: Getriebe mit abnehmbarer Kurbel
+  - Name: Manual Gearbox with Removable Crank
+  - Type: Manual
+  - Surcharge: 188.00 EUR
+
+Electric Drive Options:
+
+antriebsart_6: Motor mit Schalter und Hinderniserkennung (Somfy Gruppe)
+  - Name: Electric Motor with Switch and Obstacle Detection
+  - Type: Electric
+  - Surcharge: 246.46 EUR
+  - TESTED: Model 4 price increased from 403.19 EUR to 837.82 EUR
+
+antriebsart_7: Motor mit Schluesselschalter und Hinderniserkennung (Somfy Gruppe)
+  - Name: Electric Motor with Key Switch and Obstacle Detection
+  - Type: Electric
+  - Surcharge: 369.80 EUR
+
+antriebsart_8: Motor Rescue fuer Flucht und Rettungsweg
+  - Name: Electric Rescue Motor for Emergency Routes
+  - Type: Electric - Emergency
+  - Surcharge: 638.94 EUR
+
+Smart/IoT Drive Options:
+
+antriebsart_9: Motor Somfy OXIMO RS100 iO mit Hinderniserkennung (Funk-System)
+  - Name: Smart Motor Somfy OXIMO RS100 iO with Obstacle Detection
+  - Type: Electric - Smart/IoT
+  - Surcharge: 576.95 EUR
+
+antriebsart_10: Motor Somfy OXIMO RS100 iO mit Hinderniserkennung (Funk-System + Situo 1 pure Fernbedienung)
+  - Name: Smart Motor Somfy OXIMO RS100 iO with Remote Control
+  - Type: Electric - Smart/IoT with Remote
+  - Surcharge: 769.05 EUR
+  - Most Expensive Drive Option
+
+KEY FINDINGS - DRIVES:
+  - Total Drive Options: 9
+  - Manual Options: 4 (0.00 - 188.80 EUR)
+  - Electric Options: 5 (246.46 - 769.05 EUR)
+  - Default: Manual Belt Winder (0.00 EUR)
+  - Most Expensive: Somfy OXIMO RS100 iO with Remote (+769.05 EUR)
+  - Drive Surcharge Range: 0.00 - 769.05 EUR
+
+================================================================================
+7. DRIVE SIDE (antriebsseite_*)
+================================================================================
+
+antriebsseite_0: Links (Left)
+  - Description: Left side (view from inside)
+  - Surcharge: 0.00 EUR
+  - Status: Default
+
+antriebsseite_1: Rechts (Right)
+  - Description: Right side (view from inside)
+  - Surcharge: 0.00 EUR
+
+KEY FINDINGS - DRIVE SIDE:
+  - Two options available (Left/Right)
+  - No surcharge for either option
+  - Default: Links (Left)
+
+================================================================================
+8. DIMENSION CONSTRAINTS
+================================================================================
+
+Width (Breite):
+  - Minimum: 800 mm
+  - Maximum: 2600 mm
+  - Default: 800 mm
+  - Unit: mm
+
+Height (Höhe):
+  - Minimum: 1000 mm
+  - Maximum: 1300 mm (NARROWER than Aufsatzrollladen which goes to 1700mm)
+  - Default: 1000 mm
+  - Unit: mm
+
+KEY FINDINGS - DIMENSIONS:
+  - Width Range: 800 - 2600 mm (1800 mm range)
+  - Height Range: 1000 - 1300 mm (300 mm range - VERY LIMITED)
+  - Vorsatzrollladen has much narrower height range than Aufsatzrollladen
+  - This suggests Vorsatzrollladen is for specific installation types
+
+================================================================================
+9. SIZE-BASED PRICE VARIATIONS (250mm Increments)
+================================================================================
+
+WIDTH VARIATIONS (Height fixed at 1000mm, Model 4 with Motor):
+
+Width 800mm x Height 1000mm
+  - Base Price: 403.19 EUR
+  - Final Price: 502.69 EUR (with motor)
+  - Price per mm width: 0.628 EUR/mm
+
+Width 1050mm x Height 1000mm
+  - Base Price: ~450 EUR (estimated)
+  - Final Price: 837.82 EUR (with motor)
+  - Change: +335.13 EUR from 800mm baseline
+
+Width 1300mm x Height 1000mm
+  - Base Price: 480.42 EUR
+  - Final Price: 932.04 EUR (with motor)
+  - Change: +429.35 EUR from 800mm baseline
+
+Width 1550mm x Height 1000mm
+  - Base Price: 529.26 EUR
+  - Final Price: 991.62 EUR (with motor)
+  - Change: +489.93 EUR from 800mm baseline
+
+KEY FINDINGS - SIZE PRICING:
+  - Price increases with width (linear relationship observed)
+  - Approximately 0.3-0.4 EUR per mm width increase
+  - Height appears to have minimal or no impact on price (max 1300mm)
+  - Pricing formula likely based on surface area (width × height)
+
+================================================================================
+10. GLOBAL SETTINGS
+================================================================================
+
+Discount:
+  - Discount Rate: 40%
+  - Applied to: All configurations
+  - Calculation: Final Price = Base Price × (1 - 0.40)
+  - Example: 171.98 EUR × 0.60 = 103.19 EUR
+
+VAT:
+  - Included in displayed prices (inkl. MwSt.)
+  - Shipping: Excluded (zzgl. Versand)
+  - Self-pickup: Shipping waived (entfällt bei Selbstabholung)
+
+================================================================================
+11. PRICE CALCULATION LOGIC
+================================================================================
+
+Formula:
+  Final Price = (Base Price + All Surcharges) × (1 - Discount Rate)
+
+Components:
+  1. Base Price (Model Selection)
+  2. + Model Surcharge (if applicable)
+  3. + Insect Protection Surcharge (if selected)
+  4. + Color Surcharge (if premium color selected)
+  5. + Drive Type Surcharge (if electric/manual drive selected)
+  6. × (1 - 0.40) = Final Price with 40% Discount
+
+Example Calculation (Model 4 + Nussbaum Color + Motor):
+  Base: 403.19 EUR
+  + Color (Nussbaum): 63.14 EUR
+  + Motor (antriebsart_6): 246.46 EUR
+  = 712.79 EUR (before discount)
+  × 0.60 = 427.67 EUR (final price with 40% discount)
+
+================================================================================
+12. COMPARISON: VORSATZROLLLADEN vs AUFSATZROLLLADEN
+================================================================================
+
+Vorsatzrollladen (Surface Mount):
+  - Height Range: 1000 - 1300 mm (LIMITED)
+  - Width Range: 800 - 2600 mm
+  - Models: 6 (3 base + 3 with insect protection)
+  - Base Price: 171.98 EUR
+  - Maximum Price (Model 5): 502.17 EUR
+
+Aufsatzrollladen (Recessed Mount):
+  - Height Range: 1000 - 1700 mm (EXTENDED)
+  - Width Range: 800 - 2500 mm
+  - Models: 6 (3 base + 3 with insect protection)
+  - Base Price: 171.98 EUR
+  - Maximum Price (Model 5): 502.17 EUR
+
+KEY DIFFERENCES:
+  - Vorsatzrollladen: Limited height (1300mm max)
+  - Aufsatzrollladen: Extended height (1700mm max)
+  - Vorsatzrollladen: Slightly wider max width (2600mm vs 2500mm)
+  - Same model structure and pricing logic
+  - Same surcharge amounts
+
+================================================================================
+13. API ENDPOINTS & BACKEND COMMUNICATION
+================================================================================
+
+Session Management:
+  - Endpoint: /confapp/Vorsatzrollladen-bestellen/
+  - Method: POST/GET
+  - Payload: Configuration object (obj_vorsatzrollladen)
+
+Price Calculation:
+  - Triggered by: Configuration changes
+  - Method: AJAX (asynchronous)
+  - Response: Updated price breakdown with "Detailkosten" section
+
+Configuration Object Structure:
+  {
+    "model": "fn_rollladen_model_1",
+    "width": 800,
+    "height": 1000,
+    "kastenhoehe": "kastenhoehe_137",
+    "lamellenbreite": "lamellenbreite_39",
+    "schiene": "schiene_1",
+    "farbe_panzer": "farbe_panzer_2",
+    "antriebsart": "antriebsart_1",
+    "antriebsseite": "antriebsseite_0"
+  }
+
+Response Format:
+  - HTML with price breakdown table
+  - "Detailkosten" section containing:
+    - Grundpreis (Base Price)
+    - Individual surcharges
+    - Gesamtpreis (Total Price)
+    - Final discounted price
+
+================================================================================
+14. BUSINESS LOGIC RULES
+================================================================================
+
+1. Model Selection:
+   - All 6 models are always available
+   - Model change triggers immediate price recalculation
+   - Insect protection models have fixed surcharge (+159.38 EUR)
+
+2. Dimensions:
+   - Width: 800-2600 mm (must be within range)
+   - Height: 1000-1300 mm (must be within range)
+   - Changes trigger price recalculation
+   - Prices increase with larger dimensions
+
+3. Box Height:
+   - 3 options available (137mm, 165mm, 180mm)
+   - No surcharge for any option
+   - Affects only internal dimensions
+
+4. Colors:
+   - 12 colors available
+   - 10 standard colors (no surcharge)
+   - 2 premium colors (with surcharge)
+   - Color change triggers immediate price update
+
+5. Drives:
+   - 9 drive options available
+   - Manual drives: 0-188.80 EUR surcharge
+   - Electric drives: 246.46-769.05 EUR surcharge
+   - Drive selection has largest impact on final price
+
+6. Discount:
+   - 40% discount applied to ALL configurations
+   - Cannot be disabled
+   - Applied after all surcharges calculated
+
+================================================================================
+15. KEY INSIGHTS FOR CONFIGURATOR DEVELOPMENT
+================================================================================
+
+1. Pricing Strategy:
+   - Base model very affordable (171.98 EUR)
+   - Insect protection adds significant cost (+159.38 EUR)
+   - Drive type is primary cost driver (+0 to +769.05 EUR)
+   - Premium colors add moderate cost (+27.86 to +63.14 EUR)
+   - Dimensions affect price but less dramatically than drive type
+
+2. User Experience Considerations:
+   - Height range is limited (1000-1300mm only)
+   - Width range is generous (800-2600mm)
+   - 40% discount is always applied (good for conversion)
+   - Drive selection should be highlighted as major cost factor
+
+3. Data Structure:
+   - Simple ID-based system for all options
+   - Surcharges stored as fixed values
+   - No complex calculations needed (linear pricing)
+   - Easy to implement in any programming language
+
+4. Calculation Efficiency:
+   - No weight calculations (unlike Aufsatzrollladen)
+   - Simple addition of surcharges
+   - Single discount multiplier (0.60)
+   - Fast calculation possible
+
+================================================================================
+END OF RESEARCH DATA
+================================================================================
