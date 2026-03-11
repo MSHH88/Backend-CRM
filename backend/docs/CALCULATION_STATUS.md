@@ -29,18 +29,18 @@ There are **two separate things** we need:
 
 | What | Source | Status |
 |------|--------|--------|
-| **CALCULATIONS** (formulas, logic, how prices are computed) | Analyzing fenstermaxx24.com / manufacturer websites / API reverse-engineering | **~85% complete** (updated with Vorsatzrollladen data + 7B Alu data + Falt-Schiebe-Tür data + Holz Haustür data) |
-| **CATALOG DATA** (actual EUR prices, surcharge amounts, base price tables) | Your catalogs from manufacturers | **~18% complete** (7 of ~40 combos) |
+| **CALCULATIONS** (formulas, logic, how prices are computed) | Analyzing fenstermaxx24.com / manufacturer websites / API reverse-engineering | **~87% complete** (updated with Insektenschutz Plissee data + Vorsatzrollladen data + 7B Alu data + Falt-Schiebe-Tür data + Holz Haustür data) |
+| **CATALOG DATA** (actual EUR prices, surcharge amounts, base price tables) | Your catalogs from manufacturers | **~20% complete** (8 of ~40 combos) |
 
 **Key Insight:** Once all calculations are known, the system can accept catalog data and automatically generate pricing. The calculations are the ENGINE — the catalog data is the FUEL.
 
 ### Current Score
 
-- **Calculations we HAVE:** Fenster (100%), Balkontür (~97%), Haustüren (~95%), Rollladen Aufsatz (~97%), Rollladen Vorsatz (~85% 🆕), Falt-Schiebe-Tür (~75%), PSK (~70%)
-- **Calculations we NEED:** HST, Smart-Slide, Raffstore, Insektenschutz, Fensterbänke
-- **Catalog data we HAVE:** 7 complete + 2 partial (Drutex PVC, Gealan PVC, Holz Fenster, Alu Balkontür, Drutex Haustür PVC, Aufsatzrollladen, Vorsatzrollladen partial 🆕, PSK partial, **Drutex Holz Haustür ~65%**)
+- **Calculations we HAVE:** Fenster (100%), Balkontür (~97%), Haustüren (~95%), Rollladen Aufsatz (~97%), Insektenschutz Plissee (~90% 🆕), Rollladen Vorsatz (~85%), Falt-Schiebe-Tür (~75%), PSK (~70%)
+- **Calculations we NEED:** HST, Smart-Slide, Raffstore, Insektenschutz (other types), Fensterbänke
+- **Catalog data we HAVE:** 8 complete + 2 partial (Drutex PVC, Gealan PVC, Holz Fenster, Alu Balkontür, Drutex Haustür PVC, Aufsatzrollladen, Insektenschutz Plissee partial 🆕, Vorsatzrollladen partial, PSK partial, **Drutex Holz Haustür ~65%**)
 - **Catalog data we NEED:** ~30+ more manufacturer/material combinations
-- **Recent update:** Vorsatzrollladen dataset analyzed (March 11, 2026) — see `docs/VORSATZROLLLADEN_ANALYSIS.md`
+- **Recent update:** Insektenschutz Plissee dataset analyzed (March 11, 2026) — see `docs/INSEKTENSCHUTZ_ANALYSIS.md`
 
 ---
 
@@ -300,12 +300,30 @@ total = (base_price + surcharges) × 0.60
 | All aspects | ❌ UNKNOWN | May be additive like Rollladen or unique |
 | **Overall Raffstore Calc** | **❌ 0% COMPLETE** | **Need to analyze from fenstermaxx24.com** |
 
-### 4K. INSEKTENSCHUTZ (Insect Protection) — ❌ NO DATA
+### 4K. INSEKTENSCHUTZ PLISSEE (Insect Protection) — ✅ ~90% COMPLETE 🆕
+
+> **UPDATE (March 11, 2026):** Insektenschutz Plissee dataset analyzed from CEO-uploaded files.
+> - ADDITIVE architecture confirmed (Architecture C — same as Rollladen)
+> - SIMPLEST product analyzed — only Plissee type selection affects price
+> - 2 Plissee types, 5 colors (all free), 2 directions (all free)
+> - Height-dominant pricing (width has minimal impact)
+> - ⚠️ CEO noted: color list may be incomplete
+> - Full analysis in `INSEKTENSCHUTZ_ANALYSIS.md`
 
 | Calculation Aspect | Status | Notes |
 |---|---|---|
-| All aspects | ❌ UNKNOWN | Likely simple additive pricing |
-| **Overall Insektenschutz Calc** | **❌ 0% COMPLETE** | **Need to analyze** |
+| Base pricing (Plissee types) | ✅ COMPLETE | 1-teilige: €906.50, 2-teilige: €1,693.50 (+€787.00) |
+| Discount factor | ✅ CONFIRMED | 0.60 (40% off) — identical to all products |
+| Frame colors | ✅ COMPLETE | 5 RAL Matt colors — ALL €0 surcharge (no premium!) |
+| Opening directions | ✅ COMPLETE | 2 options — ALL €0 surcharge |
+| Net color | ✅ COMPLETE | 1 option (Black) — €0 |
+| Dimension constraints | ✅ COMPLETE | 700-2400mm W × 1900-2600mm H (door-height only, min 1900mm) |
+| Height-dominant pricing | ✅ CONFIRMED | Height is primary cost driver; width has minimal impact |
+| Calculator implementations | ✅ COMPLETE | JS + Python available |
+| Full W×H price matrix | ❌ PARTIAL | Have scattered data points, need systematic grid |
+| Complete color catalog | ⚠️ PARTIAL | CEO noted some colors may be missing |
+| 2-teilige dimension pricing | ❌ PARTIAL | Only one data point for 2-teilige base |
+| **Overall Insektenschutz Calc** | **✅ ~90% COMPLETE** | **Architecture C (ADDITIVE). Simplest product — only type selection affects price. See `INSEKTENSCHUTZ_ANALYSIS.md`** |
 
 ### 4L. FENSTERBÄNKE (Window Sills) — ❌ NO DATA
 
@@ -380,7 +398,8 @@ These calculations we do NOT have yet and need to reverse-engineer from the webs
 | ~~**Falt-Schiebe-Tür**~~ | ~~Unknown~~ | ~~LOW~~ | ~~Medium~~ | ✅ **MOVED to 7B** — data received, now ~75% complete. See `docs/FALT_SCHIEBE_TUER_ANALYSIS.md` |
 | ~~**Vorsatzrollladen**~~ | ~~Likely Additive (C)~~ | ~~MEDIUM~~ | ~~Small~~ | ✅ **ANALYZED** — ADDITIVE architecture confirmed, ~85% complete. See `docs/VORSATZROLLLADEN_ANALYSIS.md` |
 | **Raffstore** | Unknown | LOW | Medium | External blind, new product type |
-| **Insektenschutz** | Likely Simple additive | LOW | Small | Probably simple W×H formula |
+| ~~**Insektenschutz**~~ | ~~Likely Simple additive~~ | ~~LOW~~ | ~~Small~~ | ✅ **ANALYZED** — ADDITIVE architecture confirmed, ~90% complete. SIMPLEST product. See `docs/INSEKTENSCHUTZ_ANALYSIS.md` |
+| **Insektenschutz (other types)** | Likely Additive (C) | LOW | Small | Check if Spannrahmen, Drehrahmen, etc. exist on configurator |
 | **Fensterbänke** | Likely Linear (length-based) | LOW | Small | Simple length × price_per_meter |
 
 ### 7B. Calculations That Need COMPLETION
@@ -394,6 +413,10 @@ These calculations we do NOT have yet and need to reverse-engineer from the webs
 > **UPDATE (March 11, 2026):** CEO uploaded Vorsatzrollladen dataset.
 > ADDITIVE architecture confirmed, 6 models (3 Aluprof profiles × ±insect), shared surcharges with Aufsatz verified.
 > Full analysis in `docs/VORSATZROLLLADEN_ANALYSIS.md`.
+> **UPDATE (March 11, 2026):** CEO uploaded Insektenschutz Plissee dataset.
+> ADDITIVE architecture confirmed, SIMPLEST product analyzed. 2 types, 5 colors (all free), height-dominant pricing.
+> ⚠️ CEO noted: color data may be incomplete.
+> Full analysis in `docs/INSEKTENSCHUTZ_ANALYSIS.md`.
 
 | Product | What Was Missing | Data Received? | New Status | Remaining Gap |
 |---------|-----------------|----------------|------------|---------------|
@@ -401,6 +424,7 @@ These calculations we do NOT have yet and need to reverse-engineer from the webs
 | **Haustüren** | Side panel (Seitenteil) pricing, Transom (Oberlicht) pricing, threshold verification, side panel size-dep | ✅ YES — 7 Bautyp variants + Holz threshold + side panel sizing | **~95%** (was 92%) | Exact EUR prices. Side panel needs width-based formula (NOT fixed surcharge). |
 | **Balkontüren** | Verify threshold-specific surcharges | ✅ YES — 4 threshold types confirmed | **~97%** (was 95%) | Exact EUR prices |
 | **Falt-Schiebe-Tür** | ALL calculation data (was 0%) | ✅ YES — 3 files: calculation logic + size pricing + surcharges | **~75%** (was 0%) | Exact EUR values, verify % colors, derive non-linear formula, quantify glass weight limits |
+| **Insektenschutz Plissee** | ALL calculation data (was 0%) | ✅ YES — 3 files: data + calculator (JS + Python) | **~90%** (was 0%) 🆕 | Full W×H price matrix, ⚠️ complete color catalog (CEO noted incomplete), 2-teilige dimension pricing |
 
 **New data received per product:**
 
@@ -445,6 +469,19 @@ These calculations we do NOT have yet and need to reverse-engineer from the webs
 - Discount: 0.60 confirmed; Dimension limits: 2280-6000mm W × 1900-2500mm H
 - Full analysis in `docs/FALT_SCHIEBE_TUER_ANALYSIS.md`
 
+**Insektenschutz Plissee (NEW — March 11, 2026):**
+- 3 files: Research data (TXT), Calculator (JS), Calculator (Python)
+- 2 Plissee types: 1-teilige (€906.50), 2-teilige (€1,693.50 = +€787.00)
+- ADDITIVE architecture (Architecture C) — same as Rollladen
+- SIMPLEST product analyzed — only Plissee type affects price; all colors/directions free
+- 5 frame colors (RAL Matt): Weiß 9016, Anthrazitgrau 7016, Graubraun 8019, Tiefschwarz 9005, White Aluminium 9006 — ALL €0
+- 2 opening directions: both €0; 1 net color (Black): €0
+- Height-dominant pricing: height drives cost, width has minimal/no impact
+- Dimension constraints: 700-2400mm W × 1900-2600mm H (door-height only)
+- Discount: 0.60 confirmed
+- ⚠️ CEO noted: color data may be incomplete — additional colors may exist
+- Full analysis in `docs/INSEKTENSCHUTZ_ANALYSIS.md`
+
 **⚠️ Note:** All prices are approximate ranges. Exact EUR values come from the final manufacturer catalog. For testing, use midpoint of each range.
 
 **⚠️ Drutex Surcharge Note:** CEO observed Drutex surcharges may be higher due to analysis using a larger window size. Will be verified when surcharge catalog is provided. This does NOT affect the calculation logic — only the catalog data values. See `docs/FALT_SCHIEBE_TUER_ANALYSIS.md` Section 5 for details.
@@ -456,7 +493,9 @@ These calculations we do NOT have yet and need to reverse-engineer from the webs
 | **Fenster (all materials)** | ✅ 100% | YES — just add base prices + surcharge catalog |
 | **Balkontüren** | ✅ ~97% | YES — threshold types now confirmed, exact prices from catalog |
 | **Haustüren** | ✅ ~95% | YES — side panels + transoms known, threshold + size-dep verified via Holz data |
-| **Rollladen (Aufsatz)** | ✅ ~95% | YES — just add catalog data |
+| **Rollladen (Aufsatz)** | ✅ ~97% | YES — just add catalog data |
+| **Insektenschutz Plissee** | ✅ ~90% 🆕 | YES — simplest product, just need W×H matrix + verify complete color list |
+| **Rollladen (Vorsatz)** | ✅ ~85% | MOSTLY — need full W×H matrix |
 | **Falt-Schiebe-Tür** | ⚠️ ~75% | MOSTLY — element-count logic known, need exact EUR + verify color method |
 
 ---

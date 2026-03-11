@@ -21,8 +21,8 @@
 
 | Category | Progress | Details |
 |----------|----------|---------|
-| **Calculations (engine logic)** | **~85%** | 7 of 12 product types have calculations (Haustüren ~95%, Aufsatz ~97%, Vorsatz ~85% NEW) |
-| **Catalog data (EUR prices)** | **~22%** | 9 of ~40 manufacturer/material combos (Holz Haustür ~65%, Aufsatz ~98%, Vorsatz ~80% NEW) |
+| **Calculations (engine logic)** | **~87%** | 8 of 12 product types have calculations (Haustüren ~95%, Aufsatz ~97%, Vorsatz ~85%, Insektenschutz ~90% NEW) |
+| **Catalog data (EUR prices)** | **~24%** | 10 of ~40 manufacturer/material combos (Holz Haustür ~65%, Aufsatz ~98%, Vorsatz ~80%, Insektenschutz ~85% NEW) |
 
 **Key:** Calculations = HOW prices are computed (from website analysis). Catalog data = ACTUAL prices (from manufacturer catalogs).
 Once a calculation is complete, adding a new manufacturer = just providing catalog data.
@@ -129,9 +129,19 @@ Once a calculation is complete, adding a new manufacturer = just providing catal
   - [ ] May be additive like Rollladen or unique
   - [ ] Need to analyze from fenstermaxx24.com
 
-- [ ] **Insektenschutz (Insect Protection)** — 0% complete
-  - [ ] Likely simple additive pricing (W×H formula)
-  - [ ] Need to analyze
+- [x] **Insektenschutz Plissee (Insect Protection)** — ~90% complete ✅ NEW
+  - [x] ADDITIVE architecture confirmed (same as Rollladen — Architecture C)
+  - [x] 2 Plissee types: 1-teilige (€906.50) and 2-teilige (€1,693.50, +€787.00)
+  - [x] 5 frame colors (RAL Matt) — ALL €0 surcharge (no color premium!)
+  - [x] 2 opening directions — ALL €0 surcharge
+  - [x] 1 net color (Black) — €0 surcharge
+  - [x] Discount factor confirmed (0.60)
+  - [x] Height-dominant pricing: height is primary cost driver, width has minimal impact
+  - [x] Dimension constraints: 700-2400mm W × 1900-2600mm H (door-height only)
+  - [x] Calculator implementations (JS + Python) available
+  - [x] SIMPLEST product analyzed — only Plissee type selection affects price
+  - [ ] Full W×H base price matrix NOT yet extracted (have scattered data points)
+  - [ ] ⚠️ Color list may be incomplete (CEO noted missing color options)
 
 - [ ] **Fensterbänke (Window Sills)** — 0% complete
   - [ ] Likely length-based simple calculation (length × price_per_meter)
@@ -154,6 +164,7 @@ Once a calculation is complete, adding a new manufacturer = just providing catal
 | 7 | PSK | Drutex | PVC/Kunststoff | ⚠️ **PARTIAL** — need full surcharges |
 | 8 | Haustür | Drutex | Holz (Wood) | ⚠️ **~65%** — base prices + 9 surcharges; missing colors, glass, handles (see `HOLZ_HAUSTUER_ANALYSIS.md`) |
 | 9 | Rollladen (Vorsatz) | Aluprof | Generic | ⚠️ **~80%** — 6 models, 9 drives, 12 colors, calculators. Need full W×H matrix. See `VORSATZROLLLADEN_ANALYSIS.md` |
+| 10 | Insektenschutz Plissee | Drutex | Aluminium | ⚠️ **~85%** — 2 types, 5 colors (all €0), height-dominant pricing, calculators. Color list may be incomplete. See `INSEKTENSCHUTZ_ANALYSIS.md` |
 
 ### What We DON'T Have ❌
 
@@ -195,16 +206,17 @@ Once a calculation is complete, adding a new manufacturer = just providing catal
 | Smart-Slide — All manufacturers | ❌ NEED |
 | Falt-Schiebe-Tür — All manufacturers | ❌ NEED (have Alu ranges only) |
 
-**Rollladen / Sonnenschutz — separate categories:**
+**Rollladen / Sonnenschutz / Insektenschutz — separate categories:**
 
-| Type | Status |
-|------|--------|
-| **Aufsatzrollladen** (Integrated) — Drutex | ✅ **COMPREHENSIVE** — 24 prices, 9 drives, 12 colors, calculators |
-| **Vorsatzrollladen** (Surface Mount) — Aluprof | ⚠️ **~80%** — 6 models, shared surcharges confirmed, need W×H matrix |
-| Aufsatzrollladen — Other manufacturers | ❌ NEED |
-| Vorsatzrollladen — Other manufacturers | ❌ NEED |
-| Raffstore — All | ❌ NEED |
-| Insektenschutz (standalone) | ❌ NEED |
+| Type | Category | Status |
+|------|----------|--------|
+| **Aufsatzrollladen** (Integrated) — Drutex | Rollladen | ✅ **COMPREHENSIVE** — 24 prices, 9 drives, 12 colors, calculators |
+| **Vorsatzrollladen** (Surface Mount) — Aluprof | Rollladen | ⚠️ **~80%** — 6 models, shared surcharges confirmed, need W×H matrix |
+| **Insektenschutz Plissee** — Drutex | Insektenschutz | ⚠️ **~85%** — 2 types, 5 colors (all free), height-dominant pricing. See `INSEKTENSCHUTZ_ANALYSIS.md` |
+| Aufsatzrollladen — Other manufacturers | Rollladen | ❌ NEED |
+| Vorsatzrollladen — Other manufacturers | Rollladen | ❌ NEED |
+| Insektenschutz — Other types/manufacturers | Insektenschutz | ❌ NEED |
+| Raffstore — All | Sonnenschutz | ❌ NEED |
 
 ---
 
@@ -365,11 +377,34 @@ Per manufacturer catalog checklist:
 - [ ] Document pricing components
 - [ ] Then: gather manufacturer catalog data
 
-### 4K. Insektenschutz (Insect Protection) — Calculation ❌ 0% COMPLETE
+### 4K. Insektenschutz Plissee (Insect Protection) — Calculation ✅ ~90% COMPLETE, Catalog ⚠️ ~85%
 
-- [ ] Analyze pricing (likely simple W×H formula)
-- [ ] Document options and surcharges
-- [ ] Then: gather manufacturer catalog data
+> **UPDATE (March 11, 2026):** Insektenschutz Plissee data analyzed from CEO-uploaded files.
+> - ADDITIVE architecture confirmed (Architecture C — same as Rollladen)
+> - 2 Plissee types: 1-teilige (€906.50) and 2-teilige (€1,693.50 = +€787.00)
+> - 5 frame colors (RAL Matt) — ALL €0 surcharge (no color premium — unique among all products!)
+> - Height-dominant pricing: height is primary cost driver, width has minimal impact
+> - SIMPLEST product analyzed — virtually no surcharges
+> - ⚠️ CEO noted: color list may be incomplete
+> - JS + Python calculator implementations provided. Full analysis in `INSEKTENSCHUTZ_ANALYSIS.md`.
+
+**ADDITIVE architecture (Architecture C) — confirmed. Simplest product analyzed.**
+
+Per manufacturer catalog checklist:
+- [x] Plissee type catalog (2 types) — €906.50 (1-teilige), €1,693.50 (2-teilige)
+- [x] Opening direction options (2) — ALL €0 surcharge
+- [x] Frame color options (5 RAL Matt colors) — ALL €0 surcharge
+- [x] Net color options (1 — Black) — €0
+- [x] Dimension constraints (700-2400mm W × 1900-2600mm H)
+- [x] Height-dominant pricing confirmed (height drives cost, width minimal impact)
+- [x] Discount factor confirmed (0.60)
+- [x] Calculator implementations (JS + Python)
+- [x] Example calculations verified
+- [ ] Full W×H base price matrix (only have scattered data points, not systematic grid)
+- [ ] ⚠️ Complete color catalog (CEO noted some color options may be missing)
+- [ ] Dimension step intervals (unclear — mm precision or fixed steps?)
+- [ ] 2-teilige dimension-based pricing (only have one data point for 2-teilige)
+- [ ] Second manufacturer verification
 
 ### 4L. Fensterbänke (Window Sills) — Calculation ❌ 0% COMPLETE
 
@@ -404,8 +439,11 @@ Per manufacturer catalog checklist:
 - [ ] **HST** — Analyze configurator, determine pricing architecture
 - [ ] **Smart-Slide** — Analyze configurator, check if HST variant
 - [x] **Vorsatzrollladen** — ✅ ANALYZED: ADDITIVE architecture confirmed (same as Aufsatz), 6 models, shared surcharges. See `VORSATZROLLLADEN_ANALYSIS.md`
+- [x] **Insektenschutz Plissee** — ✅ ANALYZED: ADDITIVE architecture confirmed, 2 types, 5 colors (all free), height-dominant pricing. SIMPLEST product. See `INSEKTENSCHUTZ_ANALYSIS.md`
+- [ ] **Insektenschutz Plissee:** Get complete color catalog (CEO noted data may be incomplete)
+- [ ] **Insektenschutz Plissee:** Extract full W×H price matrix (systematic grid)
 - [ ] **Raffstore** — Analyze configurator, new product type
-- [ ] **Insektenschutz** — Analyze pricing, likely simple
+- [ ] **Insektenschutz other types** — Check if other types exist beyond Plissee (e.g., Spannrahmen, Drehrahmen)
 - [ ] **Fensterbänke** — Analyze pricing, likely simple
 
 ### Priority 3 — Gather Catalog Data for New Manufacturers
@@ -434,6 +472,9 @@ Per manufacturer catalog checklist:
 - [ ] HST catalog data — After calculation is analyzed
 - [ ] Vorsatzrollladen full W×H matrix — Need complete dimension-based price grid (currently have model base prices only)
 - [ ] Vorsatzrollladen catalog data — Second manufacturer for verification
+- [ ] Insektenschutz Plissee full W×H matrix — Need systematic price grid (currently have scattered data points)
+- [ ] Insektenschutz Plissee complete colors — CEO noted set may be incomplete
+- [ ] Insektenschutz catalog data — Second manufacturer / other types (Spannrahmen, Drehrahmen?)
 - [ ] Raffstore catalog data — After calculation is analyzed
 - [ ] Smart-Slide catalog data — After calculation is analyzed
 
