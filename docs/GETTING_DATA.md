@@ -555,5 +555,5 @@ When providing catalog data for any new manufacturer, we need:
 | HST | ❌ 0% | ❌ None | Analyze fenstermaxx24.com first |
 | Smart-Slide | ❌ 0% | ❌ None | Analyze fenstermaxx24.com first |
 | Raffstore | ❌ 0% | ❌ None | Analyze fenstermaxx24.com first |
-| Insektenschutz | ❌ 0% | ❌ None | Analyze pricing |
+| Insektenschutz Plissee | ✅ **~90%** 🆕 | ⚠️ **~85%** 🆕 | SIMPLEST product. 2 types, 5 colors (all free). Need full W×H matrix + verify color list. See `INSEKTENSCHUTZ_ANALYSIS.md` |
 | Fensterbänke | ❌ 0% | ❌ None | Analyze pricing |
