@@ -1,0 +1,266 @@
+{
+  "price_matrix": {
+    "kiefer": {
+      "800": {
+        "1900": 1290.46,
+        "2000": 1534.02,
+        "2100": 1564.7,
+        "2200": 1594.83,
+        "2300": 1624.96
+      },
+      "900": {
+        "1900": 1538.66,
+        "2000": 1542.47,
+        "2100": 1573.57,
+        "2200": 1604.12,
+        "2300": 1634.67
+      },
+      "1000": {
+        "1900": 1590.71,
+        "2000": 1594.94,
+        "2100": 1627.02,
+        "2200": 1658.55,
+        "2300": 1690.64
+      },
+      "1100": {
+        "1900": 1642.76,
+        "2000": 1647.41,
+        "2100": 1681.03,
+        "2200": 1712.98,
+        "2300": 1746.05
+      },
+      "1200": {
+        "1900": 1695.37,
+        "2000": 1700.44,
+        "2100": 1734.48,
+        "2200": 1768.52,
+        "2300": 1801.45
+      }
+    },
+    "meranti": {
+      "800": {
+        "1900": 1424.21,
+        "2000": 1680.58,
+        "2100": 1713.49,
+        "2200": 1746.97,
+        "2300": 1778.76
+      },
+      "900": {
+        "1900": 1685.23,
+        "2000": 1689.02,
+        "2100": 1722.36,
+        "2200": 1756.25,
+        "2300": 1788.47
+      },
+      "1000": {
+        "1900": 1741.18,
+        "2000": 1745.39,
+        "2100": 1780.27,
+        "2200": 1814.59,
+        "2300": 1849.46
+      },
+      "1100": {
+        "1900": 1797.12,
+        "2000": 1801.76,
+        "2100": 1838.74,
+        "2200": 1874.03,
+        "2300": 1909.32
+      },
+      "1200": {
+        "1900": 1854.74,
+        "2000": 1859.81,
+        "2100": 1896.08,
+        "2200": 1932.91,
+        "2300": 1969.75
+      }
+    }
+  },
+  "surcharges": {
+    "Modell": {
+      "m1": {
+        "label": "Modell 1",
+        "surcharge": 0.0
+      },
+      "m2": {
+        "label": "Modell 2",
+        "surcharge": 32.49
+      },
+      "m3": {
+        "label": "Modell 3",
+        "surcharge": 322.37
+      },
+      "m4": {
+        "label": "Modell 4",
+        "surcharge": 198.36
+      },
+      "m5": {
+        "label": "Modell 5",
+        "surcharge": 423.5
+      },
+      "m6": {
+        "label": "Modell 6",
+        "surcharge": 394.38
+      },
+      "m7": {
+        "label": "Modell 7",
+        "surcharge": 416.61
+      },
+      "m8": {
+        "label": "Modell 8",
+        "surcharge": 465.38
+      },
+      "m9": {
+        "label": "Modell 9",
+        "surcharge": 479.15
+      },
+      "m10": {
+        "label": "Modell 10",
+        "surcharge": 262.72
+      },
+      "m11": {
+        "label": "Modell 11",
+        "surcharge": 608.29
+      },
+      "m12": {
+        "label": "Modell 12",
+        "surcharge": 523.24
+      },
+      "m13": {
+        "label": "Modell 13",
+        "surcharge": 186.8
+      },
+      "m14": {
+        "label": "Modell 14",
+        "surcharge": 585.52
+      },
+      "m15": {
+        "label": "Modell 15",
+        "surcharge": 701.69
+      },
+      "m16": {
+        "label": "Modell 16",
+        "surcharge": 309.73
+      },
+      "m17": {
+        "label": "Modell 17",
+        "surcharge": 77.16
+      },
+      "m18": {
+        "label": "Modell 18",
+        "surcharge": 109.65
+      },
+      "m19": {
+        "label": "Modell 19",
+        "surcharge": 154.32
+      },
+      "m20": {
+        "label": "Modell 20",
+        "surcharge": 231.47
+      },
+      "m21": {
+        "label": "Modell 21",
+        "surcharge": 64.98
+      },
+      "m22": {
+        "label": "Modell 22",
+        "surcharge": 142.13
+      },
+      "m23": {
+        "label": "Modell 23",
+        "surcharge": 219.28
+      }
+    },
+    "\u00d6ffnungsrichtung": {
+      "oer_dli": {
+        "label": "Drehrichtung Links Innen",
+        "surcharge": 0.0
+      },
+      "oer_dri": {
+        "label": "Drehrichtung Rechts Innen",
+        "surcharge": 0.0
+      },
+      "oer_dla": {
+        "label": "Drehrichtung Links Au\u00dfen",
+        "surcharge": 0.0
+      },
+      "oer_dra": {
+        "label": "Drehrichtung Rechts Au\u00dfen",
+        "surcharge": 0.0
+      }
+    },
+    "Verriegelung": {
+      "v2": {
+        "label": "1 Schloss - ohne Getriebe",
+        "surcharge": 0.0
+      },
+      "v1": {
+        "label": "3-fach Verriegelung",
+        "surcharge": 0.0
+      },
+      "v3": {
+        "label": "5-fach Verriegelung",
+        "surcharge": 87.54
+      }
+    },
+    "Schloss": {
+      "zs1": {
+        "label": "PZ-Hauptschloss (Standard)",
+        "surcharge": 0.0
+      },
+      "zs2": {
+        "label": "PZ-Hauptschloss (Klasse C)",
+        "surcharge": 30.87
+      }
+    },
+    "Hinterbandsicherung": {
+      "hbs0": {
+        "label": "Nein",
+        "surcharge": 0.0
+      },
+      "hbs1": {
+        "label": "Ja",
+        "surcharge": 43.33
+      }
+    },
+    "Zusatzschloss": {
+      "zks_0": {
+        "label": "Nein",
+        "surcharge": 0.0
+      },
+      "zks_1": {
+        "label": "Ja",
+        "surcharge": 0.0
+      }
+    },
+    "Elektro\u00f6ffner": {
+      "elektro_0": {
+        "label": "Nein",
+        "surcharge": 0.0
+      },
+      "elektro_1": {
+        "label": "Ja",
+        "surcharge": 61.02
+      }
+    },
+    "T\u00fcrschlie\u00dfer": {
+      "ts_0": {
+        "label": "Nein",
+        "surcharge": 0.0
+      },
+      "ts_1": {
+        "label": "Ja",
+        "surcharge": 67.0
+      }
+    },
+    "F\u00fcllungsstruktur": {
+      "fsk_0": {
+        "label": "Nein",
+        "surcharge": 0.0
+      },
+      "fsk_1": {
+        "label": "Ja",
+        "surcharge": 0.0
+      }
+    }
+  }
+}
