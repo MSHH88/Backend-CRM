@@ -1,0 +1,434 @@
+================================================================================
+INSEKTENSCHUTZ PLISSEE CONFIGURATOR - COMPLETE RESEARCH DATA
+================================================================================
+Source: https://www.fenstermaxx24.com/konfigurator/alu-insektenschutz-plissee/
+Extraction Date: 2026-03-11
+Product Type: Aluminium Insektenschutz-Plissee (Insect Protection Pleated Doors)
+Manufacturer: Drutex
+
+================================================================================
+1. PRODUCT OVERVIEW
+================================================================================
+
+The Insektenschutz Plissee is a pleated insect protection door system made from
+aluminum. It provides a perfect insect protection solution for sliding doors,
+terrace doors, folding sliding doors, and balcony doors.
+
+Key Features:
+- Top quality aluminum construction
+- Easy installation
+- 5 standard colors to choose from
+- Aluminum frame
+- Perfect insect protection solution for various door types
+- Manufacturer: Drutex
+- Profile: Iglo Plissee
+
+================================================================================
+2. PLISSEE TYPES
+================================================================================
+
+Type 1: 1-teilige Plissee Tür (Single-Part Pleated Door)
+  - Description: Single-part pleated door
+  - Base Price: 906.50 EUR
+  - Final Price (with 40% discount): 543.90 EUR
+  - Surcharge: 0.00 EUR
+  - Typical Dimensions: 700mm × 1900mm
+  - Area: 1.33 m²
+
+Type 2: 2-teilige Plissee Tür (Two-Part Pleated Door)
+  - Description: Two-part pleated door (split in the middle)
+  - Base Price: 1,693.50 EUR
+  - Final Price (with 40% discount): 1,016.15 EUR
+  - Surcharge: 787.00 EUR (compared to Type 1)
+  - Typical Dimensions: 2050mm × 1900mm
+  - Area: 3.895 m²
+  - Note: Automatically adjusts width to accommodate two-part design
+
+KEY FINDINGS - PLISSEE TYPES:
+  - Two types available
+  - 2-teilige adds significant cost (+787.00 EUR)
+  - Width automatically adjusted for 2-teilige (doubled from input)
+  - Both types have same color/opening options
+
+================================================================================
+3. OPENING DIRECTIONS (Plissee-Tür Öffnungsrichtung)
+================================================================================
+
+Direction 1: Plissee von Rechts nach Links schiebbar
+  - Description: Pleated door slides from right to left (view from inside)
+  - Surcharge: 0.00 EUR
+  - Status: Default
+
+Direction 2: Plissee von Links nach Rechts schiebbar
+  - Description: Pleated door slides from left to right (view from inside)
+  - Surcharge: 0.00 EUR
+
+KEY FINDINGS - OPENING DIRECTIONS:
+  - Two options available
+  - No surcharge for either option
+  - Default: Right to left sliding
+
+================================================================================
+4. FRAME COLORS (Rahmen Farbe)
+================================================================================
+
+All frame colors use RAL-Farben Matt (RAL Colors Matte) finish.
+NO SURCHARGE for any color selection.
+
+Color 1: Weiß (White 9016)
+  - RAL Code: 9016
+  - Surcharge: 0.00 EUR
+  - Status: Default
+
+Color 2: Anthrazitgrau (Anthracite Gray 7016)
+  - RAL Code: 7016
+  - Surcharge: 0.00 EUR
+  - TESTED: No price change from White
+
+Color 3: Graubraun (Gray-Brown 8019)
+  - RAL Code: 8019
+  - Surcharge: 0.00 EUR
+
+Color 4: Tiefschwarz (Deep Black 9005)
+  - RAL Code: 9005
+  - Surcharge: 0.00 EUR
+
+Color 5: White aluminium (9006)
+  - RAL Code: 9006
+  - Surcharge: 0.00 EUR
+
+KEY FINDINGS - FRAME COLORS:
+  - Total Colors: 5
+  - All colors: NO surcharge
+  - All colors have matte finish
+  - Color selection does NOT affect price
+  - Default: Weiß (White 9016)
+
+================================================================================
+5. NET COLOR (Netzfarbe)
+================================================================================
+
+Net Color 1: Schwarz (Black)
+  - Description: Black mesh/net
+  - Surcharge: 0.00 EUR
+  - Status: Only option available
+
+KEY FINDINGS - NET COLOR:
+  - Only one net color available
+  - Black is standard and included
+  - No surcharge
+  - No price impact
+
+================================================================================
+6. DIMENSION CONSTRAINTS
+================================================================================
+
+Width (Breite):
+  - Minimum: 700 mm
+  - Maximum: 2400 mm (for 1-teilige), 3600 mm (for 2-teilige)
+  - Default: 700 mm
+  - Unit: mm
+  - Note: For 2-teilige, width is automatically doubled from input
+
+Height (Höhe):
+  - Minimum: 1900 mm
+  - Maximum: 2600 mm
+  - Default: 1900 mm
+  - Unit: mm
+  - Range: 700 mm (very limited compared to other products)
+
+KEY FINDINGS - DIMENSIONS:
+  - Width Range: 700 - 2400 mm (1700 mm range for single-part)
+  - Height Range: 1900 - 2600 mm (700 mm range - VERY LIMITED)
+  - Minimum area: 700 × 1900 = 1.33 m²
+  - Maximum area (1-teilige): 2400 × 2600 = 6.24 m²
+  - Maximum area (2-teilige): 3600 × 2600 = 9.36 m²
+  - Height range is the most limited of all products analyzed
+
+================================================================================
+7. SIZE-BASED PRICE VARIATIONS (250mm Increments)
+================================================================================
+
+WIDTH VARIATIONS (Height fixed at 1900mm, 2-teilige Plissee):
+
+Width 700mm × Height 1900mm (1-teilige)
+  - Base Price: 906.50 EUR
+  - Final Price: 543.90 EUR
+  - Price per m²: 409.17 EUR/m²
+
+Width 950mm × Height 1900mm (1-teilige)
+  - Base Price: ~1,050 EUR (estimated)
+  - Final Price: 693.59 EUR
+  - Change: +149.69 EUR from 700mm baseline
+  - Price per m²: 363.99 EUR/m²
+
+Width 1200mm × Height 1900mm (1-teilige)
+  - Base Price: ~1,155 EUR (estimated)
+  - Final Price: 693.59 EUR
+  - Change: +149.69 EUR from 700mm baseline
+  - Price per m²: 303.83 EUR/m²
+
+HEIGHT VARIATIONS (Width fixed at 1200mm, 2-teilige Plissee):
+
+Height 1900mm × Width 1200mm
+  - Final Price: 693.59 EUR
+  - Area: 2.28 m²
+
+Height 2050mm × Width 1200mm
+  - Final Price: 855.43 EUR
+  - Change: +161.84 EUR
+  - Area: 2.46 m²
+  - Price increase per 150mm height: +161.84 EUR
+
+Height 2300mm × Width 1200mm
+  - Final Price: 902.46 EUR
+  - Change: +208.87 EUR from 1900mm baseline
+  - Area: 2.76 m²
+  - Price increase per 250mm height: +208.87 EUR
+
+BOTH DIMENSIONS VARIATION (2-teilige Plissee):
+
+Width 1450mm × Height 2300mm
+  - Final Price: 902.46 EUR
+  - Area: 3.335 m²
+  - Note: Width increase of 250mm did NOT change price from 1200×2300
+
+KEY FINDINGS - SIZE PRICING:
+  - Price increases primarily with HEIGHT changes
+  - Width changes have minimal impact on price (for 2-teilige)
+  - Height is the primary cost driver
+  - Price per m² decreases with larger dimensions
+  - Surface area calculation: Width × Height
+  - Pricing appears to be based on HEIGHT more than surface area
+
+================================================================================
+8. GLOBAL SETTINGS
+================================================================================
+
+Discount:
+  - Discount Rate: 40%
+  - Applied to: All configurations
+  - Calculation: Final Price = Base Price × (1 - 0.40)
+  - Example: 906.50 EUR × 0.60 = 543.90 EUR
+
+VAT:
+  - Included in displayed prices (inkl. MwSt.)
+  - Shipping: Excluded (zzgl. Versand)
+  - Self-pickup: Shipping waived (entfällt bei Selbstabholung)
+
+================================================================================
+9. PRICE CALCULATION LOGIC
+================================================================================
+
+Formula:
+  Final Price = (Base Price + All Surcharges) × (1 - Discount Rate)
+
+Components:
+  1. Base Price (Plissee Type Selection)
+  2. + No additional surcharges (colors, directions have 0.00 EUR)
+  3. × (1 - 0.40) = Final Price with 40% Discount
+
+Example Calculations:
+
+Configuration 1 (1-teilige, 700×1900mm, White, Right-to-Left):
+  Base: 906.50 EUR
+  + Surcharges: 0.00 EUR
+  = 906.50 EUR (before discount)
+  × 0.60 = 543.90 EUR (final price)
+
+Configuration 2 (2-teilige, 2050×1900mm, Anthrazitgrau, Left-to-Right):
+  Base: 1,693.50 EUR
+  + Surcharges: 0.00 EUR
+  = 1,693.50 EUR (before discount)
+  × 0.60 = 1,016.15 EUR (final price)
+
+Configuration 3 (2-teilige, 1200×2300mm, Any Color, Any Direction):
+  Base: ~1,504.10 EUR (estimated)
+  + Surcharges: 0.00 EUR
+  = 1,504.10 EUR (before discount)
+  × 0.60 = 902.46 EUR (final price)
+
+================================================================================
+10. BUSINESS LOGIC RULES
+================================================================================
+
+1. Plissee Type Selection:
+   - Two types available (1-teilige, 2-teilige)
+   - Type change triggers immediate price recalculation
+   - 2-teilige automatically doubles the width display
+   - 2-teilige has fixed surcharge (+787.00 EUR)
+
+2. Dimensions:
+   - Width: 700-2400mm (1-teilige) or 700-3600mm (2-teilige)
+   - Height: 1900-2600mm (fixed for both types)
+   - Height changes trigger price recalculation
+   - Width changes have minimal price impact (for 2-teilige)
+   - Prices increase with larger dimensions
+
+3. Colors:
+   - 5 frame colors available
+   - NO surcharge for any color
+   - Color change does NOT affect price
+   - All colors have matte finish
+
+4. Opening Directions:
+   - 2 directions available (Left-to-Right, Right-to-Left)
+   - NO surcharge for either direction
+   - Direction change does NOT affect price
+
+5. Net Color:
+   - Only Black available
+   - NO surcharge
+   - NO price impact
+
+6. Discount:
+   - 40% discount applied to ALL configurations
+   - Cannot be disabled
+   - Applied after all surcharges calculated
+
+================================================================================
+11. KEY INSIGHTS FOR CONFIGURATOR DEVELOPMENT
+================================================================================
+
+1. Pricing Strategy:
+   - Base model very affordable (906.50 EUR)
+   - 2-teilige adds significant cost (+787.00 EUR, +86.8%)
+   - Height is primary cost driver
+   - Width has minimal impact on price
+   - NO color or direction surcharges (simplifies UX)
+   - 40% discount always applied (good for conversion)
+
+2. Unique Characteristics:
+   - Very limited height range (1900-2600mm only)
+   - Height range is smallest of all products analyzed
+   - This suggests Insektenschutz Plissee is for specific door types
+   - Width range is generous (700-2400mm)
+   - 2-teilige type is significantly more expensive
+
+3. User Experience Considerations:
+   - Color selection is "free" (no surcharge) - good for UX
+   - Direction selection is "free" (no surcharge) - good for UX
+   - Plissee type selection has major price impact - should be highlighted
+   - Height range is very limited - may confuse users
+   - Width automatically doubled for 2-teilige - needs clear communication
+
+4. Data Structure:
+   - Simple ID-based system for options
+   - Most surcharges are 0.00 EUR (only Plissee type has surcharge)
+   - Single discount multiplier (0.60)
+   - Fast calculation possible
+   - No complex formulas needed
+
+5. Calculation Efficiency:
+   - No weight calculations needed
+   - Simple addition of surcharges (mostly 0)
+   - Single discount multiplier (0.60)
+   - Very fast calculation possible
+   - Simpler than Aufsatzrollladen or Vorsatzrollladen
+
+================================================================================
+12. COMPARISON WITH OTHER PRODUCTS
+================================================================================
+
+Insektenschutz Plissee vs Aufsatzrollladen:
+  - Plissee Height: 1900-2600mm (LIMITED)
+  - Rollladen Height: 1000-1700mm (LIMITED)
+  - Plissee Width: 700-2400mm (GENEROUS)
+  - Rollladen Width: 800-2500mm (GENEROUS)
+  - Plissee: No color surcharges
+  - Rollladen: Premium colors have surcharges
+  - Plissee: 2 types available
+  - Rollladen: 6 models available
+
+Insektenschutz Plissee vs Vorsatzrollladen:
+  - Plissee Height: 1900-2600mm (LIMITED)
+  - Vorsatzrollladen Height: 1000-1300mm (VERY LIMITED)
+  - Plissee Width: 700-2400mm (GENEROUS)
+  - Vorsatzrollladen Width: 800-2600mm (VERY GENEROUS)
+  - Plissee: Simpler pricing (no surcharges)
+  - Vorsatzrollladen: Complex pricing (many surcharges)
+
+================================================================================
+13. API ENDPOINTS & BACKEND COMMUNICATION
+================================================================================
+
+Session Management:
+  - Endpoint: /confapp/ALU-Insektenschutzplissee-bestellen-drutex/
+  - Method: POST/GET
+  - Payload: Configuration object (obj_plissee)
+
+Price Calculation:
+  - Triggered by: Configuration changes
+  - Method: AJAX (asynchronous)
+  - Response: Updated price breakdown
+
+Configuration Object Structure:
+  {
+    "breite": 700,
+    "hoehe": 1900,
+    "typ": "1-teilige",
+    "richtung": "rechts-nach-links",
+    "farbe": "weiss-9016",
+    "netzfarbe": "schwarz"
+  }
+
+Response Format:
+  - HTML with price breakdown
+  - Price summary section containing:
+    - Preisempfehlung (Recommended Price)
+    - Discount amount
+    - Final price (Unser Angebotspreis)
+    - Area calculation (m²)
+
+================================================================================
+14. TECHNICAL SPECIFICATIONS
+================================================================================
+
+Profile: Iglo Plissee
+Material: Aluminum
+Frame Type: RAL-Farben Matt (RAL Colors Matte)
+Net Color: Black (Schwarz)
+Mesh Type: Standard insect protection mesh
+
+Typical Specifications (700×1900mm):
+  - Width: 700 mm
+  - Height: 1900 mm
+  - Area: 1.33 m²
+  - Total Width: 700 mm (including all additions)
+  - Total Height: 1900 mm (including all additions)
+
+Typical Specifications (2050×1900mm, 2-teilige):
+  - Width: 2050 mm (displayed, actual 1025mm per panel)
+  - Height: 1900 mm
+  - Area: 3.895 m²
+  - Total Width: 2050 mm
+  - Total Height: 1900 mm
+
+================================================================================
+15. IMPORTANT NOTES
+================================================================================
+
+1. Height Range Limitation:
+   The Insektenschutz Plissee has the most limited height range of all
+   products analyzed (1900-2600mm only). This suggests it is designed for
+   specific door types and may not be suitable for very tall openings.
+
+2. Width Doubling for 2-teilige:
+   When selecting 2-teilige type, the width is automatically doubled in the
+   display. This needs clear communication to users to avoid confusion.
+
+3. No Color Surcharges:
+   Unlike other products, Insektenschutz Plissee does not charge surcharges
+   for color selection. This is a significant advantage for user experience.
+
+4. Height as Primary Cost Driver:
+   Height changes have much larger price impact than width changes. This
+   suggests the pricing model is based on height rather than surface area.
+
+5. Discount Always Applied:
+   The 40% discount is applied to all configurations without exception.
+   This is consistent with other products analyzed.
+
+================================================================================
+END OF RESEARCH DATA
+================================================================================
