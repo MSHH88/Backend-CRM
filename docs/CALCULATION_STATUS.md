@@ -29,14 +29,14 @@ There are **two separate things** we need:
 
 | What | Source | Status |
 |------|--------|--------|
-| **CALCULATIONS** (formulas, logic, how prices are computed) | Analyzing fenstermaxx24.com / manufacturer websites / API reverse-engineering | **~80% complete** (updated with 7B Alu data + Falt-Schiebe-Tür data) |
+| **CALCULATIONS** (formulas, logic, how prices are computed) | Analyzing fenstermaxx24.com / manufacturer websites / API reverse-engineering | **~82% complete** (updated with 7B Alu data + Falt-Schiebe-Tür data + Holz Haustür data) |
 | **CATALOG DATA** (actual EUR prices, surcharge amounts, base price tables) | Your catalogs from manufacturers | **~15% complete** (6 of ~40 combos) |
 
 **Key Insight:** Once all calculations are known, the system can accept catalog data and automatically generate pricing. The calculations are the ENGINE — the catalog data is the FUEL.
 
 ### Current Score
 
-- **Calculations we HAVE:** Fenster (100%), Balkontür (~97%), Haustüren (~92%), Rollladen (Aufsatz ~95%), Falt-Schiebe-Tür (~75%), PSK (~70%)
+- **Calculations we HAVE:** Fenster (100%), Balkontür (~97%), Haustüren (~95%), Rollladen (Aufsatz ~95%), Falt-Schiebe-Tür (~75%), PSK (~70%)
 - **Calculations we NEED:** HST, Smart-Slide, Vorsatzrollladen, Raffstore, Insektenschutz, Fensterbänke
 - **Catalog data we HAVE:** 6 complete + 1 partial (Drutex PVC, Gealan PVC, Holz, Alu Balkontür, Drutex Haustür, Rollladen, PSK partial)
 - **Catalog data we NEED:** ~30+ more manufacturer/material combinations
@@ -155,6 +155,8 @@ total = (base_price + surcharges) × 0.60
 
 ### 4C. HAUSTÜREN (Front Doors) — 1-4 Manufacturers, 2-4 Materials
 
+> **UPDATE (March 11, 2026):** Holz Haustüren data analyzed. Threshold verified, side panel size-dependency CONFIRMED.
+
 | Calculation Aspect | Status | Notes |
 |---|---|---|
 | Base dimension pricing | ✅ COMPLETE | Formula-based (NOT matrix), width-dominant |
@@ -166,14 +168,16 @@ total = (base_price + surcharges) × 0.60
 | Electronic access systems | ✅ COMPLETE | +€912–€1142 (largest surcharge) |
 | Handle surcharges | ✅ COMPLETE | Cosmetic only (€0 for most) |
 | Hinge color surcharges | ✅ COMPLETE | 0–€96.54 |
-| Threshold surcharges | ⚠️ NEEDS VERIFICATION | May vary per manufacturer |
-| Side panels (Seitenteil) | ✅ KNOWN (7B data) | 7 Bautyp variants: +€600-900 per side panel, +€350-550 for transom, +€1500-2200 for double door |
+| Threshold surcharges | ✅ VERIFIED (Holz data) | Drutex Holz: Standard only (€0), no other options offered. PIRNAR: separate shop, not comparable. Threshold is manufacturer-specific. |
+| Side panels (Seitenteil) | ✅ VERIFIED SIZE-DEPENDENT | **Non-linear width-based pricing confirmed**: 330mm=+€378, 500mm=+€643, 1000mm=+€1,684. NOT a fixed surcharge — needs width-based formula in engine. |
 | Transom (Oberlicht) | ✅ KNOWN (7B data) | Included in Bautyp surcharges: Oberlicht +€350-550, OL+SL combo +€950-1450 |
 | Security/Access options | ✅ KNOWN (7B data) | Verriegelung 3-fach, Elektroöffner, Fingerprint (€450-750), Türschließer, Hinterbandsicherung |
-| **Overall Haustür Calc** | **✅ ~92% COMPLETE** | **Side panels + transoms now known via 7B. Exact prices from catalog.** |
+| **Overall Haustür Calc** | **✅ ~95% COMPLETE** | **Threshold + side panel size-dep verified. Exact prices from catalog.** |
 
-**Manufacturers with catalog data:** Drutex PVC ✅
-**Manufacturers MISSING catalog data:** ALL other Haustür manufacturers/materials
+**⚠️ Engine Impact:** Side panel surcharges CANNOT be stored as fixed EUR — must implement width-based formula. This is a key architectural finding.
+
+**Manufacturers with catalog data:** Drutex PVC ✅, Drutex Holz ✅ (new — side panel data)
+**Manufacturers MISSING catalog data:** Other Haustür manufacturers/materials
 
 ### 4D. PSK (Parallel-Schiebe-Kipptür) — 1-3 Manufacturers, 2-3 Materials
 
@@ -356,11 +360,13 @@ These calculations we do NOT have yet and need to reverse-engineer from the webs
 > Full analysis in `docs/7B_DATASET_ANALYSIS.md`.
 > **UPDATE (March 10, 2026):** CEO uploaded 3 Falt-Schiebe-Tür Aluminium datasets.
 > Full analysis in `docs/FALT_SCHIEBE_TUER_ANALYSIS.md`.
+> **UPDATE (March 11, 2026):** CEO uploaded Holz Haustüren surcharge & sizing analysis.
+> Threshold verified (Standard only), side panel SIZE-DEPENDENCY confirmed (non-linear).
 
 | Product | What Was Missing | Data Received? | New Status | Remaining Gap |
 |---------|-----------------|----------------|------------|---------------|
 | **PSK** | Complete surcharge catalog, verify extreme size pricing | ✅ YES — 5 surcharge options + extreme size rules + 4 profiles | **~70%** (was 60%) | Full surcharge catalog depth (5 options received, ~20+ expected), exact EUR prices |
-| **Haustüren** | Side panel (Seitenteil) pricing, Transom (Oberlicht) pricing | ✅ YES — 7 Bautyp variants with price ranges | **~92%** (was 85%) | Exact EUR prices, verify if side panel surcharges are size-dependent |
+| **Haustüren** | Side panel (Seitenteil) pricing, Transom (Oberlicht) pricing, threshold verification, side panel size-dep | ✅ YES — 7 Bautyp variants + Holz threshold + side panel sizing | **~95%** (was 92%) | Exact EUR prices. Side panel needs width-based formula (NOT fixed surcharge). |
 | **Balkontüren** | Verify threshold-specific surcharges | ✅ YES — 4 threshold types confirmed | **~97%** (was 95%) | Exact EUR prices |
 | **Falt-Schiebe-Tür** | ALL calculation data (was 0%) | ✅ YES — 3 files: calculation logic + size pricing + surcharges | **~75%** (was 0%) | Exact EUR values, verify % colors, derive non-linear formula, quantify glass weight limits |
 
@@ -375,6 +381,15 @@ These calculations we do NOT have yet and need to reverse-engineer from the webs
 - 7 Bautyp variants: 1 Flügel (€0), +Seitenteil links/rechts (€600-900 each), +2 Seitenteile (€1200-1800), +Oberlicht (€350-550), +OL+SL (€950-1450), 2 Flügel (€1500-2200)
 - 5 security options: Verriegelung 3-fach (€80-150), Elektroöffner (€45-75), Fingerprint (€450-750), Türschließer (€120-220), Hinterbandsicherung (€35/unit)
 - Side panel width range: 300-1000mm; Max total height with transom: 3000mm
+
+**Haustüren (Holz — NEW March 11, 2026):**
+- Threshold: Drutex Holz only offers Standard threshold (€0). No Flache/Magnet/Rollstuhlgerecht options. PIRNAR uses separate shop items — no direct comparison possible.
+- Side panels: CONFIRMED SIZE-DEPENDENT (non-linear). NOT a fixed surcharge.
+  - 330mm width → +€378.19 surcharge
+  - 500mm width → +€642.95 surcharge
+  - 1000mm width → +€1,684.23 surcharge
+  - Reference: 1-Wing door, Pine, 1900mm height, base price €1,290.46 (40% discount applied)
+- **Engine impact:** Side panel pricing needs width-based formula (polynomial or stepped), not fixed EUR lookup. This differs from the 7B Alu data which showed fixed-range surcharges per Bautyp.
 
 **PSK (Alu):**
 - 4 profiles: MB-70 (€2,396.21 base), MB-70 HI, MB-86 SI, MB-79N SI
@@ -399,7 +414,7 @@ These calculations we do NOT have yet and need to reverse-engineer from the webs
 |---------|--------|-----|
 | **Fenster (all materials)** | ✅ 100% | YES — just add base prices + surcharge catalog |
 | **Balkontüren** | ✅ ~97% | YES — threshold types now confirmed, exact prices from catalog |
-| **Haustüren** | ✅ ~92% | YES — side panels + transoms now known, exact prices from catalog |
+| **Haustüren** | ✅ ~95% | YES — side panels + transoms known, threshold + size-dep verified via Holz data |
 | **Rollladen (Aufsatz)** | ✅ ~95% | YES — just add catalog data |
 | **Falt-Schiebe-Tür** | ⚠️ ~75% | MOSTLY — element-count logic known, need exact EUR + verify color method |
 
@@ -478,16 +493,17 @@ For a product where the calculation is complete (e.g., Fenster):
 - [ ] Threshold (Schwelle) options and surcharges
 - [ ] Opening direction options specific to Balkontür
 
-### 9C. FOR HAUSTÜREN (Front Doors) — Calculation ✅ ~85% COMPLETE
+### 9C. FOR HAUSTÜREN (Front Doors) — Calculation ✅ ~95% COMPLETE
 
 **Typical: 1-4 manufacturers, 2-4 materials**
 
 | Manufacturer/Material | Have? | What You Need to Provide |
 |---|---|---|
 | Drutex PVC | ✅ HAVE | Nothing — data ready |
+| Drutex Holz | ✅ HAVE (partial) | Threshold + side panel data verified (March 11, 2026) |
 | Other PVC manufacturers | ❌ NEED | Model catalog + Price catalog + Surcharges |
 | Aluminium doors | ❌ NEED | Model catalog + Price catalog + Surcharges |
-| Holz doors | ❌ NEED | Model catalog + Price catalog + Surcharges |
+| Other Holz doors | ❌ NEED | Model catalog + Price catalog + Surcharges |
 
 **Per manufacturer catalog must include:**
 - [ ] Model list with base prices (doors are model-based, not just size-based)
@@ -497,8 +513,9 @@ For a product where the calculation is complete (e.g., Fenster):
 - [ ] Handle options + prices
 - [ ] Hinge color options + prices
 - [ ] Security hardware options + prices
-- [ ] Side panel (Seitenteil) options + prices (if offered)
+- [ ] Side panel (Seitenteil) options + prices — **⚠️ SIZE-DEPENDENT: need width-based pricing, not just fixed surcharges**
 - [ ] Transom (Oberlicht) options + prices (if offered)
+- [x] Threshold (Schwelle) options — verified: Drutex Holz=Standard only (€0)
 
 ### 9D. FOR TERRASSENTÜREN — Calculations Partially/Not Complete
 

@@ -21,7 +21,7 @@
 
 | Category | Progress | Details |
 |----------|----------|---------|
-| **Calculations (engine logic)** | **~80%** | 6 of 12 product types have calculations |
+| **Calculations (engine logic)** | **~82%** | 6 of 12 product types have calculations (Haustüren updated to ~95%) |
 | **Catalog data (EUR prices)** | **~15%** | 6 of ~40 manufacturer/material combos |
 
 **Key:** Calculations = HOW prices are computed (from website analysis). Catalog data = ACTUAL prices (from manufacturer catalogs).
@@ -49,7 +49,7 @@ Once a calculation is complete, adding a new manufacturer = just providing catal
   - [x] Opening direction options
   - [ ] Exact EUR threshold prices (have ranges, need catalog values)
 
-- [x] **Haustüren (Front Doors)** — ~92% complete
+- [x] **Haustüren (Front Doors)** — ~95% complete (was ~92%)
   - [x] Base dimension pricing (formula-based, width-dominant)
   - [x] Width/height impact calculation (+€37.77/100mm W, +€1.64/100mm H)
   - [x] Model selection tiers (3 tiers)
@@ -58,8 +58,8 @@ Once a calculation is complete, adding a new manufacturer = just providing catal
   - [x] Side panels — 7 Bautyp variants (from 7B Alu data)
   - [x] Transom pricing (from 7B Alu data)
   - [x] Security/access options
-  - [ ] Verify threshold surcharges per manufacturer
-  - [ ] Verify if side panel surcharges are size-dependent
+  - [x] Threshold surcharges verified — Drutex Holz: only Standard threshold (€0), no other options offered. PIRNAR uses separate shop (not same configurator). Threshold options are manufacturer-specific.
+  - [x] Side panel surcharges are SIZE-DEPENDENT ✅ CONFIRMED — non-linear increase with width: +€378 at 330mm, +€643 at 500mm, +€1,684 at 1000mm (Drutex Holz, 1-Wing, Pine, 1900mm H). Not a fixed fee — dynamic calculation based on dimensions.
   - [ ] Exact EUR prices (have ranges, need catalog values)
 
 - [x] **Rollladen Aufsatz (Integrated Shutters)** — ~95% complete
@@ -225,7 +225,12 @@ Per manufacturer catalog checklist:
 - [ ] Balkontür-specific opening direction options
 - [ ] Exact EUR for 4 threshold types (Standard, Flache, Magnet, Rollstuhlgerecht)
 
-### 4C. Haustüren (Front Doors) — Calculation ✅ ~92% COMPLETE
+### 4C. Haustüren (Front Doors) — Calculation ✅ ~95% COMPLETE
+
+> **UPDATE (March 11, 2026):** Holz Haustüren data analyzed from CEO-uploaded file.
+> - Threshold: Drutex Holz only offers Standard (€0), no other options. PIRNAR uses separate shop.
+> - Side panels: CONFIRMED size-dependent, non-linear pricing (+€378 at 330mm to +€1,684 at 1000mm).
+> - **Impact on engine:** Side panel pricing needs width-based formula, NOT fixed surcharge.
 
 Per manufacturer catalog checklist:
 - [ ] Model list with base prices (grouped by tier)
@@ -236,9 +241,10 @@ Per manufacturer catalog checklist:
 - [ ] Electronic access system options + EUR prices
 - [ ] Handle options + EUR prices
 - [ ] Hinge color options + EUR prices
-- [ ] Threshold options + EUR prices
+- [x] Threshold options — verified: manufacturer-specific (Drutex Holz: Standard only €0)
 - [ ] Security hardware options + EUR prices (RC2, Verriegelung, etc.)
-- [ ] Side panel (Seitenteil) options + EUR prices per Bautyp variant
+- [x] Side panel (Seitenteil) — CONFIRMED size-dependent: width-based formula needed (not fixed EUR)
+  - Drutex Holz reference: 330mm=+€378, 500mm=+€643, 1000mm=+€1,684 (1-Wing, Pine, 1900mm H)
 - [ ] Transom (Oberlicht) options + EUR prices
 - [ ] Discount factor confirmation
 
@@ -318,7 +324,8 @@ Per manufacturer catalog checklist:
 - [ ] **PSK:** Get full surcharge catalog from Drutex (we have 5 of ~20+ surcharges)
 - [ ] **Falt-Schiebe-Tür:** Verify color surcharge method (% or fixed EUR?) from catalog
 - [ ] **Falt-Schiebe-Tür:** Get exact EUR prices (currently have ranges)
-- [ ] **Haustüren:** Verify threshold surcharges per manufacturer
+- [x] **Haustüren:** Verify threshold surcharges per manufacturer — ✅ DONE (Drutex Holz: Standard only €0, no alternatives. Threshold options are manufacturer-specific.)
+- [x] **Haustüren:** Verify if side panel surcharges are size-dependent — ✅ CONFIRMED size-dependent (non-linear: +€378 at 330mm → +€1,684 at 1000mm)
 - [ ] **Balkontüren:** Get exact EUR for threshold types
 
 ### Priority 2 — Analyze Missing Calculations (From fenstermaxx24.com)
@@ -427,7 +434,7 @@ When providing catalog data for any new manufacturer, we need:
 |---------|:-----------:|:------------:|-----------|
 | Fenster | ✅ 100% | ✅ 3 combos | Gather more manufacturer catalogs |
 | Balkontüren | ✅ 97% | ✅ 1 combo | Gather PVC/Holz catalogs + exact EUR thresholds |
-| Haustüren | ✅ 92% | ✅ 1 combo | Verify thresholds + gather 2nd manufacturer |
+| Haustüren | ✅ 95% | ✅ 1 combo | Thresholds + side panels verified; gather 2nd manufacturer |
 | Rollladen (Aufsatz) | ✅ 95% | ✅ 1 combo | Verify with 2nd manufacturer |
 | Falt-Schiebe-Tür | ⚠️ 75% | ⚠️ Ranges | Verify color method + get exact EUR |
 | PSK | ⚠️ 70% | ⚠️ Partial | Get full surcharge catalog |
