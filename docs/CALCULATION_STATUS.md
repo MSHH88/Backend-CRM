@@ -29,18 +29,18 @@ There are **two separate things** we need:
 
 | What | Source | Status |
 |------|--------|--------|
-| **CALCULATIONS** (formulas, logic, how prices are computed) | Analyzing fenstermaxx24.com / manufacturer websites / API reverse-engineering | **~82% complete** (updated with 7B Alu data + Falt-Schiebe-Tür data + Holz Haustür data) |
-| **CATALOG DATA** (actual EUR prices, surcharge amounts, base price tables) | Your catalogs from manufacturers | **~15% complete** (6 of ~40 combos) |
+| **CALCULATIONS** (formulas, logic, how prices are computed) | Analyzing fenstermaxx24.com / manufacturer websites / API reverse-engineering | **~85% complete** (updated with Vorsatzrollladen data + 7B Alu data + Falt-Schiebe-Tür data + Holz Haustür data) |
+| **CATALOG DATA** (actual EUR prices, surcharge amounts, base price tables) | Your catalogs from manufacturers | **~18% complete** (7 of ~40 combos) |
 
 **Key Insight:** Once all calculations are known, the system can accept catalog data and automatically generate pricing. The calculations are the ENGINE — the catalog data is the FUEL.
 
 ### Current Score
 
-- **Calculations we HAVE:** Fenster (100%), Balkontür (~97%), Haustüren (~95%), Rollladen (Aufsatz ~95%), Falt-Schiebe-Tür (~75%), PSK (~70%)
-- **Calculations we NEED:** HST, Smart-Slide, Vorsatzrollladen, Raffstore, Insektenschutz, Fensterbänke
-- **Catalog data we HAVE:** 6 complete + 2 partial (Drutex PVC, Gealan PVC, Holz Fenster, Alu Balkontür, Drutex Haustür PVC, Rollladen, PSK partial, **Drutex Holz Haustür ~65%**)
+- **Calculations we HAVE:** Fenster (100%), Balkontür (~97%), Haustüren (~95%), Rollladen Aufsatz (~97%), Rollladen Vorsatz (~85% 🆕), Falt-Schiebe-Tür (~75%), PSK (~70%)
+- **Calculations we NEED:** HST, Smart-Slide, Raffstore, Insektenschutz, Fensterbänke
+- **Catalog data we HAVE:** 7 complete + 2 partial (Drutex PVC, Gealan PVC, Holz Fenster, Alu Balkontür, Drutex Haustür PVC, Aufsatzrollladen, Vorsatzrollladen partial 🆕, PSK partial, **Drutex Holz Haustür ~65%**)
 - **Catalog data we NEED:** ~30+ more manufacturer/material combinations
-- **Recent update:** Holz Haustüren dataset analyzed (March 11, 2026) — see `docs/HOLZ_HAUSTUER_ANALYSIS.md`
+- **Recent update:** Vorsatzrollladen dataset analyzed (March 11, 2026) — see `docs/VORSATZROLLLADEN_ANALYSIS.md`
 
 ---
 
@@ -111,9 +111,10 @@ surcharges = farbe + antrieb + seitenblende + putztraeger
 total = (base_price + surcharges) × 0.60
 ```
 
-- **Used by:** Rollladen (Aufsatz), likely Vorsatzrollladen
-- **Status:** ✅ Aufsatzrollladen UNDERSTOOD, ❌ Vorsatzrollladen UNKNOWN
+- **Used by:** Rollladen (Aufsatz), Rollladen (Vorsatz)
+- **Status:** ✅ Aufsatzrollladen UNDERSTOOD, ✅ Vorsatzrollladen UNDERSTOOD (~85%)
 - **Key difference:** Uses server-side session state (obj_rollladen), separate from main konfigurator
+- **Shared surcharges:** Panel colors (12) and drive types (9) are IDENTICAL between Aufsatz and Vorsatz
 
 ---
 
@@ -261,12 +262,36 @@ total = (base_price + surcharges) × 0.60
 **Manufacturers with catalog data:** Drutex ✅
 **Manufacturers MISSING catalog data:** Other Rollladen manufacturers (often only 1-2 for Rollladen)
 
-### 4I. VORSATZROLLLADEN (External Shutters) — ❌ NO DATA
+### 4I. VORSATZROLLLADEN (Surface Mount Shutters) — ✅ ~85% COMPLETE 🆕
+
+> **UPDATE (March 11, 2026):** Vorsatzrollladen dataset analyzed from CEO-uploaded files.
+> ADDITIVE architecture (Architecture C) confirmed — same as Aufsatzrollladen.
+> Full analysis in `docs/VORSATZROLLLADEN_ANALYSIS.md`.
 
 | Calculation Aspect | Status | Notes |
 |---|---|---|
-| All aspects | ❌ UNKNOWN | Likely similar additive architecture to Aufsatzrollladen |
-| **Overall Vorsatz Calc** | **❌ 0% COMPLETE** | **Need to analyze from fenstermaxx24.com** |
+| Architecture type | ✅ ADDITIVE (C) | Same as Aufsatzrollladen: `Final = (Base + Surcharges) × 0.60` |
+| Model catalog | ✅ 6 models | 3 Aluprof profiles (SK 45°, SKO-P Rund, SP-E 90° Unterputz) × ±insect protection |
+| Model base prices | ✅ Complete (at min dims) | €171.98 (Model 1) to €502.17 (Model 5) at 800×1000 |
+| Insect protection | ✅ +€159.38 flat | Same surcharge amount as Aufsatzrollladen |
+| Drive types | ✅ 9 options | **IDENTICAL** to Aufsatzrollladen (€0–€769.05) |
+| Panel colors | ✅ 12 options | **IDENTICAL** to Aufsatzrollladen (10 std + 2 premium) |
+| Box height | ✅ 3 options | 137mm/165mm/180mm — all €0 (different from Aufsatz) |
+| Rails | ✅ 2 options | Standard/Premium — both €0 |
+| Lamella width | ✅ 1 option | 39mm — €0 |
+| Drive side | ✅ 2 options | Links/Rechts — both €0 |
+| Dimension constraints | ✅ Complete | 800–2600mm W × 1000–1300mm H (narrower height than Aufsatz) |
+| Discount factor | ✅ 0.60 | Confirmed (same universal discount) |
+| Calculator code | ✅ JS + Python | Ready for integration |
+| Full W×H price matrix | ⚠️ PARTIAL | Only model base prices at 800×1000; need full grid |
+| Size-based scaling | ⚠️ Sample data only | Price increases with width observed, formula not derived |
+| Weight formula | ❌ NOT documented | May not apply to surface mount installation |
+| **Overall Vorsatz Calc** | **✅ ~85% COMPLETE** | **Architecture confirmed, models + surcharges documented. Need full W×H matrix.** |
+
+**Key insight:** Vorsatz and Aufsatz share the same ADDITIVE architecture and many identical surcharges (colors, drives, discount). Engine can reuse shared components.
+
+**Manufacturers with catalog data:** Aluprof/fenstermaxx24 ✅
+**Manufacturers MISSING catalog data:** Other Vorsatzrollladen manufacturers
 
 ### 4J. RAFFSTORE (External Blinds) — ❌ NO DATA
 
@@ -353,7 +378,7 @@ These calculations we do NOT have yet and need to reverse-engineer from the webs
 | **HST (Hebe-Schiebe-Tür)** | Likely Formula-based (B) | HIGH | Medium | Check if similar to PSK |
 | **Smart-Slide** | Likely Formula-based (B) | MEDIUM | Medium | May be variant of HST |
 | ~~**Falt-Schiebe-Tür**~~ | ~~Unknown~~ | ~~LOW~~ | ~~Medium~~ | ✅ **MOVED to 7B** — data received, now ~75% complete. See `docs/FALT_SCHIEBE_TUER_ANALYSIS.md` |
-| **Vorsatzrollladen** | Likely Additive (C) | MEDIUM | Small | Likely similar to Aufsatzrollladen |
+| ~~**Vorsatzrollladen**~~ | ~~Likely Additive (C)~~ | ~~MEDIUM~~ | ~~Small~~ | ✅ **ANALYZED** — ADDITIVE architecture confirmed, ~85% complete. See `docs/VORSATZROLLLADEN_ANALYSIS.md` |
 | **Raffstore** | Unknown | LOW | Medium | External blind, new product type |
 | **Insektenschutz** | Likely Simple additive | LOW | Small | Probably simple W×H formula |
 | **Fensterbänke** | Likely Linear (length-based) | LOW | Small | Simple length × price_per_meter |
@@ -366,6 +391,9 @@ These calculations we do NOT have yet and need to reverse-engineer from the webs
 > Full analysis in `docs/FALT_SCHIEBE_TUER_ANALYSIS.md`.
 > **UPDATE (March 11, 2026):** CEO uploaded Holz Haustüren surcharge & sizing analysis.
 > Threshold verified (Standard only), side panel SIZE-DEPENDENCY confirmed (non-linear).
+> **UPDATE (March 11, 2026):** CEO uploaded Vorsatzrollladen dataset.
+> ADDITIVE architecture confirmed, 6 models (3 Aluprof profiles × ±insect), shared surcharges with Aufsatz verified.
+> Full analysis in `docs/VORSATZROLLLADEN_ANALYSIS.md`.
 
 | Product | What Was Missing | Data Received? | New Status | Remaining Gap |
 |---------|-----------------|----------------|------------|---------------|

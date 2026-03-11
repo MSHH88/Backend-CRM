@@ -21,8 +21,8 @@
 
 | Category | Progress | Details |
 |----------|----------|---------|
-| **Calculations (engine logic)** | **~83%** | 6 of 12 product types have calculations (Haustüren ~95%, Rollladen ~97%) |
-| **Catalog data (EUR prices)** | **~20%** | 8 of ~40 manufacturer/material combos (Holz Haustür ~65%, Rollladen upgraded to ~98%) |
+| **Calculations (engine logic)** | **~85%** | 7 of 12 product types have calculations (Haustüren ~95%, Aufsatz ~97%, Vorsatz ~85% NEW) |
+| **Catalog data (EUR prices)** | **~22%** | 9 of ~40 manufacturer/material combos (Holz Haustür ~65%, Aufsatz ~98%, Vorsatz ~80% NEW) |
 
 **Key:** Calculations = HOW prices are computed (from website analysis). Catalog data = ACTUAL prices (from manufacturer catalogs).
 Once a calculation is complete, adding a new manufacturer = just providing catalog data.
@@ -116,9 +116,14 @@ Once a calculation is complete, adding a new manufacturer = just providing catal
   - [ ] May be variant of HST
   - [ ] Need to analyze from fenstermaxx24.com
 
-- [ ] **Vorsatzrollladen (External Shutters)** — 0% complete
-  - [ ] Likely similar additive architecture to Aufsatzrollladen
-  - [ ] Need to analyze from fenstermaxx24.com
+- [x] **Vorsatzrollladen (Surface Mount Shutters)** — ~85% complete ✅ NEW
+  - [x] ADDITIVE architecture confirmed (same as Aufsatzrollladen)
+  - [x] 6 models (3 Aluprof profiles × ±insect protection) with base prices
+  - [x] Shared surcharges confirmed: same 12 colors, same 9 drives as Aufsatz
+  - [x] Dimension constraints documented (800-2600mm W × 1000-1300mm H)
+  - [x] Calculator implementations (JS + Python) available
+  - [ ] Full W×H price matrix NOT yet extracted (only base prices at 800×1000)
+  - [ ] Size-based price scaling needs more data points
 
 - [ ] **Raffstore (External Blinds)** — 0% complete
   - [ ] May be additive like Rollladen or unique
@@ -145,9 +150,10 @@ Once a calculation is complete, adding a new manufacturer = just providing catal
 | 3 | Fenster | Drutex | Holz (Wood) | ✅ **Ready** — 378 data points |
 | 4 | Balkontür | Aluprof | Aluminium | ✅ **Ready** — 288 data points |
 | 5 | Haustür | Drutex | PVC/Kunststoff | ✅ **Ready** — formula-based |
-| 6 | Rollladen | Drutex | Generic | ✅ **COMPREHENSIVE** — 24 base prices, 9 drives, 12 colors, weight formula. See `AUFSATZROLLLADEN_ANALYSIS.md` |
+| 6 | Rollladen (Aufsatz) | Drutex | Generic | ✅ **COMPREHENSIVE** — 24 base prices, 9 drives, 12 colors, weight formula. See `AUFSATZROLLLADEN_ANALYSIS.md` |
 | 7 | PSK | Drutex | PVC/Kunststoff | ⚠️ **PARTIAL** — need full surcharges |
 | 8 | Haustür | Drutex | Holz (Wood) | ⚠️ **~65%** — base prices + 9 surcharges; missing colors, glass, handles (see `HOLZ_HAUSTUER_ANALYSIS.md`) |
+| 9 | Rollladen (Vorsatz) | Aluprof | Generic | ⚠️ **~80%** — 6 models, 9 drives, 12 colors, calculators. Need full W×H matrix. See `VORSATZROLLLADEN_ANALYSIS.md` |
 
 ### What We DON'T Have ❌
 
@@ -189,12 +195,14 @@ Once a calculation is complete, adding a new manufacturer = just providing catal
 | Smart-Slide — All manufacturers | ❌ NEED |
 | Falt-Schiebe-Tür — All manufacturers | ❌ NEED (have Alu ranges only) |
 
-**Rollladen / Sonnenschutz — need ~3+ more combos:**
+**Rollladen / Sonnenschutz — separate categories:**
 
 | Type | Status |
 |------|--------|
-| Aufsatzrollladen — Drutex | ✅ **COMPREHENSIVE** — 24 prices, 9 drives, 12 colors, calculators |
-| Vorsatzrollladen — All | ❌ NEED |
+| **Aufsatzrollladen** (Integrated) — Drutex | ✅ **COMPREHENSIVE** — 24 prices, 9 drives, 12 colors, calculators |
+| **Vorsatzrollladen** (Surface Mount) — Aluprof | ⚠️ **~80%** — 6 models, shared surcharges confirmed, need W×H matrix |
+| Aufsatzrollladen — Other manufacturers | ❌ NEED |
+| Vorsatzrollladen — Other manufacturers | ❌ NEED |
 | Raffstore — All | ❌ NEED |
 | Insektenschutz (standalone) | ❌ NEED |
 
@@ -322,12 +330,33 @@ Per manufacturer catalog checklist:
 - [ ] Get exact EUR prices (currently have approximate ranges only)
 - [ ] Gather additional manufacturer catalogs (have Alu ranges only)
 
-### 4I. Vorsatzrollladen (External Shutters) — Calculation ❌ 0% COMPLETE
+### 4I. Vorsatzrollladen (Surface Mount Shutters) — Calculation ✅ ~85% COMPLETE, Catalog ⚠️ ~80%
 
-- [ ] Analyze Vorsatzrollladen configurator on fenstermaxx24.com
-- [ ] Determine if same additive architecture as Aufsatzrollladen
-- [ ] Document pricing components
-- [ ] Then: gather manufacturer catalog data
+> **UPDATE (March 11, 2026):** Vorsatzrollladen data analyzed from CEO-uploaded files.
+> - ADDITIVE architecture confirmed (same as Aufsatzrollladen)
+> - 6 models (3 Aluprof profiles × ±insect protection): SK 45°, SKO-P Round, SP-E 90° Unterputz
+> - Shared surcharges: IDENTICAL 12 colors and 9 drives as Aufsatzrollladen
+> - Insect protection surcharge confirmed at €159.38 (same as Aufsatz)
+> - Dimensions: 800-2600mm W × 1000-1300mm H (narrower height than Aufsatz)
+> - JS + Python calculator implementations provided. Full analysis in `VORSATZROLLLADEN_ANALYSIS.md`.
+
+**ADDITIVE architecture (Architecture C) — confirmed. Same formula as Aufsatzrollladen.**
+
+Per manufacturer catalog checklist:
+- [x] Model catalog (6 models) — base prices €171.98 to €502.17
+- [x] Model surcharges — €0/€170.81/€67.56/€231.21/€330.19/€159.38
+- [x] Drive type surcharges (9 options) — €0 to €769.05 — **IDENTICAL to Aufsatz**
+- [x] Panel color surcharges (12 options) — 10 standard (€0), 2 premium (€27.86/€63.14) — **IDENTICAL to Aufsatz**
+- [x] Box height options (3) — 137mm/165mm/180mm, all €0
+- [x] Rail options (2) — both €0
+- [x] Lamella width (1 option) — €0
+- [x] Dimension constraints documented (800-2600mm W × 1000-1300mm H)
+- [x] Discount factor confirmed (0.60)
+- [x] Calculator implementations (JS + Python)
+- [ ] Full W×H base price matrix (only have model prices at 800×1000 base dimensions)
+- [ ] Size-based price scaling characterization (need more data points per dimension)
+- [ ] Weight calculation (not observed — may not apply to surface mount)
+- [ ] Second manufacturer verification
 
 ### 4J. Raffstore (External Blinds) — Calculation ❌ 0% COMPLETE
 
@@ -374,7 +403,7 @@ Per manufacturer catalog checklist:
 
 - [ ] **HST** — Analyze configurator, determine pricing architecture
 - [ ] **Smart-Slide** — Analyze configurator, check if HST variant
-- [ ] **Vorsatzrollladen** — Analyze configurator, likely similar to Aufsatz
+- [x] **Vorsatzrollladen** — ✅ ANALYZED: ADDITIVE architecture confirmed (same as Aufsatz), 6 models, shared surcharges. See `VORSATZROLLLADEN_ANALYSIS.md`
 - [ ] **Raffstore** — Analyze configurator, new product type
 - [ ] **Insektenschutz** — Analyze pricing, likely simple
 - [ ] **Fensterbänke** — Analyze pricing, likely simple
@@ -403,7 +432,8 @@ Per manufacturer catalog checklist:
 - [ ] Schüco Aluminium doors — Full catalog
 - [ ] PSK complete — All manufacturers
 - [ ] HST catalog data — After calculation is analyzed
-- [ ] Vorsatzrollladen catalog data — After calculation is analyzed
+- [ ] Vorsatzrollladen full W×H matrix — Need complete dimension-based price grid (currently have model base prices only)
+- [ ] Vorsatzrollladen catalog data — Second manufacturer for verification
 - [ ] Raffstore catalog data — After calculation is analyzed
 - [ ] Smart-Slide catalog data — After calculation is analyzed
 
@@ -478,11 +508,11 @@ When providing catalog data for any new manufacturer, we need:
 | Balkontüren | ✅ 97% | ✅ 1 combo | Gather PVC/Holz catalogs + exact EUR thresholds |
 | Haustüren | ✅ 95% | ⚠️ 2 combos | Thresholds + side panels verified; Holz ~65% (need colors/glass); gather 2nd manufacturer |
 | Rollladen (Aufsatz) | ✅ 97% | ✅ **~98%** | Comprehensive: 24 prices, 9 drives, 12 colors, JS+PY calcs. See `AUFSATZROLLLADEN_ANALYSIS.md` |
+| Rollladen (Vorsatz) | ✅ **~85%** 🆕 | ⚠️ **~80%** 🆕 | 6 models analyzed, shared surcharges confirmed. Need full W×H matrix. See `VORSATZROLLLADEN_ANALYSIS.md` |
 | Falt-Schiebe-Tür | ⚠️ 75% | ⚠️ Ranges | Verify color method + get exact EUR |
 | PSK | ⚠️ 70% | ⚠️ Partial | Get full surcharge catalog |
 | HST | ❌ 0% | ❌ None | Analyze fenstermaxx24.com first |
 | Smart-Slide | ❌ 0% | ❌ None | Analyze fenstermaxx24.com first |
-| Vorsatzrollladen | ❌ 0% | ❌ None | Analyze fenstermaxx24.com first |
 | Raffstore | ❌ 0% | ❌ None | Analyze fenstermaxx24.com first |
 | Insektenschutz | ❌ 0% | ❌ None | Analyze pricing |
 | Fensterbänke | ❌ 0% | ❌ None | Analyze pricing |
