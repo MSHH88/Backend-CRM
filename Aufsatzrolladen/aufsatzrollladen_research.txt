@@ -1,0 +1,336 @@
+================================================================================
+AUFSATZROLLLADEN CONFIGURATOR - RESEARCH REPORT
+================================================================================
+URL: https://www.fenstermaxx24.com/konfigurator/konfigurator-aufsatzrollladen/
+Iframe URL: https://confde.fenstermaxx24.com/confapp/Aufsatzrollladen-bestellen/
+
+================================================================================
+API ENDPOINTS
+================================================================================
+
+1. Set Session Configuration
+   URL: /ajax/setObjectTOSession/
+   Method: POST
+   Parameters: csrf_cyko, obj (JSON stringified)
+   Purpose: Save user configuration to session
+
+2. Calculate Price
+   URL: /ajax/fn_berechnen/
+   Method: POST
+   Purpose: Recalculate price based on current configuration
+
+3. Get Min/Max Values
+   URL: /ajax/setminmax/
+   Method: POST
+   Purpose: Retrieve dimension constraints
+
+4. Get HTML Content
+   URL: /ajax/getHTMLContent/
+   Method: POST
+   Purpose: Fetch rendered price breakdown
+
+5. Add to Cart
+   URL: /ajax/fn_addWarenkorb/
+   Method: POST
+   Purpose: Add configured product to shopping cart
+
+================================================================================
+BASE PRICE MATRIX (in EUR)
+================================================================================
+
+Width (mm) | Height 1000mm | Height 1200mm | Height 1400mm | Height 1700mm
+-----------|---------------|---------------|---------------|---------------
+800        | 286.00        | 301.66        | 318.36        | 343.41
+1000       | 317.32        | 336.10        | 355.94        | 384.12
+1200       | 348.63        | 370.55        | 392.47        | 424.83
+1500       | 395.60        | 420.65        | 446.75        | 486.41
+2000       | 473.88        | 507.29        | 539.64        | 592.88
+2500       | 552.16        | 593.92        | 632.54        | 699.35
+
+Minimum Price: €286.00 (800mm × 1000mm)
+Maximum Price: €699.35 (2500mm × 1700mm)
+
+================================================================================
+ROLLER SHUTTER MODELS
+================================================================================
+
+Model 1: Aufsatzrollladen mit Revision von Unten
+  ID: fn_rollladen_model_1
+  Surcharge: €0.00
+
+Model 2: Aufsatzrollladen mit Revision von der Seite
+  ID: fn_rollladen_model_2
+  Surcharge: €0.00
+
+Model 3: Aufsatzrollladen mit Revision von Unten + Insektenschutz
+  ID: fn_rollladen_model_3
+  Surcharge: €159.38
+
+Model 4: Aufsatzrollladen mit Revision von der Seite + Insektenschutz
+  ID: fn_rollladen_model_4
+  Surcharge: €159.38
+
+================================================================================
+DRIVE TYPES & MOTORS (Antriebsart)
+================================================================================
+
+1. Schwenkgurtwickler 14mm Weiß
+   ID: antriebsart_1
+   Surcharge: €0.00
+   Type: Manual - Belt winder
+
+2. Schwenkgurtwickler 14mm Braun
+   ID: antriebsart_2
+   Surcharge: €0.00
+   Type: Manual - Belt winder
+
+3. Getriebe mit Kurbel
+   ID: antriebsart_4
+   Surcharge: €188.80
+   Type: Manual - Gearbox with crank
+
+4. Getriebe mit abnehmbarer Kurbel
+   ID: antriebsart_5
+   Surcharge: €188.00
+   Type: Manual - Gearbox with removable crank
+
+5. Motor mit Schalter und Hinderniserkennung
+   ID: antriebsart_6
+   Surcharge: €246.46
+   Type: Electric - Motor with switch and obstacle detection
+
+6. Motor mit Schlüsselschalter und Hinderniserkennung
+   ID: antriebsart_7
+   Surcharge: €369.80
+   Type: Electric - Motor with key switch and obstacle detection
+
+7. Motor Rescue für Flucht und Rettungsweg
+   ID: antriebsart_8
+   Surcharge: €638.94
+   Type: Electric - Rescue motor for emergency escape routes
+
+8. Motor Somfy OXIMO RS100 iO
+   ID: antriebsart_9
+   Surcharge: €576.95
+   Type: Electric - Smart motor (IoT enabled)
+
+9. Motor Somfy OXIMO RS100 iO + Fernbedienung
+   ID: antriebsart_10
+   Surcharge: €769.05
+   Type: Electric - Smart motor with remote control
+
+================================================================================
+PANEL COLORS (Panzerfarbe)
+================================================================================
+
+1. Silber (Silver)
+   ID: farbe_panzer_1
+   Surcharge: €0.00
+
+2. Weiß (White)
+   ID: farbe_panzer_2
+   Surcharge: €0.00
+
+3. Grau (Gray)
+   ID: farbe_panzer_3
+   Surcharge: €0.00
+
+4. Braun (Brown)
+   ID: farbe_panzer_4
+   Surcharge: €0.00
+
+5. Dunkelbraun (Dark Brown)
+   ID: farbe_panzer_5
+   Surcharge: €0.00
+
+6. Golden Oak
+   ID: farbe_panzer_6
+   Surcharge: €27.86
+
+7. Nussbaum (Walnut)
+   ID: farbe_panzer_7
+   Surcharge: €63.14
+
+8. Anthrazit (Anthracite)
+   ID: farbe_panzer_8
+   Surcharge: €0.00
+
+9. Moosgrün (Moss Green)
+   ID: farbe_panzer_9
+   Surcharge: €0.00
+
+10. Braun Metallic (Brown Metallic)
+    ID: farbe_panzer_10
+    Surcharge: €0.00
+
+11. Grau Aluminium (Aluminum Gray)
+    ID: farbe_panzer_11
+    Surcharge: €0.00
+
+12. Beige
+    ID: farbe_panzer_12
+    Surcharge: €0.00
+
+================================================================================
+BOX HEIGHT (Kastenhöhe)
+================================================================================
+
+1. 175 mm (Modell: SKS)
+   ID: kastenhoehe_175
+   Surcharge: €0.00
+
+2. 215 mm (Modell: DRUTEX)
+   ID: kastenhoehe_215
+   Surcharge: -€65.01 (DISCOUNT)
+
+================================================================================
+PLASTER CARRIER & TRIM (Putzträger und Putzleiste)
+================================================================================
+
+1. Ohne Putzträger und -leiste (Without)
+   ID: putztraeger_0
+   Surcharge: €0.00
+
+2. Putzträger und -leiste außen (Outside)
+   ID: putztraeger_1
+   Surcharge: €17.57
+
+3. Putzträger und -leiste innen (Inside)
+   ID: putztraeger_2
+   Surcharge: €17.57
+
+4. Putzträger und -leiste beidseitig (Both sides)
+   ID: putztraeger_3
+   Surcharge: €35.14
+
+================================================================================
+BUSINESS LOGIC & CALCULATIONS
+================================================================================
+
+WEIGHT CALCULATION FORMULA:
+  rollgewicht = (height * width * 3.6 / 1000000) / division
+  
+  If rollgewicht >= 12:
+    -> Display error warning to user
+    -> Prevent configuration
+
+PRICE CALCULATION:
+  Total Price = Base Price + All Surcharges
+  Final Price = Total Price * 0.6  (40% discount applied)
+
+DIMENSION CONSTRAINTS:
+  Width Range: 800 mm - 2500 mm
+  Height Range: 1000 mm - 1700 mm
+
+DIVISION OPTIONS:
+  Aufteilung 1 (Single section)
+  Aufteilung 2 (Two sections)
+  Aufteilung 3 (Three sections)
+  etc.
+
+================================================================================
+PRICE CALCULATION EXAMPLES
+================================================================================
+
+Example 1: Basic Configuration
+  Width: 800 mm
+  Height: 1000 mm
+  Model: Aufsatzrollladen mit Revision von Unten
+  Drive: Schwenkgurtwickler 14mm Weiß
+  Color: Weiß
+  Box Height: 175 mm
+  Plaster: Without
+  
+  Calculation:
+    Base Price: €286.00
+    Model Surcharge: €0.00
+    Drive Surcharge: €0.00
+    Color Surcharge: €0.00
+    Plaster Surcharge: €0.00
+    Total: €286.00
+    Final (with 40% discount): €171.60
+
+Example 2: Premium Configuration
+  Width: 2500 mm
+  Height: 1700 mm
+  Model: Aufsatzrollladen mit Revision von Unten + Insektenschutz
+  Drive: Motor Somfy OXIMO RS100 iO + Fernbedienung
+  Color: Nussbaum
+  Box Height: 175 mm
+  Plaster: Both sides
+  
+  Calculation:
+    Base Price: €699.35
+    Model Surcharge: €159.38
+    Drive Surcharge: €769.05
+    Color Surcharge: €63.14
+    Plaster Surcharge: €35.14
+    Total: €1,726.06
+    Final (with 40% discount): €1,035.64
+
+================================================================================
+KEY FINDINGS
+================================================================================
+
+1. PRICING STRUCTURE:
+   - Base price increases linearly with both width and height
+   - Price range spans from €286 to €699 for base configurations
+   - Additional surcharges can increase total by up to €769 (motor option)
+
+2. MOTOR COSTS:
+   - Manual options (belt winder, gearbox): €0-€188.80
+   - Electric motors: €246.46-€769.05
+   - Smart motors (Somfy): €576.95-€769.05
+   - Most expensive: Motor Somfy + Remote Control (€769.05)
+
+3. COLOR PREMIUM:
+   - Standard colors (Silber, Weiß, Grau, etc.): No surcharge
+   - Premium colors: Golden Oak (+€27.86), Nussbaum (+€63.14)
+   - Highest color surcharge: Nussbaum at €63.14
+
+4. BOX HEIGHT DISCOUNT:
+   - Larger box (215mm) offers €65.01 discount vs standard (175mm)
+   - This is the only negative surcharge in the system
+
+5. PLASTER CARRIER:
+   - Outside only: €17.57
+   - Inside only: €17.57
+   - Both sides: €35.14
+
+6. INSECT PROTECTION:
+   - Adds €159.38 to base price
+   - Available for both revision models
+
+7. GLOBAL DISCOUNT:
+   - All prices receive 40% discount at checkout
+   - Discount applies to total of base + all surcharges
+
+================================================================================
+CONFIGURATION OBJECT STRUCTURE
+================================================================================
+
+obj_rollladen = {
+  fn_rollladen: "fn_rollladen_ja",
+  fn_rollladen_model: "fn_rollladen_model_1",
+  fn_rollladen_breite: "800",
+  fn_rollladen_hoehe: "1000",
+  fn_rollladen_aufteilung: "aufteilung_1",
+  fn_rollladen_kastenadapter: "kastenadapter_1",
+  fn_rollladen_lamellenbreite: "lamellenbreite_37",
+  fn_rollladen_kastenhoehe: "kastenhoehe_175",
+  fn_rollladen_schiene: "schiene_1",
+  fn_rollladen_farbe_schiene: "farbe_schiene_2",
+  fn_rollladen_farbe_panzer: "farbe_panzer_2",
+  fn_rollladen_antriebsart: "antriebsart_1",
+  fn_rollladen_antriebsseite: "antriebsseite_0",
+  fn_rollladen_seitenblende: "seitenblende_0",
+  fn_rollladen_putztraeger: "putztraeger_0",
+  fn_min_breite: 1600,
+  fn_max_breite: 5000,
+  fn_min_hoehe: 1000,
+  fn_max_hoehe: 1700
+}
+
+================================================================================
+END OF REPORT
+================================================================================

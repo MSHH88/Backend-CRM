@@ -1,0 +1,471 @@
+================================================================================
+AUFSATZROLLLADEN CONFIGURATOR - COMPLETE RESEARCH DATA
+================================================================================
+Source URL: https://www.fenstermaxx24.com/konfigurator/konfigurator-aufsatzrollladen/
+Iframe URL: https://confde.fenstermaxx24.com/confapp/Aufsatzrollladen-bestellen/
+Data Extraction Date: 2026-03-11
+
+================================================================================
+API ENDPOINTS
+================================================================================
+
+1. Set Session Configuration
+   Endpoint: /ajax/setObjectTOSession/
+   Method: POST
+   Parameters: csrf_cyko, obj (JSON stringified configuration)
+   Description: Saves user configuration to server session
+
+2. Calculate Price
+   Endpoint: /ajax/fn_berechnen/
+   Method: POST
+   Description: Recalculates total price based on current configuration
+
+3. Get Min/Max Dimensions
+   Endpoint: /ajax/setminmax/
+   Method: POST
+   Description: Retrieves minimum and maximum dimension constraints
+
+4. Get HTML Content
+   Endpoint: /ajax/getHTMLContent/
+   Method: POST
+   Description: Fetches rendered price breakdown HTML
+
+5. Add to Shopping Cart
+   Endpoint: /ajax/fn_addWarenkorb/
+   Method: POST
+   Description: Adds configured product to shopping cart
+
+================================================================================
+COMPLETE BASE PRICE MATRIX (All 24 Configurations)
+================================================================================
+
+Format: Width (mm) x Height (mm) = Price (EUR)
+
+800mm Width:
+  800 x 1000 = 286.00
+  800 x 1200 = 301.66
+  800 x 1400 = 318.36
+  800 x 1700 = 343.41
+
+1000mm Width:
+  1000 x 1000 = 317.32
+  1000 x 1200 = 336.10
+  1000 x 1400 = 355.94
+  1000 x 1700 = 384.12
+
+1200mm Width:
+  1200 x 1000 = 348.63
+  1200 x 1200 = 370.55
+  1200 x 1400 = 392.47
+  1200 x 1700 = 424.83
+
+1500mm Width:
+  1500 x 1000 = 395.60
+  1500 x 1200 = 420.65
+  1500 x 1400 = 446.75
+  1500 x 1700 = 486.41
+
+2000mm Width:
+  2000 x 1000 = 473.88
+  2000 x 1200 = 507.29
+  2000 x 1400 = 539.64
+  2000 x 1700 = 592.88
+
+2500mm Width:
+  2500 x 1000 = 552.16
+  2500 x 1200 = 593.92
+  2500 x 1400 = 632.54
+  2500 x 1700 = 699.35
+
+Price Statistics:
+  Minimum Price: 286.00 (800mm x 1000mm)
+  Maximum Price: 699.35 (2500mm x 1700mm)
+  Price Range: 413.35
+  Average Price: 455.45
+
+================================================================================
+ROLLER SHUTTER MODELS (fn_rollladen_model_*)
+================================================================================
+
+Model 1: Aufsatzrollladen mit Revision von Unten
+  ID: fn_rollladen_model_1
+  Description: Roller shutter with bottom revision
+  Surcharge: 0.00
+
+Model 2: Aufsatzrollladen mit Revision von der Seite
+  ID: fn_rollladen_model_2
+  Description: Roller shutter with side revision
+  Surcharge: 0.00
+
+Model 3: Aufsatzrollladen mit Revision von Unten + Insektenschutz
+  ID: fn_rollladen_model_3
+  Description: Roller shutter with bottom revision + insect protection
+  Surcharge: 159.38
+
+Model 4: Aufsatzrollladen mit Revision von der Seite + Insektenschutz
+  ID: fn_rollladen_model_4
+  Description: Roller shutter with side revision + insect protection
+  Surcharge: 159.38
+
+================================================================================
+DRIVE TYPES & MOTORS (antriebsart_*)
+================================================================================
+
+Drive Type 1: Manual Belt Winder - White
+  ID: antriebsart_1
+  Name: Schwenkgurtwickler 14mm Weiss
+  Type: Manual
+  Surcharge: 0.00
+
+Drive Type 2: Manual Belt Winder - Brown
+  ID: antriebsart_2
+  Name: Schwenkgurtwickler 14mm Braun
+  Type: Manual
+  Surcharge: 0.00
+
+Drive Type 3: Manual Gearbox with Crank
+  ID: antriebsart_4
+  Name: Getriebe mit Kurbel
+  Type: Manual
+  Surcharge: 188.80
+
+Drive Type 4: Manual Gearbox with Removable Crank
+  ID: antriebsart_5
+  Name: Getriebe mit abnehmbarer Kurbel
+  Type: Manual
+  Surcharge: 188.00
+
+Drive Type 5: Electric Motor with Switch and Obstacle Detection
+  ID: antriebsart_6
+  Name: Motor mit Schalter und Hinderniserkennung
+  Type: Electric
+  Surcharge: 246.46
+
+Drive Type 6: Electric Motor with Key Switch and Obstacle Detection
+  ID: antriebsart_7
+  Name: Motor mit Schluesselschalter und Hinderniserkennung
+  Type: Electric
+  Surcharge: 369.80
+
+Drive Type 7: Electric Rescue Motor for Emergency Routes
+  ID: antriebsart_8
+  Name: Motor Rescue fuer Flucht und Rettungsweg
+  Type: Electric - Emergency
+  Surcharge: 638.94
+
+Drive Type 8: Smart Motor Somfy OXIMO RS100 iO
+  ID: antriebsart_9
+  Name: Motor Somfy OXIMO RS100 iO
+  Type: Electric - Smart/IoT
+  Surcharge: 576.95
+
+Drive Type 9: Smart Motor Somfy OXIMO RS100 iO with Remote Control
+  ID: antriebsart_10
+  Name: Motor Somfy OXIMO RS100 iO + Fernbedienung
+  Type: Electric - Smart/IoT with Remote
+  Surcharge: 769.05
+
+Drive Type Surcharge Summary:
+  Manual Options: 0.00 - 188.80
+  Electric Options: 246.46 - 769.05
+  Most Expensive: 769.05 (Somfy with remote)
+
+================================================================================
+PANEL COLORS (farbe_panzer_*)
+================================================================================
+
+Color 1: Silver
+  ID: farbe_panzer_1
+  Name: Silber
+  Surcharge: 0.00
+
+Color 2: White
+  ID: farbe_panzer_2
+  Name: Weiss
+  Surcharge: 0.00
+
+Color 3: Gray
+  ID: farbe_panzer_3
+  Name: Grau
+  Surcharge: 0.00
+
+Color 4: Brown
+  ID: farbe_panzer_4
+  Name: Braun
+  Surcharge: 0.00
+
+Color 5: Dark Brown
+  ID: farbe_panzer_5
+  Name: Dunkelbraun
+  Surcharge: 0.00
+
+Color 6: Golden Oak (Premium)
+  ID: farbe_panzer_6
+  Name: Golden Oak
+  Surcharge: 27.86
+
+Color 7: Walnut (Premium)
+  ID: farbe_panzer_7
+  Name: Nussbaum
+  Surcharge: 63.14
+
+Color 8: Anthracite
+  ID: farbe_panzer_8
+  Name: Anthrazit
+  Surcharge: 0.00
+
+Color 9: Moss Green
+  ID: farbe_panzer_9
+  Name: Moosgruen
+  Surcharge: 0.00
+
+Color 10: Brown Metallic
+  ID: farbe_panzer_10
+  Name: Braun Metallic
+  Surcharge: 0.00
+
+Color 11: Aluminum Gray
+  ID: farbe_panzer_11
+  Name: Grau Aluminium
+  Surcharge: 0.00
+
+Color 12: Beige
+  ID: farbe_panzer_12
+  Name: Beige
+  Surcharge: 0.00
+
+Color Surcharge Summary:
+  Standard Colors (No Surcharge): 10 colors
+  Premium Colors: 2 colors
+  Highest Surcharge: 63.14 (Walnut/Nussbaum)
+
+================================================================================
+BOX HEIGHT OPTIONS (kastenhoehe_*)
+================================================================================
+
+Box Height 1: Standard Size
+  ID: kastenhoehe_175
+  Height: 175 mm
+  Model: SKS
+  Surcharge: 0.00
+
+Box Height 2: Larger Size
+  ID: kastenhoehe_215
+  Height: 215 mm
+  Model: DRUTEX
+  Surcharge: -65.01 (DISCOUNT - This is the only negative surcharge)
+
+================================================================================
+PLASTER CARRIER & TRIM OPTIONS (putztraeger_*)
+================================================================================
+
+Option 1: Without Plaster Carrier
+  ID: putztraeger_0
+  Description: Ohne Putztraeger und -leiste
+  Surcharge: 0.00
+
+Option 2: Plaster Carrier Outside Only
+  ID: putztraeger_1
+  Description: Putztraeger und -leiste aussen
+  Surcharge: 17.57
+
+Option 3: Plaster Carrier Inside Only
+  ID: putztraeger_2
+  Description: Putztraeger und -leiste innen
+  Surcharge: 17.57
+
+Option 4: Plaster Carrier Both Sides
+  ID: putztraeger_3
+  Description: Putztraeger und -leiste beidseitig
+  Surcharge: 35.14
+
+================================================================================
+BUSINESS LOGIC & CALCULATION FORMULAS
+================================================================================
+
+WEIGHT CALCULATION:
+  Formula: rollgewicht = (height_mm * width_mm * 3.6 / 1000000) / division
+  
+  Where:
+    height_mm = Height in millimeters
+    width_mm = Width in millimeters
+    division = Number of sections (1, 2, 3, etc.)
+    
+  Constraint: If rollgewicht >= 12 kg, display error and prevent configuration
+
+PRICE CALCULATION:
+  Step 1: Get base price from matrix based on width x height
+  Step 2: Add all applicable surcharges:
+    - Model surcharge (0.00 or 159.38)
+    - Drive surcharge (0.00 to 769.05)
+    - Color surcharge (0.00 to 63.14)
+    - Box height surcharge (0.00 or -65.01)
+    - Plaster surcharge (0.00 to 35.14)
+  Step 3: Calculate subtotal = base price + all surcharges
+  Step 4: Apply global discount = subtotal * 0.40 (40% off)
+  Step 5: Final price = subtotal - discount amount
+
+DIMENSION CONSTRAINTS:
+  Width Range: 800 mm (minimum) to 2500 mm (maximum)
+  Height Range: 1000 mm (minimum) to 1700 mm (maximum)
+  Valid Widths: 800, 1000, 1200, 1500, 2000, 2500 mm
+  Valid Heights: 1000, 1200, 1400, 1700 mm
+
+DIVISION OPTIONS:
+  Supported divisions: 1, 2, 3+ (affects weight calculation)
+
+================================================================================
+PRICE CALCULATION EXAMPLES
+================================================================================
+
+EXAMPLE 1: Minimum Configuration
+  Width: 800 mm
+  Height: 1000 mm
+  Model: fn_rollladen_model_1 (Revision von Unten)
+  Drive: antriebsart_1 (Manual Belt Winder White)
+  Color: farbe_panzer_2 (White)
+  Box Height: kastenhoehe_175 (175mm SKS)
+  Plaster: putztraeger_0 (Without)
+  
+  Calculation:
+    Base Price: 286.00
+    Model Surcharge: 0.00
+    Drive Surcharge: 0.00
+    Color Surcharge: 0.00
+    Box Height Surcharge: 0.00
+    Plaster Surcharge: 0.00
+    Subtotal: 286.00
+    Discount (40%): -114.40
+    FINAL PRICE: 171.60
+
+EXAMPLE 2: Mid-Range Configuration
+  Width: 1500 mm
+  Height: 1400 mm
+  Model: fn_rollladen_model_1
+  Drive: antriebsart_6 (Motor with Switch)
+  Color: farbe_panzer_6 (Golden Oak)
+  Box Height: kastenhoehe_175
+  Plaster: putztraeger_1 (Outside)
+  
+  Calculation:
+    Base Price: 446.75
+    Model Surcharge: 0.00
+    Drive Surcharge: 246.46
+    Color Surcharge: 27.86
+    Box Height Surcharge: 0.00
+    Plaster Surcharge: 17.57
+    Subtotal: 738.64
+    Discount (40%): -295.46
+    FINAL PRICE: 443.18
+
+EXAMPLE 3: Premium Configuration
+  Width: 2500 mm
+  Height: 1700 mm
+  Model: fn_rollladen_model_3 (Revision + Insect Protection)
+  Drive: antriebsart_10 (Somfy Motor + Remote)
+  Color: farbe_panzer_7 (Walnut/Nussbaum)
+  Box Height: kastenhoehe_175
+  Plaster: putztraeger_3 (Both Sides)
+  
+  Calculation:
+    Base Price: 699.35
+    Model Surcharge: 159.38
+    Drive Surcharge: 769.05
+    Color Surcharge: 63.14
+    Box Height Surcharge: 0.00
+    Plaster Surcharge: 35.14
+    Subtotal: 1726.06
+    Discount (40%): -690.42
+    FINAL PRICE: 1035.64
+
+EXAMPLE 4: Configuration with Box Height Discount
+  Width: 2000 mm
+  Height: 1200 mm
+  Model: fn_rollladen_model_1
+  Drive: antriebsart_4 (Manual Gearbox)
+  Color: farbe_panzer_2 (White)
+  Box Height: kastenhoehe_215 (Larger - DISCOUNT)
+  Plaster: putztraeger_0
+  
+  Calculation:
+    Base Price: 507.29
+    Model Surcharge: 0.00
+    Drive Surcharge: 188.80
+    Color Surcharge: 0.00
+    Box Height Surcharge: -65.01 (DISCOUNT!)
+    Plaster Surcharge: 0.00
+    Subtotal: 631.08
+    Discount (40%): -252.43
+    FINAL PRICE: 378.65
+
+================================================================================
+CONFIGURATION OBJECT STRUCTURE (JavaScript/JSON Format)
+================================================================================
+
+obj_rollladen = {
+  fn_rollladen: "fn_rollladen_ja",
+  fn_rollladen_model: "fn_rollladen_model_1",
+  fn_rollladen_breite: "800",
+  fn_rollladen_hoehe: "1000",
+  fn_rollladen_aufteilung: "aufteilung_1",
+  fn_rollladen_kastenadapter: "kastenadapter_1",
+  fn_rollladen_lamellenbreite: "lamellenbreite_37",
+  fn_rollladen_kastenhoehe: "kastenhoehe_175",
+  fn_rollladen_schiene: "schiene_1",
+  fn_rollladen_farbe_schiene: "farbe_schiene_2",
+  fn_rollladen_farbe_panzer: "farbe_panzer_2",
+  fn_rollladen_antriebsart: "antriebsart_1",
+  fn_rollladen_antriebsseite: "antriebsseite_0",
+  fn_rollladen_seitenblende: "seitenblende_0",
+  fn_rollladen_putztraeger: "putztraeger_0",
+  fn_min_breite: 1600,
+  fn_max_breite: 5000,
+  fn_min_hoehe: 1000,
+  fn_max_hoehe: 1700
+}
+
+================================================================================
+KEY BUSINESS INSIGHTS
+================================================================================
+
+1. PRICING STRUCTURE:
+   - Base prices range from 286 to 699 (144% increase)
+   - Prices increase consistently with both dimensions
+   - Linear relationship between size and base price
+
+2. SURCHARGE HIERARCHY:
+   - Drive/Motor: Largest cost factor (up to 769.05)
+   - Model (Insect Protection): Fixed 159.38 premium
+   - Color: Minor factor (max 63.14)
+   - Plaster: Small factor (max 35.14)
+   - Box Height: Only negative surcharge (-65.01)
+
+3. MOTOR COSTS BREAKDOWN:
+   - Manual (Belt/Gearbox): 0.00-188.80
+   - Electric (Basic): 246.46-369.80
+   - Electric (Smart/Somfy): 576.95-769.05
+   - Cost difference: Smart motors cost 2.2-3.1x more
+
+4. COLOR STRATEGY:
+   - 10 standard colors: No premium
+   - 2 premium colors: +27.86 to +63.14
+   - Walnut is most expensive color option
+
+5. GLOBAL DISCOUNT:
+   - 40% discount applied to ALL configurations
+   - Discount applies to base + surcharges
+   - Effective pricing: 60% of calculated total
+
+6. WEIGHT CONSTRAINT:
+   - Formula: (H x W x 3.6 / 1000000) / division
+   - Maximum weight: 12 kg per section
+   - Affects large single-section configurations
+
+7. PRICE RANGE ANALYSIS:
+   - Minimum final price: 171.60 (basic 800x1000)
+   - Maximum final price: 1035.64 (premium 2500x1700)
+   - Price ratio: 6:1 (max to min)
+
+================================================================================
+END OF COMPLETE RESEARCH DATA
+================================================================================
