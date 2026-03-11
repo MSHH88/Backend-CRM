@@ -21,8 +21,8 @@
 
 | Category | Progress | Details |
 |----------|----------|---------|
-| **Calculations (engine logic)** | **~82%** | 6 of 12 product types have calculations (Haustüren updated to ~95%) |
-| **Catalog data (EUR prices)** | **~18%** | 7 of ~40 manufacturer/material combos (added Drutex Holz Haustür ~65%) |
+| **Calculations (engine logic)** | **~83%** | 6 of 12 product types have calculations (Haustüren ~95%, Rollladen ~97%) |
+| **Catalog data (EUR prices)** | **~20%** | 8 of ~40 manufacturer/material combos (Holz Haustür ~65%, Rollladen upgraded to ~98%) |
 
 **Key:** Calculations = HOW prices are computed (from website analysis). Catalog data = ACTUAL prices (from manufacturer catalogs).
 Once a calculation is complete, adding a new manufacturer = just providing catalog data.
@@ -62,13 +62,17 @@ Once a calculation is complete, adding a new manufacturer = just providing catal
   - [x] Side panel surcharges are SIZE-DEPENDENT ✅ CONFIRMED — non-linear increase with width: +€378 at 330mm, +€643 at 500mm, +€1,684 at 1000mm (Drutex Holz, 1-Wing, Pine, 1900mm H). Not a fixed fee — dynamic calculation based on dimensions.
   - [ ] Exact EUR prices (have ranges, need catalog values)
 
-- [x] **Rollladen Aufsatz (Integrated Shutters)** — ~95% complete
-  - [x] Base dimension pricing
-  - [x] Kastenhoehe variants (175mm vs 215mm)
-  - [x] Model selection (4 models)
-  - [x] Drive type surcharges (manual, motor)
-  - [x] Color surcharges (Kasten + Panzer)
-  - [x] Seitenblende + Putzträger surcharges
+- [x] **Rollladen Aufsatz (Integrated Shutters)** — ~97% complete (was ~95%)
+  - [x] Base dimension pricing — **COMPLETE 24-point matrix** (6W × 4H)
+  - [x] Kastenhoehe variants (175mm vs 215mm) — 215mm = -€65.01 discount
+  - [x] Model selection (4 models) — insect protection +€159.38
+  - [x] Drive type surcharges — **EXPANDED to 9 options** (was 6): added Motor Rescue €638.94, Somfy OXIMO €576.95, Somfy + Remote €769.05
+  - [x] Color surcharges (Kasten + Panzer) — **12 colors confirmed** (was 11 + 1 unconfirmed): Nussbaum CORRECTED €81.71→€63.14, Braun Metallic CONFIRMED €0, added Beige €0
+  - [x] Seitenblende + Putzträger surcharges — Putzträger beidseitig CORRECTED €35.25→€35.14
+  - [x] Weight calculation formula: `(H × W × 3.6 / 1M) / divisions`, max 12kg per section
+  - [x] Calculator implementations available (JS + Python)
+  - [ ] Seitenblende pricing not yet separately verified
+  - [ ] Farbe Kasten/Führungsschienen not yet separated from base
   - [ ] Verify with second manufacturer (only have Drutex)
 
 - [x] **Falt-Schiebe-Tür (Folding Doors)** — ~75% complete
@@ -141,7 +145,7 @@ Once a calculation is complete, adding a new manufacturer = just providing catal
 | 3 | Fenster | Drutex | Holz (Wood) | ✅ **Ready** — 378 data points |
 | 4 | Balkontür | Aluprof | Aluminium | ✅ **Ready** — 288 data points |
 | 5 | Haustür | Drutex | PVC/Kunststoff | ✅ **Ready** — formula-based |
-| 6 | Rollladen | Drutex | Generic | ✅ **Ready** — additive model |
+| 6 | Rollladen | Drutex | Generic | ✅ **COMPREHENSIVE** — 24 base prices, 9 drives, 12 colors, weight formula. See `AUFSATZROLLLADEN_ANALYSIS.md` |
 | 7 | PSK | Drutex | PVC/Kunststoff | ⚠️ **PARTIAL** — need full surcharges |
 | 8 | Haustür | Drutex | Holz (Wood) | ⚠️ **~65%** — base prices + 9 surcharges; missing colors, glass, handles (see `HOLZ_HAUSTUER_ANALYSIS.md`) |
 
@@ -189,7 +193,7 @@ Once a calculation is complete, adding a new manufacturer = just providing catal
 
 | Type | Status |
 |------|--------|
-| Aufsatzrollladen — Drutex | ✅ HAVE |
+| Aufsatzrollladen — Drutex | ✅ **COMPREHENSIVE** — 24 prices, 9 drives, 12 colors, calculators |
 | Vorsatzrollladen — All | ❌ NEED |
 | Raffstore — All | ❌ NEED |
 | Insektenschutz (standalone) | ❌ NEED |
@@ -251,7 +255,33 @@ Per manufacturer catalog checklist:
 - [ ] Transom (Oberlicht) options + EUR prices
 - [ ] Discount factor confirmation
 
-### 4D. PSK (Terrace Sliding Door) — Calculation ⚠️ ~70% COMPLETE
+### 4D. Rollladen Aufsatz (Integrated Shutters) — Calculation ✅ ~97% COMPLETE, Catalog ✅ ~98%
+
+> **UPDATE (March 11, 2026):** Comprehensive Aufsatzrollladen data analyzed from CEO-uploaded files.
+> - Complete 24-point base price matrix (6W × 4H) — replaces partial data
+> - 3 NEW drive types added: Motor Rescue (€638.94), Somfy OXIMO (€576.95), Somfy + Remote (€769.05)
+> - Price CORRECTIONS: Nussbaum €81.71→€63.14, Braun Metallic confirmed €0, Putzträger beidseitig €35.25→€35.14
+> - Weight formula documented: `(H × W × 3.6 / 1M) / divisions`, max 12kg
+> - JS + Python calculator implementations provided. Full analysis in `AUFSATZROLLLADEN_ANALYSIS.md`.
+
+**ADDITIVE architecture (Architecture C) — confirmed. Catalog data essentially complete.**
+
+Per manufacturer catalog checklist:
+- [x] Base price matrix (width × height → EUR) — **24 data points COMPLETE**
+- [x] Model selection (4 models) — €0/€0/€159.38/€159.38
+- [x] Drive type surcharges (9 options) — €0 to €769.05
+- [x] Panel color surcharges (12 options) — 10 standard (€0), 2 premium (€27.86/€63.14)
+- [x] Box height options (2) — 175mm €0, 215mm -€65.01 (discount)
+- [x] Plaster carrier options (4) — €0 to €35.14
+- [x] Weight calculation formula + constraints
+- [x] Discount factor confirmed (0.60)
+- [x] API endpoints documented (5 endpoints)
+- [x] Calculator implementations (JS + Python)
+- [ ] Seitenblende surcharge options (not yet separately tested)
+- [ ] Farbe Kasten/Führungsschienen (box/guide rail color, not separated from base)
+- [ ] Second manufacturer verification
+
+### 4E. PSK (Terrace Sliding Door) — Calculation ⚠️ ~70% COMPLETE
 
 **Still need both calculation completion AND catalog data:**
 - [ ] Resolve height pricing anomalies at 2500mm+
@@ -264,7 +294,7 @@ Per manufacturer catalog checklist:
 - [ ] Size range and pricing table
 - [ ] Discount factor confirmation
 
-### 4E. HST (Lift-Slide Door) — Calculation ❌ 0% COMPLETE
+### 4F. HST (Lift-Slide Door) — Calculation ❌ 0% COMPLETE
 
 **Need to FIRST analyze calculation logic, THEN gather catalog data:**
 - [ ] Analyze HST configurator on fenstermaxx24.com
@@ -274,7 +304,7 @@ Per manufacturer catalog checklist:
 - [ ] Extract sample prices for validation
 - [ ] Then: gather manufacturer catalog data (same format as PSK)
 
-### 4F. Smart-Slide — Calculation ❌ 0% COMPLETE
+### 4G. Smart-Slide — Calculation ❌ 0% COMPLETE
 
 - [ ] Analyze Smart-Slide configurator on fenstermaxx24.com
 - [ ] Determine if variant of HST or unique architecture
@@ -282,7 +312,7 @@ Per manufacturer catalog checklist:
 - [ ] Extract sample prices for validation
 - [ ] Then: gather manufacturer catalog data
 
-### 4G. Falt-Schiebe-Tür (Folding Doors) — Calculation ⚠️ ~75% COMPLETE
+### 4H. Falt-Schiebe-Tür (Folding Doors) — Calculation ⚠️ ~75% COMPLETE
 
 **Element-formula architecture (Architecture D). Need to complete:**
 - [ ] Verify glass surcharges per m² (exact EUR values)
@@ -292,27 +322,27 @@ Per manufacturer catalog checklist:
 - [ ] Get exact EUR prices (currently have approximate ranges only)
 - [ ] Gather additional manufacturer catalogs (have Alu ranges only)
 
-### 4H. Vorsatzrollladen (External Shutters) — Calculation ❌ 0% COMPLETE
+### 4I. Vorsatzrollladen (External Shutters) — Calculation ❌ 0% COMPLETE
 
 - [ ] Analyze Vorsatzrollladen configurator on fenstermaxx24.com
 - [ ] Determine if same additive architecture as Aufsatzrollladen
 - [ ] Document pricing components
 - [ ] Then: gather manufacturer catalog data
 
-### 4I. Raffstore (External Blinds) — Calculation ❌ 0% COMPLETE
+### 4J. Raffstore (External Blinds) — Calculation ❌ 0% COMPLETE
 
 - [ ] Analyze Raffstore configurator on fenstermaxx24.com
 - [ ] Determine pricing architecture
 - [ ] Document pricing components
 - [ ] Then: gather manufacturer catalog data
 
-### 4J. Insektenschutz (Insect Protection) — Calculation ❌ 0% COMPLETE
+### 4K. Insektenschutz (Insect Protection) — Calculation ❌ 0% COMPLETE
 
 - [ ] Analyze pricing (likely simple W×H formula)
 - [ ] Document options and surcharges
 - [ ] Then: gather manufacturer catalog data
 
-### 4K. Fensterbänke (Window Sills) — Calculation ❌ 0% COMPLETE
+### 4L. Fensterbänke (Window Sills) — Calculation ❌ 0% COMPLETE
 
 - [ ] Analyze pricing (likely length × price_per_meter)
 - [ ] Document material options + prices
@@ -334,6 +364,11 @@ Per manufacturer catalog checklist:
 - [ ] **Haustüren (Holz):** Extract handle surcharges (Griff) — missing data
 - [ ] **Haustüren (Holz):** Gather more side panel width data points (every 100mm) for precise formula
 - [ ] **Balkontüren:** Get exact EUR for threshold types
+- [x] **Rollladen:** Update `rollladen_calculations.json` — Nussbaum €81.71→€63.14, Braun Metallic confirmed €0, Putzträger €35.25→€35.14
+- [x] **Rollladen:** Add 3 new drive types (Motor Rescue €638.94, Somfy OXIMO €576.95, Somfy+Remote €769.05)
+- [x] **Rollladen:** Add Beige color (farbe_panzer_12, €0)
+- [ ] **Rollladen:** Test Seitenblende surcharge options separately
+- [ ] **Rollladen:** Test Farbe Kasten/Führungsschienen separately from Panzerfarbe
 
 ### Priority 2 — Analyze Missing Calculations (From fenstermaxx24.com)
 
@@ -442,7 +477,7 @@ When providing catalog data for any new manufacturer, we need:
 | Fenster | ✅ 100% | ✅ 3 combos | Gather more manufacturer catalogs |
 | Balkontüren | ✅ 97% | ✅ 1 combo | Gather PVC/Holz catalogs + exact EUR thresholds |
 | Haustüren | ✅ 95% | ⚠️ 2 combos | Thresholds + side panels verified; Holz ~65% (need colors/glass); gather 2nd manufacturer |
-| Rollladen (Aufsatz) | ✅ 95% | ✅ 1 combo | Verify with 2nd manufacturer |
+| Rollladen (Aufsatz) | ✅ 97% | ✅ **~98%** | Comprehensive: 24 prices, 9 drives, 12 colors, JS+PY calcs. See `AUFSATZROLLLADEN_ANALYSIS.md` |
 | Falt-Schiebe-Tür | ⚠️ 75% | ⚠️ Ranges | Verify color method + get exact EUR |
 | PSK | ⚠️ 70% | ⚠️ Partial | Get full surcharge catalog |
 | HST | ❌ 0% | ❌ None | Analyze fenstermaxx24.com first |
