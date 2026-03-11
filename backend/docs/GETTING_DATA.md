@@ -22,7 +22,7 @@
 | Category | Progress | Details |
 |----------|----------|---------|
 | **Calculations (engine logic)** | **~82%** | 6 of 12 product types have calculations (Haustüren updated to ~95%) |
-| **Catalog data (EUR prices)** | **~15%** | 6 of ~40 manufacturer/material combos |
+| **Catalog data (EUR prices)** | **~18%** | 7 of ~40 manufacturer/material combos (added Drutex Holz Haustür ~65%) |
 
 **Key:** Calculations = HOW prices are computed (from website analysis). Catalog data = ACTUAL prices (from manufacturer catalogs).
 Once a calculation is complete, adding a new manufacturer = just providing catalog data.
@@ -143,6 +143,7 @@ Once a calculation is complete, adding a new manufacturer = just providing catal
 | 5 | Haustür | Drutex | PVC/Kunststoff | ✅ **Ready** — formula-based |
 | 6 | Rollladen | Drutex | Generic | ✅ **Ready** — additive model |
 | 7 | PSK | Drutex | PVC/Kunststoff | ⚠️ **PARTIAL** — need full surcharges |
+| 8 | Haustür | Drutex | Holz (Wood) | ⚠️ **~65%** — base prices + 9 surcharges; missing colors, glass, handles (see `HOLZ_HAUSTUER_ANALYSIS.md`) |
 
 ### What We DON'T Have ❌
 
@@ -162,7 +163,7 @@ Once a calculation is complete, adding a new manufacturer = just providing catal
 
 | Manufacturer | PVC | Holz | Aluminium | Holz-Alu |
 |-------------|:---:|:----:|:---------:|:--------:|
-| Drutex | ✅ | ❌ | ❌ | — |
+| Drutex | ✅ | ⚠️ ~65% | ❌ | — |
 | Schüco | — | — | ❌ | — |
 | Hörmann | ❌ | ❌ | ❌ | — |
 
@@ -231,6 +232,8 @@ Per manufacturer catalog checklist:
 > - Threshold: Drutex Holz only offers Standard (€0), no other options. PIRNAR uses separate shop.
 > - Side panels: CONFIRMED size-dependent, non-linear pricing (+€378 at 330mm to +€1,684 at 1000mm).
 > - **Impact on engine:** Side panel pricing needs width-based formula, NOT fixed surcharge.
+> - **NEW:** Drutex Holz catalog data extracted: 2 profiles (Kiefer, Meranti), 50 price points, 9 surcharge categories, 23 models. See `HOLZ_HAUSTUER_ANALYSIS.md`.
+> - **Still needed:** Color surcharges, glass surcharges, handle surcharges (not yet extracted from configurator).
 
 Per manufacturer catalog checklist:
 - [ ] Model list with base prices (grouped by tier)
@@ -326,6 +329,10 @@ Per manufacturer catalog checklist:
 - [ ] **Falt-Schiebe-Tür:** Get exact EUR prices (currently have ranges)
 - [x] **Haustüren:** Verify threshold surcharges per manufacturer — ✅ DONE (Drutex Holz: Standard only €0, no alternatives. Threshold options are manufacturer-specific.)
 - [x] **Haustüren:** Verify if side panel surcharges are size-dependent — ✅ CONFIRMED size-dependent (non-linear: +€378 at 330mm → +€1,684 at 1000mm)
+- [ ] **Haustüren (Holz):** Extract color surcharges (Farbe Außen/Innen) — key missing data
+- [ ] **Haustüren (Holz):** Extract glass/glazing surcharges — key missing data
+- [ ] **Haustüren (Holz):** Extract handle surcharges (Griff) — missing data
+- [ ] **Haustüren (Holz):** Gather more side panel width data points (every 100mm) for precise formula
 - [ ] **Balkontüren:** Get exact EUR for threshold types
 
 ### Priority 2 — Analyze Missing Calculations (From fenstermaxx24.com)
@@ -434,7 +441,7 @@ When providing catalog data for any new manufacturer, we need:
 |---------|:-----------:|:------------:|-----------|
 | Fenster | ✅ 100% | ✅ 3 combos | Gather more manufacturer catalogs |
 | Balkontüren | ✅ 97% | ✅ 1 combo | Gather PVC/Holz catalogs + exact EUR thresholds |
-| Haustüren | ✅ 95% | ✅ 1 combo | Thresholds + side panels verified; gather 2nd manufacturer |
+| Haustüren | ✅ 95% | ⚠️ 2 combos | Thresholds + side panels verified; Holz ~65% (need colors/glass); gather 2nd manufacturer |
 | Rollladen (Aufsatz) | ✅ 95% | ✅ 1 combo | Verify with 2nd manufacturer |
 | Falt-Schiebe-Tür | ⚠️ 75% | ⚠️ Ranges | Verify color method + get exact EUR |
 | PSK | ⚠️ 70% | ⚠️ Partial | Get full surcharge catalog |

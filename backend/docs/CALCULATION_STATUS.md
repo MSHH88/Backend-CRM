@@ -38,9 +38,9 @@ There are **two separate things** we need:
 
 - **Calculations we HAVE:** Fenster (100%), Balkontür (~97%), Haustüren (~95%), Rollladen (Aufsatz ~95%), Falt-Schiebe-Tür (~75%), PSK (~70%)
 - **Calculations we NEED:** HST, Smart-Slide, Vorsatzrollladen, Raffstore, Insektenschutz, Fensterbänke
-- **Catalog data we HAVE:** 6 complete + 1 partial (Drutex PVC, Gealan PVC, Holz, Alu Balkontür, Drutex Haustür, Rollladen, PSK partial)
+- **Catalog data we HAVE:** 6 complete + 2 partial (Drutex PVC, Gealan PVC, Holz Fenster, Alu Balkontür, Drutex Haustür PVC, Rollladen, PSK partial, **Drutex Holz Haustür ~65%**)
 - **Catalog data we NEED:** ~30+ more manufacturer/material combinations
-- **Recent update:** Falt-Schiebe-Tür dataset analyzed (March 10, 2026) — see `docs/FALT_SCHIEBE_TUER_ANALYSIS.md`
+- **Recent update:** Holz Haustüren dataset analyzed (March 11, 2026) — see `docs/HOLZ_HAUSTUER_ANALYSIS.md`
 
 ---
 
@@ -156,27 +156,31 @@ total = (base_price + surcharges) × 0.60
 ### 4C. HAUSTÜREN (Front Doors) — 1-4 Manufacturers, 2-4 Materials
 
 > **UPDATE (March 11, 2026):** Holz Haustüren data analyzed. Threshold verified, side panel size-dependency CONFIRMED.
+> **NEW DATA (March 11, 2026):** Drutex Holz Haustüren catalog extracted — 2 profiles (Kiefer €1,290–€1,801, Meranti €1,424–€1,970), 50 price matrix points, 9 surcharge categories, 23 model options (€0–€702). See `HOLZ_HAUSTUER_ANALYSIS.md`.
 
 | Calculation Aspect | Status | Notes |
 |---|---|---|
-| Base dimension pricing | ✅ COMPLETE | Formula-based (NOT matrix), width-dominant |
-| Width impact calculation | ✅ COMPLETE | ~€37.77 per 100mm width |
-| Height impact calculation | ✅ COMPLETE | ~€1.64 per 100mm height (23× less than width) |
-| Model selection tiers | ✅ COMPLETE | 3 tiers: 0 / +€75 / +€361 |
-| Color surcharges | ✅ COMPLETE | 5 tiers: 0 / +€25 / +€146 / +€259 / +€349 |
-| Profile options | ✅ COMPLETE | Only 2 profiles (p2, p4 for Drutex) |
-| Electronic access systems | ✅ COMPLETE | +€912–€1142 (largest surcharge) |
-| Handle surcharges | ✅ COMPLETE | Cosmetic only (€0 for most) |
-| Hinge color surcharges | ✅ COMPLETE | 0–€96.54 |
+| Base dimension pricing | ✅ COMPLETE | Formula-based (matrix lookup), **Holz: W:H ratio = 1.6× (balanced)**, PVC: W:H ratio = 23× (width-dominant) |
+| Width impact calculation | ✅ COMPLETE | PVC: ~€37.77/100mm. **Holz: ~€52–58/100mm** (higher than PVC). |
+| Height impact calculation | ✅ COMPLETE | PVC: ~€1.64/100mm. **Holz: ~€32–35/100mm** (much higher than PVC). |
+| Model selection tiers | ✅ COMPLETE | PVC: 3 tiers. **Holz: 23 models in 5 tiers (€0/€32–77/€110–231/€263–479/€523–702)** |
+| Color surcharges | ⚠️ **PARTIAL** | PVC: 5 tiers known. **Holz: NOT YET EXTRACTED** — need to test color options. |
+| Profile options | ✅ COMPLETE | PVC: 2 profiles (p2, p4). **Holz: 2 profiles (Kiefer SOFTLINE 68mm, Meranti SOFTLINE 68mm). Meranti ~9.4% premium. Separate absolute matrices per profile.** |
+| Electronic access systems | ✅ COMPLETE | PVC: +€912–€1142. **Holz: Elektroöffner +€61.02** |
+| Handle surcharges | ⚠️ **PARTIAL** | PVC: Cosmetic only (€0 for most). **Holz: NOT YET EXTRACTED** — need to test handle options. |
+| Hinge color surcharges | ✅ COMPLETE (PVC only) | PVC: 0–€96.54. Holz: not tested. |
+| Security surcharges | ✅ COMPLETE | **Holz: 5-fach Verriegelung +€87.54, Klasse C Schloss +€30.87, Hinterbandsicherung +€43.33** |
 | Threshold surcharges | ✅ VERIFIED (Holz data) | Drutex Holz: Standard only (€0), no other options offered. PIRNAR: separate shop, not comparable. Threshold is manufacturer-specific. |
 | Side panels (Seitenteil) | ✅ VERIFIED SIZE-DEPENDENT | **Non-linear width-based pricing confirmed**: 330mm=+€378, 500mm=+€643, 1000mm=+€1,684. NOT a fixed surcharge — needs width-based formula in engine. |
 | Transom (Oberlicht) | ✅ KNOWN (7B data) | Included in Bautyp surcharges: Oberlicht +€350-550, OL+SL combo +€950-1450 |
-| Security/Access options | ✅ KNOWN (7B data) | Verriegelung 3-fach, Elektroöffner, Fingerprint (€450-750), Türschließer, Hinterbandsicherung |
-| **Overall Haustür Calc** | **✅ ~95% COMPLETE** | **Threshold + side panel size-dep verified. Exact prices from catalog.** |
+| Glass/Glazing surcharges | ⚠️ **NOT EXTRACTED (Holz)** | Holz glass options not yet tested — need to extract |
+| Türschließer (door closer) | ✅ COMPLETE | **Holz: +€67.00** |
+| Discount factor | ✅ CONFIRMED | **0.60 exact** for Holz Haustüren (same as all other products) |
+| **Overall Haustür Calc** | **✅ ~95% COMPLETE** | **Threshold + side panel size-dep verified. Holz catalog ~65% (need colors, glass, handles).** |
 
-**⚠️ Engine Impact:** Side panel surcharges CANNOT be stored as fixed EUR — must implement width-based formula. This is a key architectural finding.
+**⚠️ Engine Impact:** Side panel surcharges CANNOT be stored as fixed EUR — must implement width-based formula. Holz W:H pricing ratio (1.6×) differs significantly from PVC (23×) — engine needs full 2D matrix, not width-dominant formula.
 
-**Manufacturers with catalog data:** Drutex PVC ✅, Drutex Holz ✅ (new — side panel data)
+**Manufacturers with catalog data:** Drutex PVC ✅, Drutex Holz ⚠️ ~65% (base prices + security, missing colors/glass/handles — see `HOLZ_HAUSTUER_ANALYSIS.md`)
 **Manufacturers MISSING catalog data:** Other Haustür manufacturers/materials
 
 ### 4D. PSK (Parallel-Schiebe-Kipptür) — 1-3 Manufacturers, 2-3 Materials
@@ -389,7 +393,16 @@ These calculations we do NOT have yet and need to reverse-engineer from the webs
   - 500mm width → +€642.95 surcharge
   - 1000mm width → +€1,684.23 surcharge
   - Reference: 1-Wing door, Pine, 1900mm height, base price €1,290.46 (40% discount applied)
-- **Engine impact:** Side panel pricing needs width-based formula (polynomial or stepped), not fixed EUR lookup. This differs from the 7B Alu data which showed fixed-range surcharges per Bautyp.
+- **Catalog data extracted (March 11, 2026):**
+  - 2 profiles: Kiefer SOFTLINE 68mm (€1,290–€1,801), Meranti SOFTLINE 68mm (€1,424–€1,970)
+  - 50 price matrix data points (5 widths × 5 heights × 2 profiles)
+  - 23 model surcharges: €0 (m1) to €701.69 (m15), across 5 tiers
+  - Security: 5-fach Verriegelung +€87.54, Klasse C Schloss +€30.87, Hinterbandsicherung +€43.33
+  - Functional: Elektroöffner +€61.02, Türschließer +€67.00
+  - Meranti premium over Kiefer: ~9.4% (separate absolute matrices, not multiplicative)
+  - Discount factor: 0.60 confirmed exact
+  - **Still missing:** Color surcharges, glass surcharges, handle surcharges (~35% of catalog data)
+- **Engine impact:** Side panel pricing needs width-based formula (polynomial or stepped), not fixed EUR lookup. This differs from the 7B Alu data which showed fixed-range surcharges per Bautyp. Holz W:H ratio = 1.6× (much more balanced than PVC 23×).
 
 **PSK (Alu):**
 - 4 profiles: MB-70 (€2,396.21 base), MB-70 HI, MB-86 SI, MB-79N SI
