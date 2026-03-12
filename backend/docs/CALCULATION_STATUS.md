@@ -62,7 +62,7 @@ There are **two separate things** we need:
 
 ### ⚠️ Key Corrections from New Data
 
-1. **Width DOES have significant price impact** — previous analysis said "minimal impact" based on too few data points. New matrix shows **+€258.95** for 700mm→2150mm width increase (+47.6%). Width is actually the PRIMARY cost driver.
+1. **Width DOES have significant price impact** — previous analysis said "minimal impact" based on too few data points. New matrix shows **+€258.95** for 700mm→2150mm width increase (+47.6%). Per-100mm impact is similar for both dimensions (~€18/100mm), but width has greater total impact due to its wider operational range (1,450mm vs 400mm effective height range).
 2. **Height ceiling at 2300mm** — price does NOT increase above 2300mm height (2300mm and 2550mm have identical prices: €619.43 at W=700mm). This means max effective height = 2300mm for pricing purposes.
 3. **Non-linear pricing** — price increases are steeper at larger widths (1700→1950mm = +€118.41 vs 700→950mm = +€14.94). Suggests stepped/banded pricing.
 4. **Client-side calculation** — Insektenschutz uses CLIENT-SIDE JavaScript (no server API calls), unlike Rollladen which uses server-side session state via AJAX. Different engine approach needed.
