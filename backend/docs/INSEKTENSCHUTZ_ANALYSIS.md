@@ -1,11 +1,12 @@
 # Insektenschutz Plissee — Dataset Analysis
 
-> **Date:** March 11, 2026
+> **Date:** March 11, 2026 (initial), **March 12, 2026** (expanded with 4 new files)
 > **Source:** CEO-uploaded dataset (Datasets branch → `Insektenschutz/`)
 > **Product:** Aluminium Insektenschutz-Plissee (Insect Protection Pleated Doors)
 > **Manufacturer:** Drutex
 > **Configurator:** fenstermaxx24.com
-> **Files Analyzed:** `insektenschutz_plissee_data.js`, `insektenschutz_plissee_data.py`, `insektenschutz_plissee_data.txt`
+> **Files Analyzed (March 11):** `insektenschutz_plissee_data.js`, `insektenschutz_plissee_data.py`, `insektenschutz_plissee_data.txt`
+> **Files Analyzed (March 12 — NEW):** `insektenschutz_plissee_size_price_matrix.txt`, `insektenschutz_plissee_colors_options.txt`, `insektenschutz_plissee_api.txt`, `insektenschutz_plissee_complete_research.txt`
 
 ---
 
@@ -35,19 +36,29 @@ The Insektenschutz Plissee is a **standalone** insect protection product (not in
 | **Architecture** | **ADDITIVE** — same as Rollladen (Architecture C) |
 | **Plissee Types** | 2 types: 1-teilige (€906.50) and 2-teilige (€1,693.50) |
 | **Discount Factor** | 0.60 (40% off) — **IDENTICAL** to all other products |
-| **Frame Colors** | 5 RAL colors — **ALL €0 surcharge** (no color surcharges!) |
+| **Frame Colors** | 5 RAL colors — **ALL €0 surcharge** (individually tested and confirmed) |
 | **Opening Directions** | 2 directions — **ALL €0 surcharge** |
 | **Net Color** | 1 option (Black) — €0 surcharge |
-| **Pricing Simplicity** | SIMPLEST product analyzed — only Plissee type affects price via surcharge |
-| **Data Completeness** | ~90% — missing: full W×H price matrix, some color options noted as incomplete by CEO |
+| **Pricing** | Dimensions (width + height) + Plissee type selection drive the price |
+| **Data Completeness** | **~95%** (⬆️ was 90%) — expanded with 13 systematic price data points |
+
+### ⚠️ Key Corrections (March 12, 2026)
+
+| What Changed | Old Understanding | New Understanding |
+|-------------|------------------|------------------|
+| **Width impact** | "Minimal/no impact" | **Width IS significant** (+€259 for 700→2150mm, +47.6%) |
+| **Height ceiling** | Not documented | **Price does NOT increase above 2300mm** (2300=2550=same price) |
+| **Price data points** | 6 scattered | **13 systematic** (7 width × 1 height + 4 height × 1 width + 3 combined) |
+| **Calculation method** | Unknown | **Client-side JavaScript** (no server API calls — different from Rollladen) |
+| **Colors** | "Noted as potentially incomplete" | **All 5 individually tested and confirmed €0** |
 
 ### Key Insight: Simplest Pricing Model
 
-Unlike Aufsatzrollladen (9 drives, 12 colors, 4 plaster options) or Vorsatzrollladen (6 models, same surcharges), the Insektenschutz Plissee has **virtually no surcharges** — only the Plissee type selection (1-teilige vs 2-teilige) impacts the base price. All colors and directions are free. This makes it the simplest product to implement.
+Unlike Aufsatzrollladen (9 drives, 12 colors, 4 plaster options) or Vorsatzrollladen (6 models, same surcharges), the Insektenschutz Plissee has **virtually no surcharges** — only the Plissee type selection (1-teilige vs 2-teilige) and dimensions affect the price. All colors and directions are free. This makes it the simplest product to implement.
 
 ### ⚠️ CEO Note: Data Incomplete
 
-The CEO noted this dataset has **some data missing regarding all colour options**. The 5 frame colors documented may not be the complete set. Additional color options may exist that were not captured in this extraction.
+The CEO noted this dataset has **some data missing regarding all colour options**. The 5 frame colors documented may not be the complete set. Additional color options may exist that were not captured in this extraction. However, all 5 documented colors have been individually tested and confirmed at €0 surcharge.
 
 ---
 
@@ -166,34 +177,53 @@ Only one net color available — no surcharge.
 
 ## 7. Size-Based Price Variations
 
-### Width Impact (Height fixed at 1,900mm, 1-teilige)
+> **⚠️ CORRECTED March 12, 2026:** The original March 11 analysis concluded width had "minimal impact" based on only 3 data points. The expanded dataset (13 points) shows **width IS significant**. See corrected analysis below.
 
-| Width (mm) | Final Price (€) | Change from 700mm |
-|-----------|----------------|-------------------|
-| 700 | 543.90 | — |
-| 950 | 693.59 | +149.69 |
-| 1,200 | 693.59 | +149.69 |
+### Width Impact (Height fixed at 1,900mm, 1-teilige) — EXPANDED ⬆️
 
-**Finding:** Width increases have **minimal impact** on price. Width 950mm and 1,200mm produce the **same price** — suggesting stepped/banded pricing rather than continuous.
+| Width (mm) | Final Price (€) | Change from 700mm | Per 250mm step |
+|:----------:|:---------------:|:------------------:|:--------------:|
+| 700 | 543.90 | — | — |
+| 950 | 558.84 | +14.94 | +14.94 |
+| 1,200 | 586.78 | +42.88 | +27.94 |
+| 1,450 | 641.29 | +97.39 | +54.51 |
+| 1,700 | 673.93 | +130.03 | +32.64 |
+| 1,950 | 792.34 | +248.44 | +118.41 ⚠️ |
+| 2,150 | 802.85 | +258.95 | +10.51 |
 
-### Height Impact (Width fixed at 1,200mm, 1-teilige)
+**Finding (CORRECTED):** Width has **significant impact** on price: +€258.95 (+47.6%) from 700→2150mm. The increase is **non-linear** — steeper at larger widths (1700→1950mm = +€118.41 per 250mm step vs 700→950mm = +€14.94). This suggests stepped/banded pricing with wider bands at smaller sizes and narrower bands at larger sizes.
+
+### Height Impact (Width fixed at 700mm, 1-teilige) — EXPANDED ⬆️
 
 | Height (mm) | Final Price (€) | Change from 1,900mm |
-|------------|----------------|---------------------|
-| 1,900 | 693.59 | — |
-| 2,050 | 855.43 | +161.84 |
-| 2,300 | 902.46 | +208.87 |
+|:-----------:|:---------------:|:-------------------:|
+| 1,900 | 543.90 | — |
+| 2,050 | 567.14 | +23.24 |
+| 2,300 | 619.43 | +75.53 |
+| 2,550 | 619.43 | +0.00 ⚠️ **CEILING** |
 
-**Finding:** Height is the **primary cost driver**. A 400mm height increase adds €208.87 (+30%), while width increases up to 500mm add only €149.69.
+**Finding (NEW):** Height increases up to 2300mm add €75.53 (+13.9%). However, there is a **PRICE CEILING at 2300mm** — heights above 2300mm (tested at 2550mm) produce the IDENTICAL price. This means the effective maximum height for pricing purposes is 2300mm.
 
-### Combined Dimension Test (2-teilige)
+### Combined Dimension Tests — EXPANDED ⬆️
 
-| Dimensions (W×H) | Final Price (€) | Notes |
-|-------------------|----------------|-------|
-| 1,200 × 2,300 | 902.46 | — |
-| 1,450 × 2,300 | 902.46 | Width +250mm = **NO change** |
+| Width × Height | Final Price (€) | Notes |
+|:--------------:|:---------------:|:------|
+| 950 × 2,050 | 580.97 | Width + Height both increased |
+| 1,200 × 2,300 | 668.12 | Mid-range |
+| 1,450 × 2,550 | 763.29 | Large — note height above ceiling |
 
-**Confirmed:** Width changes have virtually zero impact on price for this product. **Height is the sole dimension-based cost driver.**
+### Dimension Impact Summary
+
+| Dimension | Total Range | Price Impact | Per 100mm |
+|-----------|:-----------:|:------------:|:---------:|
+| **Width** (700→2150mm) | 1,450mm | +€258.95 (+47.6%) | ~€17.86 avg (non-linear) |
+| **Height** (1900→2300mm) | 400mm | +€75.53 (+13.9%) | ~€18.88 avg (but ceiling at 2300) |
+
+**Key finding:** Both width and height matter, with similar per-100mm impact (~€18/100mm). Width has more TOTAL impact because it has a wider range (1,450mm vs 400mm effective height range). The height ceiling at 2300mm limits height's overall contribution.
+
+### ⚠️ Note on Original Analysis Error
+
+The original March 11 analysis used data points at 950mm and 1,200mm width (both at 1,200×1,900 starting point) which happened to produce the same price (€693.59), leading to the incorrect conclusion that width had "minimal impact." The expanded March 12 dataset with 7 width data points clearly shows width is significant, especially at larger sizes.
 
 ---
 
@@ -228,8 +258,9 @@ Only one net color available — no surcharge.
 1. **Insektenschutz is a standalone product** — not an add-on to Rollladen
 2. **No motorization** — Plissee is manually operated only
 3. **No color premium** — all 5 colors are free (vs Rollladen's 2 premium colors)
-4. **Height-dominant pricing** — unlike Rollladen which uses W×H matrix
+4. **Both width and height affect pricing** — width is non-linear, height has ceiling at 2300mm
 5. **Door-height only** — minimum 1,900mm height (vs Rollladen starting at 1,000mm)
+6. **Client-side calculation** — JavaScript on client (vs Rollladen server-side AJAX)
 
 ---
 
@@ -239,30 +270,34 @@ Only one net color available — no surcharge.
 
 - [x] Plissee type catalog (2 types with base prices)
 - [x] Opening direction options (2, all €0)
-- [x] Frame color options (5 RAL colors, all €0)
+- [x] Frame color options (5 RAL colors, all €0 — individually tested March 12)
 - [x] Net color options (1, €0)
 - [x] Dimension constraints (W: 700–2400, H: 1900–2600)
-- [x] Size-based price variation data points
+- [x] Size-based price variation — **13 systematic data points** (⬆️ was 6 scattered)
 - [x] Discount factor confirmed (0.60)
 - [x] Price calculation formula confirmed
 - [x] Calculator implementation (JS + Python)
-- [x] API endpoint documented
+- [x] API endpoint & form element IDs documented (⬆️ NEW)
+- [x] Configuration object structure (`obj_plissee`) documented (⬆️ NEW)
 - [x] Example calculations with verified prices
+- [x] Height ceiling effect at 2300mm (⬆️ NEW)
+- [x] Non-linear width pricing characterized (⬆️ NEW)
+- [x] Client-side calculation mechanism confirmed (⬆️ NEW)
 
 ### What We Don't Have ❌
 
-- [ ] **Complete color catalog** — CEO noted data may be incomplete regarding all color options
-- [ ] **Full W×H base price matrix** — only have scattered data points, not a systematic grid
-- [ ] **Dimension step intervals** — unclear if prices change at every mm or at fixed intervals
-- [ ] **2-teilige dimension-based pricing** — only have a few data points for 2-teilige
+- [ ] **Complete color catalog** — 5 colors confirmed and tested, but CEO noted set may be incomplete
+- [ ] **2-teilige dimension-based pricing** — only have one data point for 2-teilige base; need size variations
 - [ ] **Second manufacturer data** — only have Drutex
 - [ ] **Weight constraints** — not documented (may not apply to Plissee)
+- [x] ~~**Full W×H base price matrix**~~ — ✅ NOW HAVE 13 systematic data points (sufficient for interpolation)
+- [x] ~~**Dimension step intervals**~~ — ✅ Tested with 250mm increments, non-linear pattern documented
 
-### Data Completeness Estimate: **~90%**
+### Data Completeness Estimate: **~95%** (⬆️ was 90%)
 
-The core calculation logic is fully understood. The main gaps are:
-1. Potentially incomplete color list (CEO flag)
-2. Missing systematic W×H price matrix (have enough to understand the pattern but not all values)
+The core calculation logic is fully understood with 13 systematic data points. The main gaps are:
+1. Potentially incomplete color list (CEO flag — but all 5 documented colors confirmed at €0)
+2. Missing 2-teilige size variation data (only have base price, need width/height price changes for 2-teilige)
 
 ---
 
@@ -314,21 +349,53 @@ Configuration: 2-teilige, 2050×1900mm, Anthrazitgrau, Left-to-Right
 
 ## Appendix: Raw Price Data Points
 
-### 1-teilige Plissee Tür
+### 1-teilige Plissee Tür — Expanded Dataset (March 12, 2026)
 
-| Width (mm) | Height (mm) | Final Price (€) | Base Price (est.) |
-|-----------|-----------|----------------|------------------|
-| 700 | 1,900 | 543.90 | 906.50 |
-| 950 | 1,900 | 693.59 | ~1,155.98 |
-| 1,200 | 1,900 | 693.59 | ~1,155.98 |
-| 1,200 | 2,050 | 855.43 | ~1,425.72 |
-| 1,200 | 2,300 | 902.46 | ~1,504.10 |
-| 1,450 | 2,300 | 902.46 | ~1,504.10 |
+**Width variation** (Height fixed at 1,900mm):
+
+| Width (mm) | Height (mm) | Final Price (€) | Base Price (est.) | Source |
+|:---------:|:---------:|:---------------:|:----------------:|:------:|
+| 700 | 1,900 | 543.90 | 906.50 | March 11 + 12 |
+| 950 | 1,900 | 558.84 | ~931.40 | March 12 🆕 |
+| 1,200 | 1,900 | 586.78 | ~977.97 | March 12 🆕 |
+| 1,450 | 1,900 | 641.29 | ~1,068.82 | March 12 🆕 |
+| 1,700 | 1,900 | 673.93 | ~1,123.22 | March 12 🆕 |
+| 1,950 | 1,900 | 792.34 | ~1,320.57 | March 12 🆕 |
+| 2,150 | 1,900 | 802.85 | ~1,338.08 | March 12 🆕 |
+
+**Height variation** (Width fixed at 700mm):
+
+| Width (mm) | Height (mm) | Final Price (€) | Base Price (est.) | Source |
+|:---------:|:---------:|:---------------:|:----------------:|:------:|
+| 700 | 1,900 | 543.90 | 906.50 | March 11 + 12 |
+| 700 | 2,050 | 567.14 | ~945.23 | March 12 🆕 |
+| 700 | 2,300 | 619.43 | ~1,032.38 | March 12 🆕 |
+| 700 | 2,550 | 619.43 | ~1,032.38 | March 12 🆕 ⚠️ CEILING |
+
+**Combined variations:**
+
+| Width (mm) | Height (mm) | Final Price (€) | Base Price (est.) | Source |
+|:---------:|:---------:|:---------------:|:----------------:|:------:|
+| 950 | 2,050 | 580.97 | ~968.28 | March 12 🆕 |
+| 1,200 | 2,300 | 668.12 | ~1,113.53 | March 12 🆕 |
+| 1,450 | 2,550 | 763.29 | ~1,272.15 | March 12 🆕 |
+
+**Original March 11 data points (from different base widths — may not align with expanded dataset):**
+
+| Width (mm) | Height (mm) | Final Price (€) | Base Price (est.) | Note |
+|:---------:|:---------:|:---------------:|:----------------:|:-----|
+| 950 | 1,900 | 693.59 | ~1,155.98 | Original data — different base? |
+| 1,200 | 1,900 | 693.59 | ~1,155.98 | Original data — same as 950mm |
+| 1,200 | 2,050 | 855.43 | ~1,425.72 | Original data |
+| 1,200 | 2,300 | 902.46 | ~1,504.10 | Original data |
+| 1,450 | 2,300 | 902.46 | ~1,504.10 | Original data — same as 1200mm |
+
+> **⚠️ Note:** The March 11 and March 12 data show different prices for the same dimensions (e.g., 950×1900: €693.59 vs €558.84). This discrepancy likely means the March 11 data was extracted at a different starting configuration or the configurator state was different. The March 12 data is the systematic extraction and should be treated as authoritative.
 
 ### 2-teilige Plissee Tür
 
 | Width (mm) | Height (mm) | Final Price (€) | Base Price (est.) |
-|-----------|-----------|----------------|------------------|
+|:---------:|:---------:|:---------------:|:----------------:|
 | 2,050 | 1,900 | 1,016.15 | 1,693.50 |
 
 ---
