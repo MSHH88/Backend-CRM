@@ -29,18 +29,18 @@ There are **two separate things** we need:
 
 | What | Source | Status |
 |------|--------|--------|
-| **CALCULATIONS** (formulas, logic, how prices are computed) | Analyzing fenstermaxx24.com / manufacturer websites / API reverse-engineering | **~88% complete** (updated with expanded Insektenschutz Plissee data + Vorsatzrollladen data + 7B Alu data + Falt-Schiebe-Tür data + Holz Haustür data) |
+| **CALCULATIONS** (formulas, logic, how prices are computed) | Analyzing fenstermaxx24.com / manufacturer websites / API reverse-engineering | **~90% complete** (updated with PSK dataset + expanded Insektenschutz Plissee data + Vorsatzrollladen data + 7B Alu data + Falt-Schiebe-Tür data + Holz Haustür data) |
 | **CATALOG DATA** (actual EUR prices, surcharge amounts, base price tables) | Your catalogs from manufacturers | **~22% complete** (8 of ~40 combos + improved Insektenschutz) |
 
 **Key Insight:** Once all calculations are known, the system can accept catalog data and automatically generate pricing. The calculations are the ENGINE — the catalog data is the FUEL.
 
 ### Current Score
 
-- **Calculations we HAVE:** Fenster (100%), Balkontür (~97%), Haustüren (~95%), Rollladen Aufsatz (~97%), **Insektenschutz Plissee (~95% ⬆️ was 90%)**, Rollladen Vorsatz (~85%), Falt-Schiebe-Tür (~75%), PSK (~70%)
+- **Calculations we HAVE:** Fenster (100%), Balkontür (~97%), Haustüren (~95%), Rollladen Aufsatz (~97%), **Insektenschutz Plissee (~95%)**, **PSK (~85% ⬆️ was 70%)**, Rollladen Vorsatz (~85%), Falt-Schiebe-Tür (~75%)
 - **Calculations we NEED:** HST, Smart-Slide, Raffstore, Insektenschutz (other types), Fensterbänke
-- **Catalog data we HAVE:** 8 complete + 2 partial (Drutex PVC, Gealan PVC, Holz Fenster, Alu Balkontür, Drutex Haustür PVC, Aufsatzrollladen, **Insektenschutz Plissee ⬆️ improved**, Vorsatzrollladen partial, PSK partial, **Drutex Holz Haustür ~65%**)
+- **Catalog data we HAVE:** 8 complete + 3 partial (Drutex PVC, Gealan PVC, Holz Fenster, Alu Balkontür, Drutex Haustür PVC, Aufsatzrollladen, **Insektenschutz Plissee**, Vorsatzrollladen partial, **PSK partial ⬆️ improved**, **Drutex Holz Haustür ~65%**)
 - **Catalog data we NEED:** ~30+ more manufacturer/material combinations
-- **Recent update (March 12, 2026):** New Insektenschutz Plissee dataset files added — 4 new files with expanded size×price matrix (13 data points), detailed color testing, API documentation, and comprehensive research. See updated analysis below and `docs/INSEKTENSCHUTZ_ANALYSIS.md`
+- **Recent update (March 12, 2026):** New PSK dataset (5 files) added with color surcharges (fixed EUR confirmed), multi-manufacturer size constraints, extended surcharge catalog (11+ items), and 2400mm height hard limit resolution. See `docs/PSK_DATASET_ANALYSIS.md`. Also: Insektenschutz Plissee dataset files (7 files total, all analyzed). See `docs/INSEKTENSCHUTZ_ANALYSIS.md`
 
 ---
 
@@ -183,7 +183,7 @@ With the expanded analysis of these 3 datasets, Architecture C (ADDITIVE) is now
 | **Raffstore (External Blinds)** | ❌ 0% | LOW | Medium — may be ADDITIVE like Rollladen |
 | **Insektenschutz (other types)** | ❌ 0% | LOW | Small — Spannrahmen, Drehrahmen etc. |
 | **Fensterbänke (Window Sills)** | ❌ 0% | LOW | Small — likely length × price_per_meter |
-| **PSK (completion)** | ⚠️ 70% | MEDIUM | Small — need full surcharge catalog |
+| **PSK (completion)** | ⚠️ 85% | MEDIUM | Small — need exact glass/profile surcharges + PVC base pricing |
 | **Falt-Schiebe-Tür (completion)** | ⚠️ 75% | LOW | Medium — need exact EUR + color method |
 
 **Overall calculation progress: ~88% (8 of 12 product types have calculations)**
@@ -331,23 +331,27 @@ total = (base_price + surcharges) × 0.60
 **Manufacturers with catalog data:** Drutex PVC ✅, Drutex Holz ⚠️ ~65% (base prices + security, missing colors/glass/handles — see `HOLZ_HAUSTUER_ANALYSIS.md`)
 **Manufacturers MISSING catalog data:** Other Haustür manufacturers/materials
 
-### 4D. PSK (Parallel-Schiebe-Kipptür) — 1-3 Manufacturers, 2-3 Materials
+### 4D. PSK (Parallel-Schiebe-Kipptür) — 3 Manufacturers, 2 Materials
+
+> **UPDATE (March 12, 2026):** CEO uploaded 5 new PSK dataset files. Full analysis in `docs/PSK_DATASET_ANALYSIS.md`.
 
 | Calculation Aspect | Status | Notes |
 |---|---|---|
-| Base price logic | ⚠️ PARTIAL | Width ranges with flat pricing (1200-1700mm all same), progressive above 1800mm |
-| Height pricing | ⚠️ PARTIAL | Progressive 1800-2400mm, data anomalies at 2500mm+ |
-| Profile options | ✅ COMPLETE | 5 profiles (p1-p5), price range 1177-1350 EUR |
-| Opening types | ✅ COMPLETE | 4 variants (ks_fest, fest_ks, ks_ff, ff_ks) |
-| Color surcharges | ⚠️ PARTIAL | Base colors known, full surcharge catalog MISSING. Alu uses "15-25%" — may be percentage-based (needs verification) |
-| Glass surcharges | ⚠️ PARTIAL | 6 types known, need complete catalog. Auto ESG/VSG above area threshold (7B data) |
-| Surcharge catalog | ⚠️ PARTIAL (was INCOMPLETE) | 5 Alu surcharges known via 7B (Auto-Getriebe, RC2, Reedkontakt, Rahmenverbreiterung, Elektroantrieb). Need full depth. |
+| Base price logic | ⚠️ PARTIAL | Width ranges with flat pricing (1200-1700mm all same), progressive above 1800mm. Aluprof base: €2,396.21 at 1500×1700mm |
+| Height pricing | ✅ RESOLVED (was PARTIAL) | 2400mm is HARD LIMIT for ALL manufacturers (Aluprof, Aluplast, Gealan). No anomaly — system rejects heights >2400mm |
+| Profile options | ✅ COMPLETE | 5 Drutex PVC profiles (p1-p5); 4 Alu profiles (MB-70, MB-70 HI, MB-86 SI, MB-79N SI) |
+| Opening types | ✅ COMPLETE | 4 variants (ks_fest, fest_ks, ks_ff, ff_ks) + 2 Alu directions confirmed |
+| Color surcharges (Alu) | ✅ COMPLETE (was PARTIAL) | Fixed EUR per category: RAL=€299.53, Wood=€599.05, Metallic=€1,198.10. **Per-side** (both sides = 2× surcharge) |
+| Color surcharges (PVC) | ⚠️ PARTIAL (NEW) | 4 tiers: White=€0, Decor 1-side=~€150, Decor 2-side=~€250, Special=~€350 |
+| Glass surcharges | ⚠️ IMPROVED | 6 types: Standard(€0), Warm-edge(€45), 3-fach(€180.44), 3-fach+WK(€225), VSG(~€250), Ornament(~€150) |
+| Surcharge catalog | ⚠️ IMPROVED (was 5 items) | 11+ items now: Rahmenverbreiterung (3 sizes), Sprossen (3 widths), Rollladen, Fensterbankanschluss, Griffolive, RC2, Reedkontakt, Auto-Getriebe |
 | Extreme size pricing | ✅ KNOWN (7B data) | Non-linear scaling near 3000×2400mm; auto ESG/VSG surcharge above glass area threshold |
-| Alu profiles | ✅ KNOWN (7B data) | 4 Alu profiles: MB-70 (€2,396.21), MB-70 HI, MB-86 SI, MB-79N SI |
-| **Overall PSK Calc** | **⚠️ ~70% COMPLETE** | **Improved with 7B data. Still need full surcharge catalog depth + exact EUR.** |
+| Alu profiles | ✅ CONFIRMED | 4 Alu profiles: MB-70 (€2,396.21), MB-70 HI, MB-86 SI, MB-79N SI |
+| Size constraints (multi-mfg) | ✅ COMPLETE (NEW) | Aluprof: 1500-3000×1700-2400mm; Aluplast: 1400-3000×800-2400mm; Gealan: 1800-4100×1900-2400mm |
+| **Overall PSK Calc** | **⚠️ ~85% COMPLETE** | **⬆️ was 70%. Height anomaly resolved, color surcharges fixed EUR confirmed, surcharge catalog extended. Still need exact glass/profile surcharges + PVC base pricing.** |
 
-**Manufacturers with catalog data:** Drutex PVC (PARTIAL) ⚠️, Aluprof Aluminium (7B PARTIAL) ⚠️
-**Manufacturers MISSING catalog data:** ALL others
+**Manufacturers with catalog data:** Drutex PVC (PARTIAL) ⚠️, **Aluprof Aluminium (IMPROVED) ⚠️**, **Aluplast PVC (size constraints only) ⚠️**, **Gealan PVC (size constraints only) ⚠️**
+**Manufacturers MISSING catalog data:** Other Alu/Holz/Holz-Alu manufacturers
 
 ### 4E. HST (Hebe-Schiebe-Tür) — ❌ NO DATA
 
@@ -575,7 +579,7 @@ These calculations we do NOT have yet and need to reverse-engineer from the webs
 
 | Product | What Was Missing | Data Received? | New Status | Remaining Gap |
 |---------|-----------------|----------------|------------|---------------|
-| **PSK** | Complete surcharge catalog, verify extreme size pricing | ✅ YES — 5 surcharge options + extreme size rules + 4 profiles | **~70%** (was 60%) | Full surcharge catalog depth (5 options received, ~20+ expected), exact EUR prices |
+| **PSK** | Complete surcharge catalog, verify extreme size pricing | ✅ YES — 11+ surcharge options + color EUR amounts + multi-mfg size constraints + height limit resolved | **~85%** (was 70%) | Exact glass/profile surcharges, PVC manufacturer base pricing, complete PVC color catalog |
 | **Haustüren** | Side panel (Seitenteil) pricing, Transom (Oberlicht) pricing, threshold verification, side panel size-dep | ✅ YES — 7 Bautyp variants + Holz threshold + side panel sizing | **~95%** (was 92%) | Exact EUR prices. Side panel needs width-based formula (NOT fixed surcharge). |
 | **Balkontüren** | Verify threshold-specific surcharges | ✅ YES — 4 threshold types confirmed | **~97%** (was 95%) | Exact EUR prices |
 | **Falt-Schiebe-Tür** | ALL calculation data (was 0%) | ✅ YES — 3 files: calculation logic + size pricing + surcharges | **~75%** (was 0%) | Exact EUR values, verify % colors, derive non-linear formula, quantify glass weight limits |
@@ -613,8 +617,13 @@ These calculations we do NOT have yet and need to reverse-engineer from the webs
 
 **PSK (Alu):**
 - 4 profiles: MB-70 (€2,396.21 base), MB-70 HI, MB-86 SI, MB-79N SI
-- 5 surcharges: Auto-Getriebe UP (€150-250), Sicherheitsbeschläge RC2 (€80-120), Reedkontakt (€45/unit), Rahmenverbreiterung (€25-60/m), HS-Master Elektroantrieb (€1,200+)
-- NEW: Extreme size pricing is non-linear near 3000×2400mm limit; auto ESG/VSG surcharge above area threshold
+- 11+ surcharges: Rahmenverbreiterung (25/50/100mm → €50/100/200), Sprossen innenliegend (8/18/26mm → €150/200/250), Rollladen (€500+), Fensterbankanschluss (€30), Griffolive (€50), RC2 (€150), Reedkontakt (€80), Auto-Getriebe UP (€120), HS-Master Elektroantrieb (€1,200+)
+- **NEW (March 12, 2026):** Color surcharges are FIXED EUR: RAL=€299.53, Wood=€599.05, Metallic=€1,198.10. Per-side (both sides = 2×)
+- **NEW:** Height hard limit 2400mm for ALL manufacturers (Aluprof, Aluplast, Gealan) — no anomaly
+- **NEW:** Multi-manufacturer size constraints: Aluprof 1500-3000×1700-2400, Aluplast 1400-3000×800-2400, Gealan 1800-4100×1900-2400
+- **NEW:** PVC color tiers: White=€0, Decor 1-side=~€150, Decor 2-side=~€250, Special=~€350
+- Glass: 6 types from €0 (standard) to €225 (3-fach + warme Kante). VSG ~€250, Ornament ~€150
+- Full analysis in `docs/PSK_DATASET_ANALYSIS.md`
 
 **Falt-Schiebe-Tür (NEW — March 10, 2026):**
 - 3 files: Calculation Logic, Size-Based Price Changes, Surcharge Catalog
@@ -759,22 +768,28 @@ For a product where the calculation is complete (e.g., Fenster):
 
 ### 9D. FOR TERRASSENTÜREN — Calculations Partially/Not Complete
 
-#### PSK (Parallel-Schiebe-Kipptür) — Calculation ⚠️ ~60% COMPLETE
+#### PSK (Parallel-Schiebe-Kipptür) — Calculation ⚠️ ~85% COMPLETE
+
+> **Updated March 12, 2026:** 5 new PSK data files analyzed. See `docs/PSK_DATASET_ANALYSIS.md`.
 
 | Manufacturer/Material | Have? | What You Need to Provide |
 |---|---|---|
-| Drutex PVC | ⚠️ PARTIAL | **Complete surcharge catalog needed** |
-| Other manufacturers | ❌ NEED | Full catalog (after calculation is complete) |
+| Drutex PVC | ⚠️ PARTIAL | Base price formula completion |
+| Aluprof Aluminium | ⚠️ IMPROVED | Exact profile upgrade surcharges (MB-70 HI, MB-86 SI, MB-79N SI deltas) |
+| Aluplast PVC | ⚠️ SIZE ONLY | Base pricing + full surcharge catalog |
+| Gealan PVC | ⚠️ SIZE ONLY | Base pricing + full surcharge catalog |
 
-**What's still needed from analysis (NOT from you):**
-- Complete the PSK calculation by analyzing fenstermaxx24.com more thoroughly
-- Verify extreme size pricing (anomalies at 2500mm+)
+**What's been resolved:**
+- ✅ Height anomaly — 2400mm is hard limit for ALL manufacturers
+- ✅ Alu color surcharges — fixed EUR: RAL=€299.53, Wood=€599.05, Metallic=€1,198.10 (per side)
+- ✅ Multi-manufacturer size constraints documented
+- ✅ 11+ surcharge items now cataloged
 
-**What you need to provide (after calculation is done):**
-- [ ] Complete surcharge catalog for each manufacturer
-- [ ] Profile options + prices
-- [ ] Opening type options
-- [ ] Size ranges
+**What you still need to provide:**
+- [ ] Exact profile upgrade surcharges (HI, SI variants)
+- [ ] Aluplast/Gealan base pricing at reference sizes
+- [ ] Exact PVC per-decor color surcharges
+- [ ] Verify glass surcharges (VSG ~€250, Ornament ~€150 marked as "example")
 
 #### HST (Hebe-Schiebe-Tür) — Calculation ❌ 0% COMPLETE
 
@@ -840,7 +855,7 @@ These need to be done before catalog data is useful:
 
 | # | Product | Effort | Priority |
 |---|---------|--------|----------|
-| A1 | PSK — complete surcharge analysis | Small | HIGH |
+| A1 | PSK — exact glass/profile surcharges + PVC base pricing | Small | MEDIUM |
 | A2 | HST — full calculation analysis | Medium | HIGH |
 | A3 | Haustüren — side panel + transom | Medium | MEDIUM |
 | A4 | Smart-Slide — calculation analysis | Medium | MEDIUM |
