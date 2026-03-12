@@ -1,8 +1,9 @@
 # Getting Data — Calculations & Catalog Data Checklist
 
-> **Last Updated:** March 11, 2026
+> **Last Updated:** March 12, 2026
 > **Purpose:** Know exactly what we have and what we still need to gather
 > **Format:** ✅ = Have, ❌ = Need, ⚠️ = Partial
+> **Recent:** Raffstore dataset (7 files) analyzed — ~90% calc complete. PSK updated to ~85%. Cross-product calculation analysis added (Section 5B).
 
 ---
 
@@ -21,8 +22,8 @@
 
 | Category | Progress | Details |
 |----------|----------|---------|
-| **Calculations (engine logic)** | **~87%** | 8 of 12 product types have calculations (Haustüren ~95%, Aufsatz ~97%, Vorsatz ~85%, Insektenschutz ~90% NEW) |
-| **Catalog data (EUR prices)** | **~24%** | 10 of ~40 manufacturer/material combos (Holz Haustür ~65%, Aufsatz ~98%, Vorsatz ~80%, Insektenschutz ~85% NEW) |
+| **Calculations (engine logic)** | **~91%** | 9 of 12 product types have calculations (Raffstore ~90% NEW, Haustüren ~95%, Aufsatz ~97%, Vorsatz ~85%, Insektenschutz ~90%) |
+| **Catalog data (EUR prices)** | **~26%** | 11 of ~40 manufacturer/material combos (Raffstore ~85% NEW, Holz Haustür ~65%, Aufsatz ~98%, Vorsatz ~80%, Insektenschutz ~85%) |
 
 **Key:** Calculations = HOW prices are computed (from website analysis). Catalog data = ACTUAL prices (from manufacturer catalogs).
 Once a calculation is complete, adding a new manufacturer = just providing catalog data.
@@ -90,14 +91,20 @@ Once a calculation is complete, adding a new manufacturer = just providing catal
   - [ ] Non-linear scaling formula (behavior described, exact formula not derived)
   - [ ] Glass weight auto-limits (thresholds not quantified)
 
-- [x] **PSK (Parallel-Schiebe-Kipptür)** — ~70% complete
+- [x] **PSK (Parallel-Schiebe-Kipptür)** — ~85% complete (was ~70%)
   - [x] Base price logic (width ranges with flat/progressive pricing)
   - [x] Profile options (5 profiles)
   - [x] Opening types (4 variants)
   - [x] Extreme size pricing rules (from 7B data)
   - [x] Alu profiles (4 profiles from 7B data)
-  - [ ] Height pricing — data anomalies at 2500mm+ need resolution
-  - [ ] Full color surcharge catalog (base colors known, full catalog MISSING)
+  - [x] Height anomaly resolved: 2400mm is HARD LIMIT (not anomaly)
+  - [x] Color surcharges (Alu): Fixed EUR (RAL €299.53, Wood €599.05, Metallic €1,198.10 per side)
+  - [x] Color surcharges (PVC): 4-tier (€0 to ~€350)
+  - [x] Multi-manufacturer size constraints (Aluprof, Aluplast, Gealan)
+  - [x] 11+ surcharge items documented
+  - [ ] Complete glass surcharge catalog (extended but still approximate)
+  - [ ] PVC profile-specific base pricing
+  - [ ] Exact EUR prices from catalog
   - [ ] Verify if Alu uses percentage-based color surcharges
   - [ ] Full glass surcharge catalog (6 types known, need complete list)
   - [ ] Full surcharge catalog depth (5 options received, ~20+ expected)
@@ -125,22 +132,35 @@ Once a calculation is complete, adding a new manufacturer = just providing catal
   - [ ] Full W×H price matrix NOT yet extracted (only base prices at 800×1000)
   - [ ] Size-based price scaling needs more data points
 
-- [ ] **Raffstore (External Blinds)** — 0% complete
-  - [ ] May be additive like Rollladen or unique
-  - [ ] Need to analyze from fenstermaxx24.com
+- [x] **Raffstore (External Blinds)** — ~90% complete ✅ NEW
+  - [x] ADDITIVE architecture confirmed (Architecture C, server-side — same as Rollladen)
+  - [x] 9-point W×H base price matrix (Vorsatz type, DRUTEX)
+  - [x] 12 surcharge items documented with EUR values
+  - [x] 6 box/rail + 6 slat color options (flat €31.43 non-standard box, €0 slat)
+  - [x] 5 motor options (€0 to +€332.01) + smart home steuerung
+  - [x] 2 types (Vorsatz base, Aufsatz +€248.87) with 4 models
+  - [x] 3 slat types (C-80, Z-90, S-90)
+  - [x] Dimension limits: 800-4000mm W × 800-2500mm H
+  - [x] Discount factor confirmed (0.60)
+  - [x] Full JS configuration rules + API endpoints documented
+  - [ ] Need more W×H data points (9 → 24+ for better interpolation)
+  - [ ] Aufsatz (typ1) base price matrix not separately documented
 
-- [x] **Insektenschutz Plissee (Insect Protection)** — ~90% complete ✅ NEW
-  - [x] ADDITIVE architecture confirmed (same as Rollladen — Architecture C)
+- [x] **Insektenschutz Plissee (Insect Protection)** — ~95% complete ✅ UPDATED
+  - [x] ADDITIVE architecture confirmed (Architecture C — CLIENT-SIDE JS, not server AJAX)
   - [x] 2 Plissee types: 1-teilige (€906.50) and 2-teilige (€1,693.50, +€787.00)
   - [x] 5 frame colors (RAL Matt) — ALL €0 surcharge (no color premium!)
   - [x] 2 opening directions — ALL €0 surcharge
   - [x] 1 net color (Black) — €0 surcharge
   - [x] Discount factor confirmed (0.60)
-  - [x] Height-dominant pricing: height is primary cost driver, width has minimal impact
+  - [x] Width IS significant: +€259 for 700→2150mm (corrected from "minimal impact")
+  - [x] Height ceiling at 2300mm: no price increase above this height
+  - [x] 13 systematic price data points (expanded from scattered data)
+  - [x] Non-linear width pricing (steeper at larger widths)
+  - [x] Client-side JS calculation (different from Rollladen server-side)
   - [x] Dimension constraints: 700-2400mm W × 1900-2600mm H (door-height only)
   - [x] Calculator implementations (JS + Python) available
-  - [x] SIMPLEST product analyzed — only Plissee type selection affects price
-  - [ ] Full W×H base price matrix NOT yet extracted (have scattered data points)
+  - [ ] Full W×H base price matrix NOT yet extracted (have 13 points, not systematic grid)
   - [ ] ⚠️ Color list may be incomplete (CEO noted missing color options)
 
 - [ ] **Fensterbänke (Window Sills)** — 0% complete
@@ -213,10 +233,11 @@ Once a calculation is complete, adding a new manufacturer = just providing catal
 | **Aufsatzrollladen** (Integrated) — Drutex | Rollladen | ✅ **COMPREHENSIVE** — 24 prices, 9 drives, 12 colors, calculators |
 | **Vorsatzrollladen** (Surface Mount) — Aluprof | Rollladen | ⚠️ **~80%** — 6 models, shared surcharges confirmed, need W×H matrix |
 | **Insektenschutz Plissee** — Drutex | Insektenschutz | ⚠️ **~85%** — 2 types, 5 colors (all free), height-dominant pricing. See `INSEKTENSCHUTZ_ANALYSIS.md` |
+| **Raffstore** — Drutex | Sonnenschutz | ⚠️ **~85%** 🆕 — 9-point W×H matrix, 12 surcharges, 12 colors, full rules. See `RAFFSTORE_ANALYSIS.md` |
 | Aufsatzrollladen — Other manufacturers | Rollladen | ❌ NEED |
 | Vorsatzrollladen — Other manufacturers | Rollladen | ❌ NEED |
 | Insektenschutz — Other types/manufacturers | Insektenschutz | ❌ NEED |
-| Raffstore — All | Sonnenschutz | ❌ NEED |
+| Raffstore — Other manufacturers | Sonnenschutz | ❌ NEED |
 
 ---
 
@@ -301,14 +322,18 @@ Per manufacturer catalog checklist:
 - [ ] Farbe Kasten/Führungsschienen (box/guide rail color, not separated from base)
 - [ ] Second manufacturer verification
 
-### 4E. PSK (Terrace Sliding Door) — Calculation ⚠️ ~70% COMPLETE
+### 4E. PSK (Terrace Sliding Door) — Calculation ⚠️ ~85% COMPLETE (was ~70%)
 
-**Still need both calculation completion AND catalog data:**
-- [ ] Resolve height pricing anomalies at 2500mm+
-- [ ] Complete color surcharge catalog (base colors → full catalog)
-- [ ] Verify if Alu uses percentage-based color surcharges
-- [ ] Complete glass surcharge catalog
-- [ ] Full surcharge catalog (have 5 options, expect ~20+)
+> **UPDATE (March 12, 2026):** PSK dataset (5 files) analyzed. Color surcharges resolved (Alu = fixed EUR not percentage), 2400mm height limit confirmed, 11+ surcharges documented, 3 manufacturers covered. See `PSK_DATASET_ANALYSIS.md`.
+
+**Significant improvement — most calculation gaps resolved:**
+- [x] Height pricing anomalies — ✅ RESOLVED: 2400mm is hard limit, not anomaly
+- [x] Color surcharge catalog — ✅ Alu: Fixed EUR (RAL €299.53, Wood €599.05, Metallic €1,198.10 per side)
+- [x] Color surcharge catalog — ✅ PVC: 4-tier (€0 to ~€350)
+- [x] Verify if Alu uses percentage-based color surcharges — ✅ RESOLVED: Fixed EUR, not %
+- [x] Size constraints by manufacturer — ✅ 3 manufacturers documented (Aluprof, Aluplast, Gealan)
+- [ ] Complete glass surcharge catalog (extended but still approximate)
+- [ ] PVC profile-specific base pricing (Aluplast/Gealan base prices not fully documented)
 - [ ] Exact EUR prices from manufacturer catalog
 - [ ] Profile list with base prices
 - [ ] Size range and pricing table
@@ -370,12 +395,42 @@ Per manufacturer catalog checklist:
 - [ ] Weight calculation (not observed — may not apply to surface mount)
 - [ ] Second manufacturer verification
 
-### 4J. Raffstore (External Blinds) — Calculation ❌ 0% COMPLETE
+### 4J. Raffstore (External Blinds) — Calculation ✅ ~90% COMPLETE 🆕
 
-- [ ] Analyze Raffstore configurator on fenstermaxx24.com
-- [ ] Determine pricing architecture
-- [ ] Document pricing components
-- [ ] Then: gather manufacturer catalog data
+> **UPDATE (March 12, 2026):** Raffstore dataset (7 files) analyzed from CEO-uploaded files.
+> - ADDITIVE architecture confirmed (Architecture C, server-side — same as Rollladen)
+> - 9-point W×H base price matrix, 12 surcharge items, 12 color options documented
+> - Discount factor 0.60 confirmed, API endpoints documented, full JS configuration rules provided
+> - Width-dominant pricing confirmed (first 250mm width step = +€216.46 vs +€58.14 height)
+> - DRUTEX manufacturer data. Full analysis in `RAFFSTORE_ANALYSIS.md`.
+
+**ADDITIVE architecture (Architecture C, server-side) — confirmed. Same pattern as Rollladen.**
+
+Per manufacturer catalog checklist:
+- [x] Architecture confirmed: ADDITIVE, server-side AJAX (`/ajax/berechnen/`)
+- [x] Discount factor confirmed (0.60)
+- [x] Dimension limits: 800-4000mm W × 800-2500mm H
+- [x] Base price at 1000×1000: €681.57 (Old, Vorsatz)
+- [x] W×H price matrix (9 data points — Vorsatz type)
+- [x] Type options (2): Vorsatz (default), Aufsatz (+€248.87)
+- [x] Model options (4): 2 per type, ZF-A 240mm/300mm, ZF-S variants
+- [x] Slat types (3): C-80 (€0), Z-90 (+€31.43), S-90 (+€31.43)
+- [x] Box/rail colors (6): Standard white (€0), 5 non-standard (all +€31.43)
+- [x] Slat colors (6): ALL €0 surcharge (independent of box color)
+- [x] Motor options (5): Standard (€0) to Premium (+€332.01)
+- [x] Steuerung options: uWIFI Blebox (+€104.73)
+- [x] Putzleiste: +€31.43 (Vorsatz only)
+- [x] Configuration rules: Full JS logic for conditional display
+- [x] API endpoints (3): berechnen, minmax, addWarenkorb
+- [x] Calculator implementations (JS available)
+- [ ] More W×H data points (9 is good, 24+ like Aufsatzrollladen would be better)
+- [ ] Aufsatz (typ1) base price matrix (only have Vorsatz, Aufsatz adds +€248.87 at base but scaling unknown)
+- [ ] Fernbedienung options (`fst` parameter — no prices captured)
+- [ ] Windschutz options (`wss` parameter — no prices captured)
+- [ ] Kastendeckel options (`kd` parameter — Aufsatz only, no prices captured)
+- [ ] Adapter options (`ada` parameter — Aufsatz only, no prices captured)
+- [ ] Size-dependent surcharge verification (all captured at 1000×1000 only)
+- [ ] Second manufacturer verification
 
 ### 4K. Insektenschutz Plissee (Insect Protection) — Calculation ✅ ~90% COMPLETE, Catalog ⚠️ ~85%
 
@@ -439,10 +494,8 @@ Per manufacturer catalog checklist:
 - [ ] **HST** — Analyze configurator, determine pricing architecture
 - [ ] **Smart-Slide** — Analyze configurator, check if HST variant
 - [x] **Vorsatzrollladen** — ✅ ANALYZED: ADDITIVE architecture confirmed (same as Aufsatz), 6 models, shared surcharges. See `VORSATZROLLLADEN_ANALYSIS.md`
-- [x] **Insektenschutz Plissee** — ✅ ANALYZED: ADDITIVE architecture confirmed, 2 types, 5 colors (all free), height-dominant pricing. SIMPLEST product. See `INSEKTENSCHUTZ_ANALYSIS.md`
-- [ ] **Insektenschutz Plissee:** Get complete color catalog (CEO noted data may be incomplete)
-- [ ] **Insektenschutz Plissee:** Extract full W×H price matrix (systematic grid)
-- [ ] **Raffstore** — Analyze configurator, new product type
+- [x] **Insektenschutz Plissee** — ✅ ANALYZED: ADDITIVE architecture confirmed, 2 types, 5 colors (all free), width significant (+€259), height ceiling at 2300mm. See `INSEKTENSCHUTZ_ANALYSIS.md`
+- [x] **Raffstore** — ✅ ANALYZED: ADDITIVE architecture confirmed (server-side, same as Rollladen), 9-point W×H matrix, 12 surcharges, full JS rules. See `RAFFSTORE_ANALYSIS.md`
 - [ ] **Insektenschutz other types** — Check if other types exist beyond Plissee (e.g., Spannrahmen, Drehrahmen)
 - [ ] **Fensterbänke** — Analyze pricing, likely simple
 
@@ -472,10 +525,13 @@ Per manufacturer catalog checklist:
 - [ ] HST catalog data — After calculation is analyzed
 - [ ] Vorsatzrollladen full W×H matrix — Need complete dimension-based price grid (currently have model base prices only)
 - [ ] Vorsatzrollladen catalog data — Second manufacturer for verification
-- [ ] Insektenschutz Plissee full W×H matrix — Need systematic price grid (currently have scattered data points)
+- [ ] Insektenschutz Plissee full W×H matrix — Need systematic price grid (have 13 data points)
 - [ ] Insektenschutz Plissee complete colors — CEO noted set may be incomplete
 - [ ] Insektenschutz catalog data — Second manufacturer / other types (Spannrahmen, Drehrahmen?)
-- [ ] Raffstore catalog data — After calculation is analyzed
+- [ ] Raffstore — More W×H data points (9 → 24+ for better interpolation)
+- [ ] Raffstore — Aufsatz (typ1) separate base price matrix
+- [ ] Raffstore — Missing option surcharges: Fernbedienung, Windschutz, Kastendeckel, Adapter
+- [ ] Raffstore catalog data — Second manufacturer for verification
 - [ ] Smart-Slide catalog data — After calculation is analyzed
 
 ### Open Question for CEO 🔑
@@ -484,6 +540,143 @@ Per manufacturer catalog checklist:
   - Do we sell at Angebotspreis or add our own margin?
   - Same margin for all products or different per category?
 - [ ] **Confirm discount factor is 0.60 for ALL manufacturers** (verified for Drutex, Gealan, Holz, Alu so far)
+
+---
+
+## 5B. Cross-Product Calculation Analysis — What Shares What
+
+> **Added March 12, 2026** — Overview of which products share the same calculation logic and what's truly needed per product/material/manufacturer.
+
+### 🔑 Key Principle: Calculations vs Catalog Data
+
+**CALCULATIONS** = the ENGINE (formulas, logic, how prices are computed). Determined from website analysis.
+**CATALOG DATA** = the FUEL (actual EUR base prices and surcharge amounts). From manufacturer catalogs.
+
+**Once calculations are confirmed for a product, adding a new manufacturer = just providing catalog data (base prices + surcharge amounts).**
+
+### Architecture Groups — Shared Calculation Logic
+
+| Architecture | Products Using It | Calculation Status | Shared Logic? |
+|:------------|:-----------------|:------------------:|:-------------:|
+| **A: MATRIX** | Fenster, Balkontüren | ✅ 100% / 97% | ✅ YES — identical 2D lookup + surcharge pattern |
+| **B: FORMULA** | Haustüren, PSK | ✅ 95% / 85% | ⚠️ PARTIAL — both formula-based but different parameters |
+| **C: ADDITIVE (server)** | Aufsatz, Vorsatz, **Raffstore** | ✅ 97% / 85% / **90%** | ✅ YES — identical AJAX pattern + fixed EUR surcharges |
+| **C: ADDITIVE (client)** | Insektenschutz Plissee | ✅ 95% | ⚠️ UNIQUE — client-side JS, no server AJAX |
+| **D: ELEMENT-FORMULA** | Falt-Schiebe-Tür | ⚠️ 75% | Unique element-count architecture |
+
+### Product-by-Product: What We Know and What We Still Need
+
+#### ✅ Fenster (Windows) — CALCULATION COMPLETE, Multiple Materials Confirmed
+
+| Material | Manufacturers | Calc Same? | Catalog Data | What's Needed |
+|:---------|:-------------|:----------:|:------------:|:-------------|
+| **PVC/Kunststoff** | Drutex ✅, Gealan ✅ | ✅ YES — confirmed identical calc, different base prices | ✅ 2 complete | More manufacturers (Salamander, VEKA, Rehau, Aluplast) — **just catalog data** |
+| **Holz (Wood)** | Drutex ✅ | ✅ YES — same calc as PVC, different base prices | ✅ 1 complete | ✅ **Sufficient** — only 1 manufacturer typically needed for Holz |
+| **Aluminium** | None ❌ | ⚠️ LIKELY same calc — need to verify | ❌ None | Need 1 Alu manufacturer catalog + verify calc matches |
+| **Holz-Alu** | None ❌ | ⚠️ LIKELY same calc — need to verify | ❌ None | Need 1 catalog + verify calc |
+| **Kunststoff-Alu** | None ❌ | ⚠️ LIKELY same calc — need to verify | ❌ None | Need 1 catalog + verify calc |
+
+**Bottom line for Fenster:** ✅ PVC and Holz calculations are CONFIRMED identical — we're good on both. Only need to verify that Alu/Holz-Alu/Kunststoff-Alu use the same calculation pattern (very likely based on fenstermaxx24.com architecture).
+
+#### ✅ Balkontüren — CALCULATION COMPLETE, Same as Fenster
+
+| Material | Manufacturers | Calc Same? | Catalog Data | What's Needed |
+|:---------|:-------------|:----------:|:------------:|:-------------|
+| **Aluminium** | Aluprof ✅ | ✅ YES — same as Fenster + threshold options | ✅ 1 complete | More manufacturers — **just catalog data** |
+| **PVC** | None ❌ | ✅ CONFIRMED same calc as Alu Balkontür | ❌ None | 1 PVC manufacturer catalog |
+| **Holz** | None ❌ | ✅ CONFIRMED same calc | ❌ None | 1 Holz manufacturer catalog |
+
+**Bottom line for Balkontüren:** ✅ Calculation confirmed same across materials (like Fenster). Just need catalog data for PVC/Holz manufacturers.
+
+#### ✅ Haustüren — CALCULATION ~95% COMPLETE
+
+| Material | Manufacturers | Calc Same? | Catalog Data | What's Needed |
+|:---------|:-------------|:----------:|:------------:|:-------------|
+| **PVC** | Drutex ✅ | ✅ CONFIRMED | ✅ Complete | ✅ Good — verify with 2nd manufacturer |
+| **Holz** | Drutex ⚠️ ~65% | ✅ YES — same formula, different prices | ⚠️ Partial | Missing: colors, glass, handles |
+| **Aluminium** | None ❌ | ⚠️ LIKELY same formula — need to verify | ❌ None | 1 Alu manufacturer catalog + verify calc |
+
+**Bottom line for Haustüren:** ✅ PVC and Holz confirmed same formula (width-dominant, +€37.77/100mm W). Complete Holz data (colors, glass, handles) and verify Alu uses same calc.
+
+#### ✅ Rollladen Aufsatz — CALCULATION COMPLETE (~97%)
+
+| Manufacturer | Calc Same? | Catalog Data | What's Needed |
+|:-------------|:----------:|:------------:|:-------------|
+| **Drutex** ✅ | ✅ CONFIRMED | ✅ ~98% complete | Minor: Seitenblende, Farbe Kasten separately |
+| Other manufacturers | ✅ YES — ADDITIVE architecture is universal | ❌ None | **Just catalog data** (base prices + surcharge amounts) |
+
+**Bottom line for Aufsatz:** ✅ Calculation complete and architecture confirmed universal. New manufacturers = just provide price catalog.
+
+#### ✅ Rollladen Vorsatz — CALCULATION ~85% COMPLETE
+
+| Manufacturer | Calc Same? | Catalog Data | What's Needed |
+|:-------------|:----------:|:------------:|:-------------|
+| **Aluprof** ✅ | ✅ CONFIRMED — same ADDITIVE architecture as Aufsatz | ⚠️ ~80% | Full W×H matrix (only have model base prices) |
+| Other manufacturers | ✅ YES — shares surcharges with Aufsatz | ❌ None | Catalog data |
+
+**Bottom line for Vorsatz:** ✅ Confirmed shares ADDITIVE architecture + identical color & drive surcharges with Aufsatz. Need more size-based price data.
+
+#### ✅ Raffstore — CALCULATION ~90% COMPLETE 🆕
+
+| Manufacturer | Calc Same? | Catalog Data | What's Needed |
+|:-------------|:----------:|:------------:|:-------------|
+| **DRUTEX** ✅ | ✅ CONFIRMED — ADDITIVE (server-side), same as Rollladen | ⚠️ ~85% | More W×H points, Aufsatz type matrix, missing option surcharges |
+| Other manufacturers | ✅ YES — ADDITIVE architecture is universal | ❌ None | **Just catalog data** |
+
+**Bottom line for Raffstore:** ✅ Architecture confirmed same as Rollladen. 12 surcharges + 12 colors + 9 price points documented. Only need more W×H data and a few missing option prices.
+
+#### ⚠️ PSK — CALCULATION ~85% COMPLETE
+
+| Material | Manufacturers | Calc Same? | Catalog Data | What's Needed |
+|:---------|:-------------|:----------:|:------------:|:-------------|
+| **PVC** | Drutex ⚠️, Aluplast ⚠️, Gealan ⚠️ | ✅ YES — confirmed same FORMULA architecture | ⚠️ Partial | PVC profile-specific base pricing, exact glass catalog |
+| **Aluminium** | Aluprof ⚠️ | ✅ YES — same FORMULA arch, fixed EUR colors | ⚠️ Partial | Exact EUR values |
+
+**Bottom line for PSK:** ⚠️ Multi-manufacturer data confirmed same architecture. Color surcharges resolved (fixed EUR for Alu, not percentage). Need glass catalog completion and PVC base prices.
+
+#### ⚠️ Falt-Schiebe-Tür — CALCULATION ~75% COMPLETE
+
+| Material | Manufacturers | What's Needed |
+|:---------|:-------------|:-------------|
+| **Aluminium** | Ranges only ⚠️ | Exact EUR values, color % vs fixed verification, scaling formula |
+
+**Bottom line:** Need to verify color surcharge method and derive exact scaling formula.
+
+#### ✅ Insektenschutz Plissee — CALCULATION ~95% COMPLETE
+
+| Manufacturer | Calc Same? | Catalog Data | What's Needed |
+|:-------------|:----------:|:------------:|:-------------|
+| **Drutex** ✅ | ✅ CONFIRMED — ADDITIVE (client-side JS) | ⚠️ ~85% | Full W×H matrix, verify color list completeness |
+| Other manufacturers | ⚠️ UNKNOWN — client-side calc may be manufacturer-specific | ❌ None | Need to check other types (Spannrahmen, Drehrahmen) |
+
+**Bottom line:** ✅ Simplest product — nearly complete. Width IS significant (+€259), all 5 colors = €0. Need systematic price grid.
+
+#### ❌ Still Missing Entirely
+
+| Product | Priority | Notes |
+|:--------|:---------|:------|
+| **HST (Hebe-Schiebe-Tür)** | HIGH | Likely FORMULA-based like PSK — need to analyze from fenstermaxx24.com |
+| **Smart-Slide** | MEDIUM | May be HST variant — analyze from fenstermaxx24.com |
+| **Insektenschutz (other types)** | LOW | Spannrahmen, Drehrahmen — check if they exist in configurator |
+| **Fensterbänke** | LOW | Likely simple length × price_per_meter |
+
+### Summary: What's Truly Needed Now
+
+**Products where calculations are DONE and we only need more catalog data (manufacturer prices):**
+1. ✅ **Fenster** — PVC + Holz confirmed same calc. Need: Alu verification + more PVC manufacturers
+2. ✅ **Balkontüren** — Same as Fenster. Need: PVC + Holz manufacturer catalogs
+3. ✅ **Haustüren** — PVC + Holz confirmed same calc. Need: Alu verification + Holz completion
+4. ✅ **Aufsatzrollladen** — Complete. Need: additional manufacturer catalogs
+5. ✅ **Vorsatzrollladen** — Confirmed same as Aufsatz. Need: full W×H matrix
+6. ✅ **Raffstore** — Confirmed same ADDITIVE arch. Need: more W×H points + missing options
+7. ✅ **Insektenschutz Plissee** — Nearly complete. Need: full W×H matrix
+
+**Products where calculations still need work:**
+1. ⚠️ **PSK** (~85%) — Most gaps resolved, need glass catalog + PVC base pricing
+2. ⚠️ **Falt-Schiebe-Tür** (~75%) — Need exact EUR + color method verification
+3. ❌ **HST** (0%) — Need to analyze from scratch
+4. ❌ **Smart-Slide** (0%) — Need to analyze from scratch
+5. ❌ **Fensterbänke** (0%) — Need to analyze
 
 ---
 
@@ -549,11 +742,11 @@ When providing catalog data for any new manufacturer, we need:
 | Balkontüren | ✅ 97% | ✅ 1 combo | Gather PVC/Holz catalogs + exact EUR thresholds |
 | Haustüren | ✅ 95% | ⚠️ 2 combos | Thresholds + side panels verified; Holz ~65% (need colors/glass); gather 2nd manufacturer |
 | Rollladen (Aufsatz) | ✅ 97% | ✅ **~98%** | Comprehensive: 24 prices, 9 drives, 12 colors, JS+PY calcs. See `AUFSATZROLLLADEN_ANALYSIS.md` |
-| Rollladen (Vorsatz) | ✅ **~85%** 🆕 | ⚠️ **~80%** 🆕 | 6 models analyzed, shared surcharges confirmed. Need full W×H matrix. See `VORSATZROLLLADEN_ANALYSIS.md` |
+| Rollladen (Vorsatz) | ✅ **~85%** | ⚠️ **~80%** | 6 models analyzed, shared surcharges confirmed. Need full W×H matrix. See `VORSATZROLLLADEN_ANALYSIS.md` |
 | Falt-Schiebe-Tür | ⚠️ 75% | ⚠️ Ranges | Verify color method + get exact EUR |
-| PSK | ⚠️ 70% | ⚠️ Partial | Get full surcharge catalog |
+| PSK | ⚠️ **85%** ⬆️ | ⚠️ Partial | Color surcharges resolved, height limit confirmed. Need glass + PVC base pricing. See `PSK_DATASET_ANALYSIS.md` |
 | HST | ❌ 0% | ❌ None | Analyze fenstermaxx24.com first |
 | Smart-Slide | ❌ 0% | ❌ None | Analyze fenstermaxx24.com first |
-| Raffstore | ❌ 0% | ❌ None | Analyze fenstermaxx24.com first |
-| Insektenschutz Plissee | ✅ **~90%** 🆕 | ⚠️ **~85%** 🆕 | SIMPLEST product. 2 types, 5 colors (all free). Need full W×H matrix + verify color list. See `INSEKTENSCHUTZ_ANALYSIS.md` |
+| Raffstore | ✅ **~90%** 🆕 | ⚠️ **~85%** 🆕 | ADDITIVE architecture. 9-pt matrix, 12 surcharges, 12 colors, full rules. Need more W×H points. See `RAFFSTORE_ANALYSIS.md` |
+| Insektenschutz Plissee | ✅ **~95%** ⬆️ | ⚠️ **~85%** | Width significant, height ceiling at 2300mm. Need full W×H matrix + verify colors. See `INSEKTENSCHUTZ_ANALYSIS.md` |
 | Fensterbänke | ❌ 0% | ❌ None | Analyze pricing |

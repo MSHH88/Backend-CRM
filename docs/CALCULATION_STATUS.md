@@ -29,18 +29,18 @@ There are **two separate things** we need:
 
 | What | Source | Status |
 |------|--------|--------|
-| **CALCULATIONS** (formulas, logic, how prices are computed) | Analyzing fenstermaxx24.com / manufacturer websites / API reverse-engineering | **~90% complete** (updated with PSK dataset + expanded Insektenschutz Plissee data + Vorsatzrollladen data + 7B Alu data + Falt-Schiebe-Tür data + Holz Haustür data) |
-| **CATALOG DATA** (actual EUR prices, surcharge amounts, base price tables) | Your catalogs from manufacturers | **~22% complete** (8 of ~40 combos + improved Insektenschutz) |
+| **CALCULATIONS** (formulas, logic, how prices are computed) | Analyzing fenstermaxx24.com / manufacturer websites / API reverse-engineering | **~91% complete** (updated with Raffstore dataset + PSK dataset + expanded Insektenschutz Plissee data + Vorsatzrollladen data + 7B Alu data + Falt-Schiebe-Tür data + Holz Haustür data) |
+| **CATALOG DATA** (actual EUR prices, surcharge amounts, base price tables) | Your catalogs from manufacturers | **~26% complete** (9 of ~40 combos + improved data for several) |
 
 **Key Insight:** Once all calculations are known, the system can accept catalog data and automatically generate pricing. The calculations are the ENGINE — the catalog data is the FUEL.
 
 ### Current Score
 
-- **Calculations we HAVE:** Fenster (100%), Balkontür (~97%), Haustüren (~95%), Rollladen Aufsatz (~97%), **Insektenschutz Plissee (~95%)**, **PSK (~85% ⬆️ was 70%)**, Rollladen Vorsatz (~85%), Falt-Schiebe-Tür (~75%)
-- **Calculations we NEED:** HST, Smart-Slide, Raffstore, Insektenschutz (other types), Fensterbänke
-- **Catalog data we HAVE:** 8 complete + 3 partial (Drutex PVC, Gealan PVC, Holz Fenster, Alu Balkontür, Drutex Haustür PVC, Aufsatzrollladen, **Insektenschutz Plissee**, Vorsatzrollladen partial, **PSK partial ⬆️ improved**, **Drutex Holz Haustür ~65%**)
+- **Calculations we HAVE:** Fenster (100%), Balkontür (~97%), Haustüren (~95%), Rollladen Aufsatz (~97%), **Insektenschutz Plissee (~95%)**, **Raffstore (~90% 🆕)**, **PSK (~85% ⬆️ was 70%)**, Rollladen Vorsatz (~85%), Falt-Schiebe-Tür (~75%)
+- **Calculations we NEED:** HST, Smart-Slide, Insektenschutz (other types), Fensterbänke
+- **Catalog data we HAVE:** 9 complete + 3 partial (Drutex PVC, Gealan PVC, Holz Fenster, Alu Balkontür, Drutex Haustür PVC, Aufsatzrollladen, **Insektenschutz Plissee**, **Raffstore DRUTEX 🆕**, Vorsatzrollladen partial, **PSK partial ⬆️ improved**, **Drutex Holz Haustür ~65%**)
 - **Catalog data we NEED:** ~30+ more manufacturer/material combinations
-- **Recent update (March 12, 2026):** New PSK dataset (5 files) added with color surcharges (fixed EUR confirmed), multi-manufacturer size constraints, extended surcharge catalog (11+ items), and 2400mm height hard limit resolution. See `docs/PSK_DATASET_ANALYSIS.md`. Also: Insektenschutz Plissee dataset files (7 files total, all analyzed). See `docs/INSEKTENSCHUTZ_ANALYSIS.md`
+- **Recent update (March 12, 2026):** Raffstore dataset (7 files) analyzed — ADDITIVE architecture confirmed (same as Rollladen), 9-point W×H matrix, 12 surcharges, 12 colors, full JS rules, DRUTEX manufacturer. See `docs/RAFFSTORE_ANALYSIS.md`. Also: PSK dataset (5 files) with color surcharges resolved, Insektenschutz Plissee (7 files). See `docs/PSK_DATASET_ANALYSIS.md`, `docs/INSEKTENSCHUTZ_ANALYSIS.md`
 
 ---
 
@@ -180,13 +180,13 @@ With the expanded analysis of these 3 datasets, Architecture C (ADDITIVE) is now
 |---------|--------|----------|--------|
 | **HST (Hebe-Schiebe-Tür)** | ❌ 0% | HIGH | Medium — likely formula-based like PSK |
 | **Smart-Slide** | ❌ 0% | MEDIUM | Medium — may be HST variant |
-| **Raffstore (External Blinds)** | ❌ 0% | LOW | Medium — may be ADDITIVE like Rollladen |
+| ~~**Raffstore (External Blinds)**~~ | ~~❌ 0%~~ | ~~LOW~~ | ✅ **~90% COMPLETE** — ADDITIVE architecture confirmed. See `RAFFSTORE_ANALYSIS.md` |
 | **Insektenschutz (other types)** | ❌ 0% | LOW | Small — Spannrahmen, Drehrahmen etc. |
 | **Fensterbänke (Window Sills)** | ❌ 0% | LOW | Small — likely length × price_per_meter |
 | **PSK (completion)** | ⚠️ 85% | MEDIUM | Small — need exact glass/profile surcharges + PVC base pricing |
 | **Falt-Schiebe-Tür (completion)** | ⚠️ 75% | LOW | Medium — need exact EUR + color method |
 
-**Overall calculation progress: ~90% (8 of 12 product types have calculations)**
+**Overall calculation progress: ~91% (9 of 12 product types have calculations)**
 
 ---
 
@@ -444,12 +444,47 @@ total = (base_price + surcharges) × 0.60
 **Manufacturers with catalog data:** Aluprof/fenstermaxx24 ✅
 **Manufacturers MISSING catalog data:** Other Vorsatzrollladen manufacturers
 
-### 4J. RAFFSTORE (External Blinds) — ❌ NO DATA
+### 4J. RAFFSTORE (External Blinds) — ✅ ~90% COMPLETE 🆕
+
+> **UPDATE (March 12, 2026):** Raffstore dataset (7 files) analyzed from CEO-uploaded files.
+> - ADDITIVE architecture confirmed (Architecture C, server-side — same as Rollladen)
+> - 9-point W×H base price matrix documented (Vorsatz, DRUTEX)
+> - 12 surcharge items with EUR values, 12 color options
+> - 2 types (Vorsatz base €681.57, Aufsatz +€248.87), 4 models, 3 slat types
+> - 5 motor options (€0 to +€332.01) + smart home steuerung (+€104.73)
+> - Dimension limits: 800-4000mm W × 800-2500mm H
+> - Full JS configuration rules + 3 API endpoints documented
+> - Width-dominant pricing (first 250mm W = +€216.46 vs +€58.14 H)
+> - Discount factor 0.60 confirmed. Full analysis in `RAFFSTORE_ANALYSIS.md`.
 
 | Calculation Aspect | Status | Notes |
 |---|---|---|
-| All aspects | ❌ UNKNOWN | May be additive like Rollladen or unique |
-| **Overall Raffstore Calc** | **❌ 0% COMPLETE** | **Need to analyze from fenstermaxx24.com** |
+| Architecture classification | ✅ CONFIRMED | ADDITIVE (Architecture C, server-side AJAX — same as Rollladen) |
+| Discount factor | ✅ CONFIRMED | 0.60 (40% off list price) |
+| Base price matrix (Vorsatz) | ✅ HAVE | 9 data points (W×H), non-linear pricing |
+| Dimension limits | ✅ COMPLETE | 800-4000mm W × 800-2500mm H |
+| Type surcharges | ✅ COMPLETE | Aufsatz adds +€248.87 at base |
+| Model surcharges | ✅ COMPLETE | 4 models (2 per type), 300mm box = +€31.43 |
+| Slat type surcharges | ✅ COMPLETE | 3 types: C-80 (€0), Z-90 (+€31.43), S-90 (+€31.43) |
+| Color system (box) | ✅ COMPLETE | 6 options: standard €0, 5 non-standard flat €31.43 |
+| Color system (slats) | ✅ COMPLETE | 6 options: ALL €0 surcharge |
+| Motor surcharges | ✅ COMPLETE | 5 options: standard €0 to premium +€332.01 |
+| Steuerung (smart home) | ✅ HAVE | uWIFI Blebox +€104.73 |
+| Putzleiste | ✅ HAVE | +€31.43 (Vorsatz only) |
+| Configuration rules | ✅ COMPLETE | Full JS logic for all conditional display rules |
+| API endpoints | ✅ COMPLETE | berechnen, minmax, addWarenkorb |
+| Aufsatz base price matrix | ⚠️ PARTIAL | Only Aufsatz surcharge at base size known (+€248.87), size scaling unknown |
+| More W×H data points | ⚠️ NEED | 9 points → ideally 24+ (like Aufsatzrollladen 6W×4H) |
+| Fernbedienung options | ❌ MISSING | `fst` parameter exists but no surcharges captured |
+| Windschutz options | ❌ MISSING | `wss` parameter exists but no surcharges captured |
+| Kastendeckel options | ❌ MISSING | `kd` parameter (Aufsatz only), no surcharges |
+| Adapter options | ❌ MISSING | `ada` parameter (Aufsatz only), no surcharges |
+| **Overall Raffstore Calc** | **✅ ~90% COMPLETE** | **Architecture confirmed, core surcharges documented. Need more W×H data + a few missing option prices.** |
+
+**Key insight:** Raffstore is the 4th product confirmed using Architecture C (ADDITIVE, server-side). The engine module for Aufsatzrollladen/Vorsatzrollladen can be extended to handle Raffstore with product-specific surcharge categories (slat types, independent box/slat colors, type switch).
+
+**Manufacturers with catalog data:** DRUTEX ✅
+**Manufacturers MISSING catalog data:** Other Raffstore manufacturers
 
 ### 4K. INSEKTENSCHUTZ PLISSEE (Insect Protection) — ✅ ~95% COMPLETE ⬆️
 
@@ -552,7 +587,7 @@ These calculations we do NOT have yet and need to reverse-engineer from the webs
 | **Smart-Slide** | Likely Formula-based (B) | MEDIUM | Medium | May be variant of HST |
 | ~~**Falt-Schiebe-Tür**~~ | ~~Unknown~~ | ~~LOW~~ | ~~Medium~~ | ✅ **MOVED to 7B** — data received, now ~75% complete. See `docs/FALT_SCHIEBE_TUER_ANALYSIS.md` |
 | ~~**Vorsatzrollladen**~~ | ~~Likely Additive (C)~~ | ~~MEDIUM~~ | ~~Small~~ | ✅ **ANALYZED** — ADDITIVE architecture confirmed, ~85% complete. See `docs/VORSATZROLLLADEN_ANALYSIS.md` |
-| **Raffstore** | Unknown | LOW | Medium | External blind, new product type |
+| ~~**Raffstore**~~ | ~~Unknown~~ | ~~LOW~~ | ~~Medium~~ | ✅ **ANALYZED** — ADDITIVE architecture confirmed (server-side, same as Rollladen), ~90% complete. See `docs/RAFFSTORE_ANALYSIS.md` |
 | ~~**Insektenschutz**~~ | ~~Likely Simple additive~~ | ~~LOW~~ | ~~Small~~ | ✅ **ANALYZED** — ADDITIVE architecture confirmed, ~90% complete. SIMPLEST product. See `docs/INSEKTENSCHUTZ_ANALYSIS.md` |
 | **Insektenschutz (other types)** | Likely Additive (C) | LOW | Small | Check if Spannrahmen, Drehrahmen, etc. exist on configurator |
 | **Fensterbänke** | Likely Linear (length-based) | LOW | Small | Simple length × price_per_meter |
@@ -841,9 +876,15 @@ For a product where the calculation is complete (e.g., Fenster):
 - [ ] Width × Height pricing table
 - [ ] Seitenblende + Putzträger options + prices
 
-### 9F. FOR RAFFSTORE, INSEKTENSCHUTZ, FENSTERBÄNKE — Calculations ❌ 0%
+### 9F. FOR RAFFSTORE — Calculation ✅ ~90% COMPLETE 🆕
 
-**We need to analyze fenstermaxx24.com FIRST before catalogs are useful.**
+> **UPDATE (March 12, 2026):** Raffstore dataset analyzed — ADDITIVE architecture confirmed. See `docs/RAFFSTORE_ANALYSIS.md`.
+
+**Raffstore uses same architecture as Rollladen — catalog data can be used NOW.**
+
+### 9G. FOR INSEKTENSCHUTZ, FENSTERBÄNKE — Calculations Partially/Not Complete
+
+**Insektenschutz Plissee is ~95% complete. Other types and Fensterbänke need analysis from fenstermaxx24.com FIRST.**
 
 ---
 
@@ -861,7 +902,7 @@ These need to be done before catalog data is useful:
 | A4 | Smart-Slide — calculation analysis | Medium | MEDIUM |
 | A5 | Vorsatzrollladen — calculation analysis | Small | MEDIUM |
 | ~~A6~~ | ~~Falt-Schiebe-Tür — calculation analysis~~ | ~~Medium~~ | ✅ **~75% DONE** — verify color % + derive formula |
-| A7 | Raffstore — calculation analysis | Medium | LOW |
+| ~~A7~~ | ~~Raffstore — calculation analysis~~ | ~~Medium~~ | ✅ **~90% DONE** — ADDITIVE architecture confirmed, 12 surcharges + 12 colors. See `RAFFSTORE_ANALYSIS.md` |
 | A8 | Insektenschutz — calculation analysis | Small | LOW |
 | A9 | Fensterbänke — calculation analysis | Small | LOW |
 
@@ -904,11 +945,13 @@ For each product/manufacturer combination:
 ### You Need to WAIT (calculations not ready yet):
 1. HST catalogs — we need to analyze the calculation first
 2. Smart-Slide catalogs — calculation needed first
-3. Falt-Schiebe-Tür catalogs — calculation needed first
-4. Vorsatzrollladen catalogs — calculation needed first
-5. Raffstore catalogs — calculation needed first
-6. Insektenschutz catalogs — calculation needed first
-7. Fensterbänke catalogs — calculation needed first
+3. Falt-Schiebe-Tür catalogs — calculation ~75% done, need exact EUR + color method
+4. Fensterbänke catalogs — calculation needed first
+
+### You CAN Provide Now (calculations recently completed):
+6. **Raffstore catalogs** for additional manufacturers — calculation ✅ ~90% done (ADDITIVE same as Rollladen)
+7. **Vorsatzrollladen catalogs** for additional manufacturers — calculation ✅ ~85% done
+8. **Insektenschutz catalogs** for additional manufacturers/types — calculation ✅ ~95% done
 
 ### For Testing: We Use Existing Price Data
 ✅ Correct — for testing and development, we use the price data we already have (Drutex, Gealan, Holz, Alu). Real catalog prices are plugged in later.
