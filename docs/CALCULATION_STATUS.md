@@ -34,6 +34,8 @@ There are **two separate things** we need:
 
 **Key Insight:** Once all calculations are known, the system can accept catalog data and automatically generate pricing. The calculations are the ENGINE — the catalog data is the FUEL.
 
+> **📋 See also:** `docs/GETTING_DATA.md` Section 0 for CEO Q&A on catalog impact, calculation family cross-reference, and what to gather next.
+
 ### Current Score
 
 - **Calculations we HAVE:** Fenster (100%), Balkontür (~97%), Haustüren (~95%), Rollladen Aufsatz (~97%), **Insektenschutz Plissee (~95%)**, **Raffstore (~90% 🆕)**, **PSK (~85% ⬆️ was 70%)**, Rollladen Vorsatz (~85%), Falt-Schiebe-Tür (~75%)
