@@ -186,7 +186,7 @@ With the expanded analysis of these 3 datasets, Architecture C (ADDITIVE) is now
 | **PSK (completion)** | ⚠️ 85% | MEDIUM | Small — need exact glass/profile surcharges + PVC base pricing |
 | **Falt-Schiebe-Tür (completion)** | ⚠️ 75% | LOW | Medium — need exact EUR + color method |
 
-**Overall calculation progress: ~88% (8 of 12 product types have calculations)**
+**Overall calculation progress: ~90% (8 of 12 product types have calculations)**
 
 ---
 
