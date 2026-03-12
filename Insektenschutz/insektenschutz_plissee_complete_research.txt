@@ -1,0 +1,380 @@
+================================================================================
+INSEKTENSCHUTZ PLISSEE CONFIGURATOR - COMPLETE RESEARCH DATA
+================================================================================
+Source: https://www.fenstermaxx24.com/konfigurator/alu-insektenschutz-plissee/
+Iframe: https://confde.fenstermaxx24.com/confapp/ALU-Insektenschutzplissee-bestellen-drutex/
+Manufacturer: Drutex
+Product: Aluminium Insektenschutz-Plissee (Insect Protection Pleated Doors)
+Extraction Date: 2026-03-12
+================================================================================
+
+================================================================================
+1. PRODUCT OVERVIEW
+================================================================================
+
+Product Name: Drutex Aluminium Plissee
+Description: Top quality insect protection pleated door solution for:
+  - Hebeschiebetür (lift-and-slide doors)
+  - Terrassentür (patio doors)
+  - Faltschiebetür (folding sliding doors)
+  - Balkontür (balcony doors)
+
+Key Features:
+  - Top quality
+  - Easy installation
+  - 5 standard colors to choose from
+  - Aluminium frame
+  - Perfect insect protection solution
+
+================================================================================
+2. PLISSEE TYPES (TESTED)
+================================================================================
+
+Type 1: 1-teilige Plissee Tür (Single-part pleated door)
+  - Base Price: 906.50 EUR
+  - Final Price (40% discount): 543.90 EUR
+  - Surcharge: 0.00 EUR
+  - Description: Single panel pleated door
+
+Type 2: 2-teilige Plissee Tür (Two-part pleated door)
+  - Base Price: Not fully captured (system issue)
+  - Final Price: N/A
+  - Surcharge: Estimated 787.00 EUR (based on previous analysis)
+  - Description: Two-panel pleated door (split in middle), width doubled
+
+================================================================================
+3. FRAME COLORS (ALL TESTED - NO SURCHARGES)
+================================================================================
+
+IMPORTANT FINDING: All frame colors have NO surcharge (0.00 EUR)
+
+Color 1: Weiß (White) - RAL 9016
+  - Price: 543.90 EUR (final with 40% discount)
+  - Surcharge: 0.00 EUR
+  - Status: DEFAULT
+
+Color 2: Anthrazitgrau (Anthracite Gray) - RAL 7016
+  - Price: 543.90 EUR (final with 40% discount)
+  - Surcharge: 0.00 EUR
+  - Status: TESTED
+
+Color 3: Graubraun (Gray-Brown) - RAL 8019
+  - Price: 543.90 EUR (final with 40% discount)
+  - Surcharge: 0.00 EUR
+  - Status: TESTED
+
+Color 4: Tiefschwarz (Deep Black) - RAL 9005
+  - Price: 543.90 EUR (final with 40% discount)
+  - Surcharge: 0.00 EUR
+  - Status: TESTED
+
+Color 5: White aluminium - RAL 9006
+  - Price: 543.90 EUR (final with 40% discount)
+  - Surcharge: 0.00 EUR
+  - Status: TESTED
+
+================================================================================
+4. NET COLOR
+================================================================================
+
+Net Color: Schwarz (Black)
+  - Price: 0.00 EUR surcharge
+  - Only option available
+  - No variations
+
+================================================================================
+5. OPENING DIRECTIONS (TESTED)
+================================================================================
+
+Direction 1: Plissee von Rechts nach Links schiebbar (Right to Left)
+  - Price: 543.90 EUR (final with 40% discount)
+  - Surcharge: 0.00 EUR
+  - Status: DEFAULT
+
+Direction 2: Plissee von Links nach Rechts schiebbar (Left to Right)
+  - Price: 543.90 EUR (final with 40% discount)
+  - Surcharge: 0.00 EUR
+  - Status: TESTED
+
+FINDING: Opening direction does NOT affect price
+
+================================================================================
+6. DIMENSION CONSTRAINTS
+================================================================================
+
+Width (Breite):
+  - Minimum: 700 mm
+  - Maximum: 2400 mm
+  - Default: 700 mm
+  - Unit: mm
+  - Allowed Range: 700 to 2400 mm
+
+Height (Höhe):
+  - Minimum: 1900 mm
+  - Maximum: 2600 mm
+  - Default: 1900 mm
+  - Unit: mm
+  - Allowed Range: 1900 to 2600 mm
+
+IMPORTANT: Height range is VERY LIMITED (only 700mm range) compared to other products
+
+================================================================================
+7. SIZE-BASED PRICE MATRIX (TESTED WITH 250MM INCREMENTS)
+================================================================================
+
+WIDTH VARIATIONS (Height fixed at 1900mm, 1-teilige):
+  Width: 700mm    → Price: 543.90 EUR
+  Width: 950mm    → Price: 558.84 EUR (+14.94 EUR)
+  Width: 1200mm   → Price: 586.78 EUR (+27.94 EUR from 700mm)
+  Width: 1450mm   → Price: 641.29 EUR (+97.39 EUR from 700mm)
+  Width: 1700mm   → Price: 673.93 EUR (+130.03 EUR from 700mm)
+  Width: 1950mm   → Price: 792.34 EUR (+248.44 EUR from 700mm)
+  Width: 2150mm   → Price: 802.85 EUR (+258.95 EUR from 700mm)
+
+HEIGHT VARIATIONS (Width fixed at 700mm, 1-teilige):
+  Height: 1900mm  → Price: 543.90 EUR
+  Height: 2050mm  → Price: 567.14 EUR (+23.24 EUR)
+  Height: 2300mm  → Price: 619.43 EUR (+75.53 EUR from 1900mm)
+  Height: 2550mm  → Price: 619.43 EUR (NO CHANGE from 2300mm)
+
+COMBINED SIZE CHANGES (1-teilige):
+  950×2050mm   → Price: 580.97 EUR
+  1200×2300mm  → Price: 668.12 EUR
+  1450×2550mm  → Price: 763.29 EUR
+
+================================================================================
+8. PRICING FORMULA & BUSINESS LOGIC
+================================================================================
+
+Discount Rate: 40%
+Discount Multiplier: 0.60 (1 - 0.40)
+
+Price Calculation Formula:
+  Final Price = Base Price × (1 - Discount Rate)
+  Final Price = Base Price × 0.60
+
+For 1-teilige (default):
+  Base Price: 906.50 EUR
+  Discount: 362.60 EUR (40%)
+  Final Price: 543.90 EUR
+
+Key Observations:
+  1. All colors have NO surcharge (unique feature)
+  2. Opening direction has NO surcharge
+  3. Net color has NO surcharge
+  4. Price is primarily driven by SIZE (width and height)
+  5. Width has more impact on price than height
+  6. Height has a ceiling effect (2300mm = 2550mm price)
+  7. 40% discount is applied to all configurations
+
+================================================================================
+9. PRICE PER SQUARE METER
+================================================================================
+
+700×1900mm (1.33 m²):
+  Price: 543.90 EUR
+  Price/m²: 408.87 EUR/m²
+
+1200×2300mm (2.76 m²):
+  Price: 668.12 EUR
+  Price/m²: 242.04 EUR/m²
+
+1450×2550mm (3.70 m²):
+  Price: 763.29 EUR
+  Price/m²: 206.03 EUR/m²
+
+FINDING: Larger sizes have better price per m² (economies of scale)
+
+================================================================================
+10. API ENDPOINTS & BACKEND COMMUNICATION
+================================================================================
+
+Main Configurator URL:
+  https://confde.fenstermaxx24.com/confapp/ALU-Insektenschutzplissee-bestellen-drutex/
+
+Scripts Loaded:
+  - jQuery: https://confde.fenstermaxx24.com/confapp/assets/jquery.min.js
+  - Bootstrap: https://confde.fenstermaxx24.com/confapp/assets/bootstrap.min.js
+  - Configurator Logic: https://confde.fenstermaxx24.com/confapp/ALU-Insektenschutzplissee-bestellen-drutex/js/konfig.min.js
+  - Business Rules: https://confde.fenstermaxx24.com/confapp/ALU-Insektenschutzplissee-bestellen-drutex/js/rules.min.js
+  - Global Functions: https://confde.fenstermaxx24.com/confapp/assets/global.min.js?v=2026031210
+
+Configuration Data Structure:
+  - breite (width): number input
+  - hoehe (height): number input
+  - Plissee Type: radio buttons (typ1, typ2)
+  - Opening Direction: radio buttons (pl_l, pl_r)
+  - Frame Color: image buttons (fs1_01 to fs1_05)
+  - Net Color: single option (Schwarz)
+
+Price Update Mechanism:
+  - Event-driven: Changes trigger immediate price recalculation
+  - No visible API calls (calculations done client-side via JavaScript)
+  - Price updates appear in real-time
+
+================================================================================
+11. CONFIGURATION OBJECT STRUCTURE
+================================================================================
+
+obj_plissee (estimated):
+{
+  breite: 700,                          // Width in mm
+  hoehe: 1900,                          // Height in mm
+  typ: "1-teilige",                     // Plissee type
+  richtung: "rechts-nach-links",        // Opening direction
+  farbe_rahmen: "weiss-9016",           // Frame color
+  farbe_netz: "schwarz",                // Net color
+  grundpreis: 906.50,                   // Base price
+  rabatt: 0.40,                         // Discount rate
+  flaeche: 1.33,                        // Area in m²
+  gesamtpreis: 543.90                   // Final price
+}
+
+================================================================================
+12. BUSINESS RULES & CONSTRAINTS
+================================================================================
+
+1. Width Constraints:
+   - Minimum: 700 mm
+   - Maximum: 2400 mm
+   - Increments: Any value allowed (tested 250mm increments)
+
+2. Height Constraints:
+   - Minimum: 1900 mm
+   - Maximum: 2600 mm
+   - Increments: Any value allowed (tested 250mm increments)
+   - Note: Price ceiling at 2300mm (no increase to 2550mm)
+
+3. Color Rules:
+   - All 5 colors available for all plissee types
+   - No color restrictions based on other selections
+   - All colors have identical pricing
+
+4. Opening Direction Rules:
+   - Both directions available for all plissee types
+   - No impact on pricing
+   - No restrictions based on other selections
+
+5. Plissee Type Rules:
+   - 1-teilige: Standard single panel
+   - 2-teilige: Width is doubled in display (input 1025 = display 2050)
+
+6. Discount Rules:
+   - 40% discount applied to ALL configurations
+   - No minimum order value
+   - Discount is automatic (not code-based)
+
+================================================================================
+13. UNIQUE FEATURES & FINDINGS
+================================================================================
+
+1. NO COLOR SURCHARGES: Unlike other products (Aufsatzrollladen, Vorsatzrollladen),
+   all frame colors have identical pricing (0.00 EUR surcharge each)
+
+2. NO OPENING DIRECTION SURCHARGES: Both opening directions cost the same
+
+3. HEIGHT CEILING: Price doesn't increase beyond 2300mm height
+
+4. ECONOMIES OF SCALE: Larger sizes have better price per m²
+
+5. CLIENT-SIDE CALCULATIONS: All price calculations appear to be done in JavaScript
+   on the client side (no server API calls visible)
+
+6. LIMITED HEIGHT RANGE: Only 700mm range (1900-2600mm) vs. other products with
+   larger ranges
+
+7. SIMPLE CONFIGURATION: Only 5 main options (type, direction, color, net, size)
+   compared to more complex products
+
+================================================================================
+14. COMPARISON WITH OTHER PRODUCTS
+================================================================================
+
+Aufsatzrollladen:
+  - Height range: 1000-1700mm (700mm range)
+  - Width range: 800-2500mm
+  - Multiple color surcharges
+  - Multiple drive types with surcharges
+  - More complex pricing
+
+Vorsatzrollladen:
+  - Height range: 1000-1300mm (300mm range - MOST LIMITED)
+  - Width range: 800-2600mm
+  - Multiple color surcharges
+  - Multiple drive types with surcharges
+  - More complex pricing
+
+Insektenschutz Plissee:
+  - Height range: 1900-2600mm (700mm range)
+  - Width range: 700-2400mm
+  - NO color surcharges (UNIQUE)
+  - NO drive types (simpler)
+  - Simpler pricing structure
+
+================================================================================
+15. PRICE CALCULATION EXAMPLES
+================================================================================
+
+Example 1: Default Configuration
+  - Type: 1-teilige
+  - Width: 700mm
+  - Height: 1900mm
+  - Color: Weiß (9016)
+  - Direction: Rechts nach Links
+  - Base Price: 906.50 EUR
+  - Surcharges: 0.00 EUR
+  - Price Before Discount: 906.50 EUR
+  - Discount (40%): -362.60 EUR
+  - FINAL PRICE: 543.90 EUR
+
+Example 2: Large Configuration
+  - Type: 1-teilige
+  - Width: 1450mm
+  - Height: 2550mm
+  - Color: Anthrazitgrau (7016)
+  - Direction: Links nach Rechts
+  - Base Price: 906.50 EUR
+  - Surcharges: 0.00 EUR
+  - Price Before Discount: 906.50 EUR (+ size adjustment)
+  - Discount (40%): Applied
+  - FINAL PRICE: 763.29 EUR
+
+Example 3: Maximum Size
+  - Type: 1-teilige
+  - Width: 2400mm (maximum)
+  - Height: 2600mm (maximum)
+  - Color: Tiefschwarz (9005)
+  - Direction: Rechts nach Links
+  - Estimated Price: ~850-900 EUR (based on trend)
+
+================================================================================
+16. IMPLEMENTATION NOTES FOR YOUR CONFIGURATOR
+================================================================================
+
+1. Pricing Algorithm:
+   - Use linear or quadratic interpolation for sizes not in matrix
+   - Width has stronger impact than height
+   - Implement height ceiling at 2300mm
+
+2. Color Handling:
+   - Store all 5 colors with 0.00 EUR surcharge
+   - No conditional logic needed for color pricing
+
+3. Configuration Flow:
+   - Allow user to select type, direction, color, size
+   - Calculate price in real-time on client-side
+   - Apply 40% discount automatically
+
+4. Validation:
+   - Width: 700-2400mm
+   - Height: 1900-2600mm
+   - Warn if height > 2300mm (no price benefit)
+
+5. Display:
+   - Show base price and discount amount
+   - Show final price prominently
+   - Show price per m²
+
+================================================================================
+END OF RESEARCH DATA
+================================================================================

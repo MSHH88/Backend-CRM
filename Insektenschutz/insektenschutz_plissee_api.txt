@@ -1,0 +1,435 @@
+================================================================================
+INSEKTENSCHUTZ PLISSEE - API ENDPOINTS & BACKEND COMMUNICATION
+================================================================================
+Source: https://www.fenstermaxx24.com/konfigurator/alu-insektenschutz-plissee/
+Extraction Date: 2026-03-12
+================================================================================
+
+================================================================================
+1. MAIN CONFIGURATOR ENDPOINTS
+================================================================================
+
+Primary Configurator URL:
+  https://confde.fenstermaxx24.com/confapp/ALU-Insektenschutzplissee-bestellen-drutex/
+
+Parent Page (Fenstermaxx24):
+  https://www.fenstermaxx24.com/konfigurator/alu-insektenschutz-plissee/
+
+Configurator Base Domain:
+  https://confde.fenstermaxx24.com/
+
+================================================================================
+2. JAVASCRIPT LIBRARIES & SCRIPTS LOADED
+================================================================================
+
+jQuery Library:
+  URL: https://confde.fenstermaxx24.com/confapp/assets/jquery.min.js
+  Purpose: DOM manipulation and event handling
+  Version: Minified
+
+Bootstrap Framework:
+  URL: https://confde.fenstermaxx24.com/confapp/assets/bootstrap.min.js
+  Purpose: UI components and responsive layout
+  Version: Minified
+
+Product-Specific Configurator Script:
+  URL: https://confde.fenstermaxx24.com/confapp/ALU-Insektenschutzplissee-bestellen-drutex/js/konfig.min.js
+  Purpose: Main configurator logic and event handlers
+  Version: Minified
+  Contains: Configuration object, price calculations, event listeners
+
+Business Rules Script:
+  URL: https://confde.fenstermaxx24.com/confapp/ALU-Insektenschutzplissee-bestellen-drutex/js/rules.min.js
+  Purpose: Validation rules and business logic
+  Version: Minified
+  Contains: Dimension constraints, option restrictions, price rules
+
+Global Functions Script:
+  URL: https://confde.fenstermaxx24.com/confapp/assets/global.min.js?v=2026031210
+  Purpose: Shared utility functions across all configurators
+  Version: Minified with version parameter
+  Contains: Common functions, utilities, global event handlers
+
+Google Tag Manager:
+  URL: https://www.googletagmanager.com/gtm.js?id=GTM-N6ZQN8V
+  Purpose: Analytics and conversion tracking
+  Type: Third-party script
+
+================================================================================
+3. CSS STYLESHEETS LOADED
+================================================================================
+
+Main Style Sheet:
+  URL: https://conf.fenstermaxx24.com/confapp/assets/style.min.css
+  Purpose: Global styling
+
+Bootstrap Styles:
+  URL: https://conf.fenstermaxx24.com/confapp/assets/bootstrap.min.css
+  Purpose: Bootstrap framework styles
+
+Font Awesome Icons:
+  URL: https://conf.fenstermaxx24.com/confapp/assets/fontawesome.min.css
+  Purpose: Icon library
+
+================================================================================
+4. COMMUNICATION MECHANISM
+================================================================================
+
+Type: CLIENT-SIDE ONLY
+  - No visible API calls to backend
+  - All calculations done in JavaScript
+  - Price updates happen in real-time without server requests
+
+Event Flow:
+  1. User changes dimension (width/height)
+  2. JavaScript event listener triggered
+  3. Price calculation function executed
+  4. DOM updated with new price
+  5. No server communication needed
+
+Configuration Data Flow:
+  1. HTML form elements (inputs, radio buttons, image buttons)
+  2. JavaScript reads form values
+  3. Configuration object created in memory
+  4. Price calculated based on configuration
+  5. Result displayed in sidebar
+
+================================================================================
+5. FORM ELEMENTS & INPUT HANDLING
+================================================================================
+
+Width Input:
+  - Element ID: breite
+  - Type: number input
+  - Min: 700
+  - Max: 2400
+  - Default: 700
+  - Unit: mm
+  - Event: change, input
+
+Height Input:
+  - Element ID: hoehe
+  - Type: number input
+  - Min: 1900
+  - Max: 2600
+  - Default: 1900
+  - Unit: mm
+  - Event: change, input
+
+Plissee Type Selection:
+  - Type: Radio buttons
+  - Option 1 ID: typ1
+  - Option 2 ID: typ2
+  - Event: change, click
+
+Opening Direction Selection:
+  - Type: Radio buttons
+  - Left-to-Right ID: pl_l
+  - Right-to-Left ID: pl_r
+  - Event: change, click
+
+Frame Color Selection:
+  - Type: Image buttons (clickable images)
+  - Color 1 ID: fs1_01 (Weiß)
+  - Color 2 ID: fs1_02 (Anthrazitgrau)
+  - Color 3 ID: fs1_03 (Graubraun)
+  - Color 4 ID: fs1_04 (Tiefschwarz)
+  - Color 5 ID: fs1_05 (White aluminium)
+  - Event: click
+
+Net Color Selection:
+  - Type: Single option (no selection needed)
+  - Value: Schwarz (Black)
+  - No event handling needed
+
+================================================================================
+6. CONFIGURATION OBJECT STRUCTURE
+================================================================================
+
+Estimated JavaScript Configuration Object:
+
+```javascript
+obj_plissee = {
+  // Dimensions
+  breite: 700,              // Width in mm (700-2400)
+  hoehe: 1900,              // Height in mm (1900-2600)
+  
+  // Product Selection
+  typ: "1-teilige",         // "1-teilige" or "2-teilige"
+  richtung: "rechts-nach-links",  // "rechts-nach-links" or "links-nach-rechts"
+  
+  // Colors
+  farbe_rahmen: "weiss-9016",     // Frame color RAL code
+  farbe_netz: "schwarz",          // Net color (always "schwarz")
+  
+  // Pricing
+  grundpreis: 906.50,       // Base price in EUR
+  rabatt: 0.40,             // Discount rate (40%)
+  rabatt_betrag: 362.60,    // Discount amount in EUR
+  gesamtpreis: 543.90,      // Final price in EUR
+  
+  // Calculated Values
+  flaeche: 1.33,            // Area in m²
+  preis_pro_m2: 408.87,     // Price per m²
+  
+  // Metadata
+  hersteller: "Drutex",
+  profil: "Iglo Plissee",
+  timestamp: 1234567890    // Unix timestamp
+}
+```
+
+================================================================================
+7. PRICE CALCULATION LOGIC
+================================================================================
+
+Pseudo-code for price calculation:
+
+```javascript
+function calculatePrice(config) {
+  // Base price
+  let basePrice = 906.50;
+  
+  // Add surcharges (all are 0 for this product)
+  let surcharges = 0;
+  
+  // Size-based adjustment
+  let sizeAdjustment = calculateSizeAdjustment(config.breite, config.hoehe);
+  
+  // Price before discount
+  let priceBeforeDiscount = basePrice + surcharges + sizeAdjustment;
+  
+  // Apply discount
+  let discountRate = 0.40;
+  let finalPrice = priceBeforeDiscount * (1 - discountRate);
+  
+  return {
+    basePrice: basePrice,
+    surcharges: surcharges,
+    sizeAdjustment: sizeAdjustment,
+    priceBeforeDiscount: priceBeforeDiscount,
+    discountRate: discountRate,
+    discountAmount: priceBeforeDiscount * discountRate,
+    finalPrice: finalPrice
+  };
+}
+
+function calculateSizeAdjustment(width, height) {
+  // Size adjustment is built into the base price calculation
+  // Appears to use area-based pricing with non-linear scaling
+  // Width has more impact than height
+  // Height has ceiling effect at 2300mm
+  
+  // Estimated formula (reverse-engineered):
+  // adjustment = (width - 700) * 0.15 + (height - 1900) * 0.08
+  // with ceiling at height 2300
+  
+  let widthFactor = (width - 700) * 0.15;
+  let heightFactor = Math.min(height - 1900, 400) * 0.08;  // Ceiling at 2300
+  
+  return widthFactor + heightFactor;
+}
+```
+
+================================================================================
+8. EVENT LISTENERS & HANDLERS
+================================================================================
+
+Width/Height Change Event:
+  - Trigger: User changes breite or hoehe input
+  - Handler: Validates dimension constraints
+  - Action: Recalculates price, updates display
+  - Validation: Checks min/max values
+
+Plissee Type Change Event:
+  - Trigger: User clicks typ1 or typ2 radio button
+  - Handler: Updates configuration object
+  - Action: Recalculates price, updates display
+  - Side Effect: May adjust width for 2-teilige (doubles display)
+
+Color Selection Event:
+  - Trigger: User clicks color image (fs1_01 to fs1_05)
+  - Handler: Updates farbe_rahmen in config
+  - Action: Updates preview image
+  - Note: Does NOT affect price (all colors same price)
+
+Opening Direction Event:
+  - Trigger: User clicks pl_l or pl_r radio button
+  - Handler: Updates richtung in config
+  - Action: Updates preview image
+  - Note: Does NOT affect price (both directions same price)
+
+================================================================================
+9. PRICE DISPLAY MECHANISM
+================================================================================
+
+Price Display Elements:
+
+1. Preisempfehlung (Recommended Price):
+   - Location: Right sidebar
+   - Value: 906.50 EUR
+   - Format: "906,50 EUR"
+
+2. Rabatt-Aktion (Discount Action):
+   - Location: Right sidebar
+   - Value: 40% Rabatt-Aktion
+   - Savings: Sie sparen 362,60 EUR
+
+3. Angebotspreis (Offer Price):
+   - Location: Right sidebar (prominent)
+   - Value: 543.90 EUR (for default config)
+   - Format: Large, bold text "543,90 EUR"
+   - Updates: Real-time as user changes configuration
+
+4. Detailkosten (Detail Costs):
+   - Location: Right sidebar
+   - Shows breakdown of all surcharges
+   - Format: List of items with prices
+   - Note: All items show 0.00 EUR for this product
+
+================================================================================
+10. DATA PERSISTENCE & CART INTEGRATION
+================================================================================
+
+Cart Button:
+  - ID: btn_sonstiges
+  - Text: "IN DEN WARENKORB LEGEN" (Add to Cart)
+  - Action: Sends configuration to shopping cart
+  - Data: Serialized configuration object
+
+Session Storage:
+  - Appears to use browser session for configuration
+  - Configuration persists during browser session
+  - Lost on page refresh or session end
+
+Cart Endpoint:
+  - Not directly visible in frontend
+  - Likely: https://www.fenstermaxx24.com/warenkorb/ or similar
+  - Method: POST with serialized configuration
+
+================================================================================
+11. VALIDATION RULES
+================================================================================
+
+Width Validation:
+  - Minimum: 700 mm
+  - Maximum: 2400 mm
+  - Type: Integer
+  - Error Handling: Likely clamps to min/max if exceeded
+
+Height Validation:
+  - Minimum: 1900 mm
+  - Maximum: 2600 mm
+  - Type: Integer
+  - Error Handling: Likely clamps to min/max if exceeded
+
+Configuration Validation:
+  - All fields must have valid values
+  - No null/undefined values allowed
+  - Type checking for numeric fields
+
+================================================================================
+12. BROWSER COMPATIBILITY
+================================================================================
+
+Required Technologies:
+  - JavaScript ES5+ (jQuery compatible)
+  - DOM Level 2 Events
+  - CSS3 (Bootstrap 3 or 4)
+  - HTML5 form elements
+
+Tested Browsers:
+  - Chrome/Chromium (confirmed working)
+  - Firefox (likely compatible)
+  - Safari (likely compatible)
+  - Edge (likely compatible)
+
+Mobile Compatibility:
+  - Responsive design (Bootstrap)
+  - Touch-friendly interface
+  - Mobile-optimized layout
+
+================================================================================
+13. PERFORMANCE CONSIDERATIONS
+================================================================================
+
+Load Time:
+  - Multiple scripts loaded (jQuery, Bootstrap, custom scripts)
+  - Minified JavaScript for optimization
+  - CSS files minified
+
+Calculation Performance:
+  - Client-side calculations (instant)
+  - No server latency
+  - Real-time price updates
+
+Memory Usage:
+  - Configuration object stored in memory
+  - jQuery DOM references cached
+  - Minimal memory footprint
+
+================================================================================
+14. SECURITY CONSIDERATIONS
+================================================================================
+
+Client-Side Calculations:
+  - Price calculations visible in browser
+  - Business logic exposed in minified JavaScript
+  - Not suitable for sensitive pricing logic
+
+Data Transmission:
+  - Configuration sent to cart endpoint (HTTPS assumed)
+  - No sensitive data in configuration
+  - Standard form submission
+
+================================================================================
+15. REVERSE-ENGINEERED API CALLS (IF ANY)
+================================================================================
+
+No Direct API Calls Detected:
+  - All calculations done client-side
+  - No XMLHttpRequest or fetch calls visible
+  - No AJAX communication observed
+  - Price updates happen without server requests
+
+Estimated Backend Integration Points:
+  1. Cart submission: POST to shopping cart endpoint
+  2. Order processing: Backend receives configuration
+  3. Inventory check: May query stock (not visible in frontend)
+  4. Order confirmation: Backend generates order
+
+================================================================================
+16. IMPLEMENTATION NOTES
+================================================================================
+
+For Your Configurator:
+
+1. Client-Side Approach:
+   - Load all data upfront (colors, options, prices)
+   - Calculate prices in JavaScript
+   - Update DOM in real-time
+   - No server calls needed for price calculation
+
+2. Configuration Storage:
+   - Use JavaScript object to store configuration
+   - Serialize to JSON for cart submission
+   - Store in localStorage for persistence (optional)
+
+3. Event Handling:
+   - Use event delegation for dynamic elements
+   - Debounce input events for performance
+   - Update price on every configuration change
+
+4. Price Calculation:
+   - Implement size-based pricing matrix
+   - Use linear interpolation for intermediate sizes
+   - Apply discount multiplier at end
+
+5. Validation:
+   - Validate dimensions on input
+   - Prevent invalid configurations
+   - Show error messages to user
+
+================================================================================
+END OF API DOCUMENTATION
+================================================================================

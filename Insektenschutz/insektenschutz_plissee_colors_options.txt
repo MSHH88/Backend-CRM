@@ -1,0 +1,459 @@
+================================================================================
+INSEKTENSCHUTZ PLISSEE - COLORS & OPTIONS WITH SURCHARGES
+================================================================================
+Source: https://www.fenstermaxx24.com/konfigurator/alu-insektenschutz-plissee/
+Extraction Date: 2026-03-12
+Product: Drutex Aluminium Insektenschutz-Plissee
+================================================================================
+
+================================================================================
+1. FRAME COLORS (TESTED - ALL NO SURCHARGE)
+================================================================================
+
+IMPORTANT: All frame colors have IDENTICAL pricing (0.00 EUR surcharge each)
+
+Color 1: Weiß (White)
+  - RAL Code: 9016
+  - HTML Element ID: fs1_01
+  - Surcharge: 0.00 EUR
+  - Final Price (default 700×1900mm): 543.90 EUR
+  - Status: DEFAULT
+  - Availability: All plissee types
+  - Description: Pure white color, matte finish
+  - Tested: YES
+
+Color 2: Anthrazitgrau (Anthracite Gray)
+  - RAL Code: 7016
+  - HTML Element ID: fs1_02
+  - Surcharge: 0.00 EUR
+  - Final Price (default 700×1900mm): 543.90 EUR
+  - Status: TESTED
+  - Availability: All plissee types
+  - Description: Dark gray color, matte finish
+  - Tested: YES
+
+Color 3: Graubraun (Gray-Brown)
+  - RAL Code: 8019
+  - HTML Element ID: fs1_03
+  - Surcharge: 0.00 EUR
+  - Final Price (default 700×1900mm): 543.90 EUR
+  - Status: TESTED
+  - Availability: All plissee types
+  - Description: Warm gray-brown tone, matte finish
+  - Tested: YES
+
+Color 4: Tiefschwarz (Deep Black)
+  - RAL Code: 9005
+  - HTML Element ID: fs1_04
+  - Surcharge: 0.00 EUR
+  - Final Price (default 700×1900mm): 543.90 EUR
+  - Status: TESTED
+  - Availability: All plissee types
+  - Description: Deep black color, matte finish
+  - Tested: YES
+
+Color 5: White aluminium
+  - RAL Code: 9006
+  - HTML Element ID: fs1_05
+  - Surcharge: 0.00 EUR
+  - Final Price (default 700×1900mm): 543.90 EUR
+  - Status: TESTED
+  - Availability: All plissee types
+  - Description: Bright white-silver aluminum color, matte finish
+  - Tested: YES
+
+================================================================================
+2. COLOR SELECTION MECHANISM
+================================================================================
+
+Selection Type: Image Buttons (Clickable Images)
+  - Each color is represented by a clickable image
+  - Images show the actual color appearance
+  - Clicking image selects that color
+  - Selected color gets visual indication (border/highlight)
+
+Color Display:
+  - Images are 50-100px wide
+  - Show color swatch with RAL code label
+  - Arranged horizontally in a row
+  - Easy to compare colors side-by-side
+
+Color Restrictions:
+  - All 5 colors available for all configurations
+  - No color restrictions based on plissee type
+  - No color restrictions based on size
+  - No color restrictions based on opening direction
+
+================================================================================
+3. NET COLOR (MESH COLOR)
+================================================================================
+
+Net Color: Schwarz (Black)
+  - HTML Element: Single option (no selection needed)
+  - Surcharge: 0.00 EUR
+  - Final Price Impact: 0.00 EUR
+  - Status: ONLY OPTION
+  - Description: Black mesh for insect protection
+  - Availability: All configurations
+  - Tested: YES
+
+Net Color Restrictions:
+  - Only one option available
+  - Cannot be changed
+  - No alternative colors offered
+
+Net Color Specifications:
+  - Material: Aluminum mesh
+  - Color: Black (Schwarz)
+  - Durability: Standard
+  - Visibility: Good (black mesh allows good visibility)
+
+================================================================================
+4. PLISSEE TYPES (CONFIGURATIONS)
+================================================================================
+
+Type 1: 1-teilige Plissee Tür (Single-Part Pleated Door)
+  - HTML Element ID: typ1
+  - Base Price: 906.50 EUR
+  - Final Price (40% discount): 543.90 EUR (default size)
+  - Surcharge: 0.00 EUR
+  - Status: DEFAULT
+  - Description: Single panel pleated door
+  - Width Handling: Direct (input = display)
+  - Available Colors: All 5
+  - Available Directions: Both
+  - Tested: YES
+
+Type 2: 2-teilige Plissee Tür (Two-Part Pleated Door)
+  - HTML Element ID: typ2
+  - Base Price: 1693.50 EUR (estimated)
+  - Final Price (40% discount): Not captured (system issue)
+  - Surcharge: ~787.00 EUR (estimated from previous analysis)
+  - Status: AVAILABLE
+  - Description: Two-panel pleated door (split in middle)
+  - Width Handling: DOUBLED (input 1025 = display 2050)
+  - Available Colors: All 5
+  - Available Directions: Both
+  - Tested: PARTIAL (price not captured)
+
+Type Restrictions:
+  - Both types available for all configurations
+  - No restrictions based on size
+  - No restrictions based on color
+  - No restrictions based on opening direction
+
+================================================================================
+5. OPENING DIRECTIONS
+================================================================================
+
+Direction 1: Plissee von Rechts nach Links schiebbar (Right to Left)
+  - HTML Element ID: pl_l
+  - Display: "Plissee von Rechts nach Links schiebbar"
+  - Translation: "Pleated door slides from right to left (viewed from inside)"
+  - Surcharge: 0.00 EUR
+  - Final Price Impact: 0.00 EUR
+  - Status: DEFAULT
+  - Availability: All plissee types
+  - Tested: YES
+
+Direction 2: Plissee von Links nach Rechts schiebbar (Left to Right)
+  - HTML Element ID: pl_r
+  - Display: "Plissee von Links nach Rechts schiebbar"
+  - Translation: "Pleated door slides from left to right (viewed from inside)"
+  - Surcharge: 0.00 EUR
+  - Final Price Impact: 0.00 EUR
+  - Status: AVAILABLE
+  - Availability: All plissee types
+  - Tested: YES
+
+Direction Restrictions:
+  - Both directions available for all configurations
+  - No restrictions based on size
+  - No restrictions based on color
+  - No restrictions based on plissee type
+
+Direction Selection Mechanism:
+  - Radio buttons (only one can be selected)
+  - Visual preview shows selected direction
+  - Clicking direction updates preview image
+
+================================================================================
+6. SURCHARGE SUMMARY TABLE
+================================================================================
+
+Option Category       | Option Name              | Surcharge (EUR)
+----------------------|--------------------------|----------------
+Plissee Type         | 1-teilige                | 0.00
+Plissee Type         | 2-teilige                | ~787.00
+Frame Color          | Weiß (9016)              | 0.00
+Frame Color          | Anthrazitgrau (7016)     | 0.00
+Frame Color          | Graubraun (8019)         | 0.00
+Frame Color          | Tiefschwarz (9005)       | 0.00
+Frame Color          | White aluminium (9006)   | 0.00
+Net Color            | Schwarz                  | 0.00
+Opening Direction    | Rechts nach Links        | 0.00
+Opening Direction    | Links nach Rechts        | 0.00
+
+TOTAL SURCHARGES FOR ALL OPTIONS: 0.00 EUR (except 2-teilige type)
+
+================================================================================
+7. OPTION AVAILABILITY MATRIX
+================================================================================
+
+Configuration: 1-teilige + Weiß + Rechts nach Links
+
+Available Options:
+  ✓ All 5 frame colors available
+  ✓ Both opening directions available
+  ✓ 2-teilige type available
+  ✓ All size ranges available (700-2400mm width, 1900-2600mm height)
+
+No Restrictions:
+  - No color restrictions
+  - No direction restrictions
+  - No type restrictions
+  - No size restrictions
+
+================================================================================
+8. UNIQUE FEATURES - NO SURCHARGES
+================================================================================
+
+CRITICAL FINDING: This product is UNIQUE among the three analyzed
+
+Insektenschutz Plissee:
+  ✓ All frame colors: 0.00 EUR surcharge each
+  ✓ All opening directions: 0.00 EUR surcharge each
+  ✓ No drive types (simpler than other products)
+  ✓ No additional hardware options
+  ✓ No installation options
+
+Comparison with Aufsatzrollladen:
+  ✗ Multiple colors with surcharges
+  ✗ Multiple drive types with surcharges
+  ✗ Multiple hardware options with surcharges
+
+Comparison with Vorsatzrollladen:
+  ✗ Multiple colors with surcharges
+  ✗ Multiple drive types with surcharges
+  ✗ Multiple hardware options with surcharges
+
+================================================================================
+9. COLOR SELECTION IMPACT ON PRICE
+================================================================================
+
+Base Configuration (1-teilige, 700×1900mm):
+  Default Price: 543.90 EUR
+
+After Selecting Each Color:
+  - Weiß (9016):          543.90 EUR (no change)
+  - Anthrazitgrau (7016): 543.90 EUR (no change)
+  - Graubraun (8019):     543.90 EUR (no change)
+  - Tiefschwarz (9005):   543.90 EUR (no change)
+  - White aluminium (9006): 543.90 EUR (no change)
+
+FINDING: Color selection does NOT affect price
+
+================================================================================
+10. DIRECTION SELECTION IMPACT ON PRICE
+================================================================================
+
+Base Configuration (1-teilige, 700×1900mm, Weiß):
+  Default Price: 543.90 EUR
+
+After Selecting Each Direction:
+  - Rechts nach Links: 543.90 EUR (no change)
+  - Links nach Rechts: 543.90 EUR (no change)
+
+FINDING: Direction selection does NOT affect price
+
+================================================================================
+11. TYPE SELECTION IMPACT ON PRICE
+================================================================================
+
+Configuration (700×1900mm, Weiß, Rechts nach Links):
+  1-teilige: 543.90 EUR
+  2-teilige: Not captured (system issue during testing)
+
+Estimated Impact:
+  - 2-teilige adds ~787.00 EUR surcharge
+  - 2-teilige base price: ~1693.50 EUR
+  - 2-teilige final price (40% discount): ~1016.15 EUR (estimated)
+
+FINDING: Type selection has MAJOR price impact
+
+================================================================================
+12. OPTION SELECTION WORKFLOW
+================================================================================
+
+Step 1: Select Plissee Type
+  - Click typ1 or typ2 radio button
+  - Affects: Base price, width handling (2-teilige doubles width)
+  - Price Impact: Major (0 EUR for 1-teilige, ~787 EUR for 2-teilige)
+
+Step 2: Select Opening Direction
+  - Click pl_l or pl_r radio button
+  - Affects: Preview image only
+  - Price Impact: None (0.00 EUR)
+
+Step 3: Select Frame Color
+  - Click color image (fs1_01 to fs1_05)
+  - Affects: Preview image only
+  - Price Impact: None (0.00 EUR)
+
+Step 4: Set Dimensions
+  - Enter width (700-2400mm)
+  - Enter height (1900-2600mm)
+  - Affects: Area, price calculation
+  - Price Impact: Major (depends on size)
+
+Step 5: Review and Add to Cart
+  - All options selected
+  - Price calculated and displayed
+  - Click "IN DEN WARENKORB LEGEN" button
+
+================================================================================
+13. CONFIGURATION EXAMPLES
+================================================================================
+
+Example 1: Budget Configuration
+  - Type: 1-teilige
+  - Width: 700mm
+  - Height: 1900mm
+  - Color: Weiß (9016)
+  - Direction: Rechts nach Links
+  - Area: 1.33 m²
+  - PRICE: 543.90 EUR
+  - Price/m²: 408.87 EUR
+
+Example 2: Standard Configuration
+  - Type: 1-teilige
+  - Width: 1200mm
+  - Height: 2300mm
+  - Color: Anthrazitgrau (7016)
+  - Direction: Links nach Rechts
+  - Area: 2.76 m²
+  - PRICE: 668.12 EUR
+  - Price/m²: 242.04 EUR
+
+Example 3: Large Configuration
+  - Type: 1-teilige
+  - Width: 1450mm
+  - Height: 2550mm
+  - Color: Tiefschwarz (9005)
+  - Direction: Rechts nach Links
+  - Area: 3.70 m²
+  - PRICE: 763.29 EUR
+  - Price/m²: 206.03 EUR
+
+Example 4: Two-Part Configuration (estimated)
+  - Type: 2-teilige
+  - Width: 1025mm (displays as 2050mm)
+  - Height: 1900mm
+  - Color: White aluminium (9006)
+  - Direction: Links nach Rechts
+  - Area: 3.90 m² (2050×1900)
+  - PRICE: ~1016.15 EUR (estimated)
+  - Price/m²: ~260.55 EUR (estimated)
+
+================================================================================
+14. IMPLEMENTATION NOTES FOR YOUR CONFIGURATOR
+================================================================================
+
+1. Color Handling:
+   - Store all 5 colors with 0.00 EUR surcharge
+   - No conditional logic needed for color pricing
+   - Display color swatches for user selection
+   - Update preview image on color change
+
+2. Direction Handling:
+   - Store both directions with 0.00 EUR surcharge
+   - No conditional logic needed for direction pricing
+   - Update preview image on direction change
+   - Show direction in configuration summary
+
+3. Type Handling:
+   - Store base prices for both types
+   - Apply surcharge for 2-teilige type
+   - For 2-teilige, double the width in display
+   - Apply different price calculation for 2-teilige
+
+4. Price Calculation:
+   - For 1-teilige: Use size-based matrix
+   - For 2-teilige: Add ~787 EUR surcharge to 1-teilige price
+   - Apply 40% discount to final price
+   - Show price/m² for comparison
+
+5. Validation:
+   - Width: 700-2400mm
+   - Height: 1900-2600mm
+   - All options must be selected before adding to cart
+   - Warn if height > 2300mm (no price benefit)
+
+6. Database Schema:
+   ```sql
+   CREATE TABLE options (
+     id INT PRIMARY KEY,
+     category VARCHAR(50),
+     name VARCHAR(100),
+     ral_code VARCHAR(10),
+     surcharge DECIMAL(10,2),
+     available BOOLEAN
+   );
+   
+   CREATE TABLE configurations (
+     id INT PRIMARY KEY,
+     type_id INT,
+     color_id INT,
+     direction_id INT,
+     width INT,
+     height INT,
+     price DECIMAL(10,2),
+     FOREIGN KEY (type_id) REFERENCES options(id),
+     FOREIGN KEY (color_id) REFERENCES options(id),
+     FOREIGN KEY (direction_id) REFERENCES options(id)
+   );
+   ```
+
+================================================================================
+15. DATA EXPORT
+================================================================================
+
+JSON Format:
+```json
+{
+  "product": "Insektenschutz Plissee",
+  "colors": [
+    {"id": "fs1_01", "name": "Weiß", "ral": "9016", "surcharge": 0.00},
+    {"id": "fs1_02", "name": "Anthrazitgrau", "ral": "7016", "surcharge": 0.00},
+    {"id": "fs1_03", "name": "Graubraun", "ral": "8019", "surcharge": 0.00},
+    {"id": "fs1_04", "name": "Tiefschwarz", "ral": "9005", "surcharge": 0.00},
+    {"id": "fs1_05", "name": "White aluminium", "ral": "9006", "surcharge": 0.00}
+  ],
+  "directions": [
+    {"id": "pl_l", "name": "Rechts nach Links", "surcharge": 0.00},
+    {"id": "pl_r", "name": "Links nach Rechts", "surcharge": 0.00}
+  ],
+  "types": [
+    {"id": "typ1", "name": "1-teilige", "surcharge": 0.00},
+    {"id": "typ2", "name": "2-teilige", "surcharge": 787.00}
+  ]
+}
+```
+
+CSV Format:
+```
+category,name,ral_code,surcharge_eur
+Color,Weiß,9016,0.00
+Color,Anthrazitgrau,7016,0.00
+Color,Graubraun,8019,0.00
+Color,Tiefschwarz,9005,0.00
+Color,White aluminium,9006,0.00
+Direction,Rechts nach Links,,0.00
+Direction,Links nach Rechts,,0.00
+Type,1-teilige,,0.00
+Type,2-teilige,,787.00
+```
+
+================================================================================
+END OF COLORS & OPTIONS
+================================================================================
