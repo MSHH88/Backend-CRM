@@ -1,9 +1,9 @@
 # Getting Data — Calculations & Catalog Data Checklist
 
-> **Last Updated:** March 12, 2026
+> **Last Updated:** March 13, 2026
 > **Purpose:** Know exactly what we have and what we still need to gather
 > **Format:** ✅ = Have, ❌ = Need, ⚠️ = Partial
-> **Recent:** Raffstore dataset (7 files) analyzed — ~90% calc complete. PSK updated to ~85%. Cross-product calculation analysis added (Section 5B). CEO Q&A section added (Section 0).
+> **Recent:** Smart-Slide dataset (6 files) analyzed — FORMULA-BASED architecture confirmed (same as PSK), ~60% calc. Raffstore dataset (7 files) analyzed — ~90% calc complete. PSK updated to ~85%. Cross-product calculation analysis added (Section 5B). CEO Q&A section added (Section 0).
 
 ---
 
@@ -27,7 +27,7 @@ Here's the breakdown:
 
 **What the catalog will NOT solve (the remaining ~10-15%):**
 1. ❌ **HST calculation logic** — We haven't analyzed HOW HST prices are computed yet (0% done). The catalog gives prices but we still need to understand the calculation architecture
-2. ❌ **Smart-Slide calculation logic** — Same as HST (0% done)
+2. ⚠️ **Smart-Slide calculation logic** — Now ~60% done (was 0%). Architecture confirmed as FORMULA-BASED (same as PSK). Need more data points for exact formula.
 3. ❌ **Fensterbänke calculation logic** — Not analyzed yet (0% done)
 4. ⚠️ **Falt-Schiebe-Tür scaling formula** — We know it's element-based but haven't derived the exact non-linear formula (~75% done)
 
@@ -42,7 +42,7 @@ Here's the breakdown:
 - **PSK** → ✅ ~95% ready (minor glass catalog gaps)
 - **Falt-Schiebe-Tür** → ⚠️ ~85% (need to verify scaling formula)
 - **HST** → ❌ Still need to analyze calculation logic FIRST
-- **Smart-Slide** → ❌ Still need to analyze calculation logic FIRST
+- **Smart-Slide** → ⚠️ ~75% ready (architecture confirmed FORMULA-BASED, need more price data points)
 - **Fensterbänke** → ❌ Still need to analyze calculation logic FIRST
 
 **Bottom line: The catalog is the single biggest unlock. It solves 9 of 12 products completely.**
@@ -77,14 +77,14 @@ Here's the breakdown:
 | **Haustüren** | ✅ 95% | ✅ BASE — width-dominant formula | PVC ✅, Holz ✅ (both Drutex) | Width +€37.77/100mm, Height +€1.64/100mm |
 | **PSK** | ⚠️ 85% | ⚠️ SIMILAR pattern (formula-based) but different parameters | PVC ⚠️ (3 mfrs partial), Alu ⚠️ (1 mfr partial) | Width ranges + progressive tiers |
 | **HST** | ❌ 0% | ❓ UNKNOWN — likely similar to PSK | None | Need to analyze |
-| **Smart-Slide** | ❌ 0% | ❓ UNKNOWN — may be HST variant | None | Need to analyze |
+| **Smart-Slide** | ⚠️ 60% | ✅ CONFIRMED same FORMULA-BASED as PSK | PVC ⚠️ (Gealan, 4 data points) | Height-dominant pricing (~1.75× width), size-dependent surcharges |
 
 **What we can confirm:**
 - ✅ Haustüren PVC and Holz use **same width-dominant formula** — confirmed
 - ✅ PSK is confirmed formula-based across 3 PVC manufacturers (Aluplast, Gealan, Drutex) + 1 Alu (Aluprof) — **same architecture, same patterns**
 - ⚠️ HST is LIKELY formula-based too (same product family) — needs analysis
 
-**Conclusion for Family 2:** ⚠️ Haustüren is solid. PSK improved to 85%. HST and Smart-Slide still need analysis from fenstermaxx24.com.
+**Conclusion for Family 2:** ⚠️ Haustüren is solid. PSK improved to 85%. **Smart-Slide confirmed FORMULA-BASED (~60%)** — same architecture as PSK. HST still needs analysis from fenstermaxx24.com.
 
 #### FAMILY 3: ADDITIVE Products (Rollladen/Sonnenschutz/Insektenschutz — Component Pricing)
 > **Calculation:** Base price (from W×H matrix) + sum of fixed EUR surcharges per component selected
@@ -114,7 +114,7 @@ Here's the breakdown:
 
 ### Q3: Do we have enough data to build the whole calculation system?
 
-**Answer: YES for ~91% of products. The calculation ENGINE is essentially built. What's missing is mostly FUEL (catalog prices).**
+**Answer: YES for ~92% of products. The calculation ENGINE is essentially built. What's missing is mostly FUEL (catalog prices).**
 
 **What we CAN build RIGHT NOW (with catalog):**
 
@@ -129,16 +129,16 @@ Here's the breakdown:
 | 7 | Insektenschutz Plissee | ✅ YES | 95% — simplest product, nearly complete |
 | 8 | PSK | ⚠️ MOSTLY | 85% — formula-based, 3 manufacturers confirmed same. Minor gaps in glass catalog |
 | 9 | Falt-Schiebe-Tür | ⚠️ PARTIALLY | 75% — need exact scaling formula + color method verification |
+| 10 | Smart-Slide | ⚠️ MOSTLY | 60% 🆕 — FORMULA-BASED architecture confirmed (same as PSK). Need more data points for exact formula |
 
 **What we CANNOT build yet:**
 
 | # | Product | Can Build? | Why Not | What's Needed |
 |:-:|:--------|:----------:|:--------|:-------------|
-| 10 | HST | ❌ NO | 0% — haven't analyzed calculation logic | Analyze fenstermaxx24.com HST configurator |
-| 11 | Smart-Slide | ❌ NO | 0% — haven't analyzed | Analyze fenstermaxx24.com (may be HST variant) |
+| 11 | HST | ❌ NO | 0% — haven't analyzed calculation logic | Analyze fenstermaxx24.com HST configurator |
 | 12 | Fensterbänke | ❌ NO | 0% — haven't analyzed | Analyze pricing logic (likely simple) |
 
-**Summary: 9 of 12 products are ready to build. The catalog unlocks them all at once.**
+**Summary: 10 of 12 products are ready to build (was 9). Smart-Slide moved from "CANNOT" to "CAN build". The catalog unlocks them all at once.**
 
 ---
 
@@ -149,7 +149,7 @@ Here's the breakdown:
 | Product | What's Missing | Effort | Priority |
 |:--------|:---------------|:------:|:--------:|
 | **HST** | Everything — no analysis done yet | 🔴 HIGH | HIGH — premium product |
-| **Smart-Slide** | Everything — may be HST variant | 🟡 MEDIUM | MEDIUM |
+| **Smart-Slide** | More data points for exact formula (architecture confirmed) | 🟡 MEDIUM | MEDIUM — architecture is known |
 | **Fensterbänke** | Everything — likely simple (length × price/meter) | 🟢 LOW | LOW |
 | **Falt-Schiebe-Tür** | Exact scaling formula + color method | 🟡 MEDIUM | MEDIUM |
 
@@ -214,8 +214,13 @@ Here's the breakdown:
 | Product | What's Needed | When Catalog Helps |
 |:--------|:-------------|:------------------|
 | **HST** | Analyze fenstermaxx24.com configurator | AFTER calculation analysis |
-| **Smart-Slide** | Analyze configurator (may be HST variant) | AFTER calculation analysis |
 | **Fensterbänke** | Analyze pricing (likely simple) | AFTER calculation analysis |
+
+**⚠️ PARTIALLY ANALYZED (architecture known, need more data):**
+
+| Product | What's Known | What's Needed |
+|:--------|:------------|:-------------|
+| **Smart-Slide** 🆕 | FORMULA-BASED architecture (same as PSK), 4 data points, Gealan PVC | More W×H data points for exact formula, 4-Flügel pricing, complete surcharges |
 
 ---
 
@@ -250,8 +255,8 @@ Here's the breakdown:
 
 | Category | Progress | Details |
 |----------|----------|---------|
-| **Calculations (engine logic)** | **~91%** | 9 of 12 product types have calculations (Raffstore ~90% NEW, Haustüren ~95%, Aufsatz ~97%, Vorsatz ~85%, Insektenschutz ~90%) |
-| **Catalog data (EUR prices)** | **~26%** | 11 of ~40 manufacturer/material combos (Raffstore ~85% NEW, Holz Haustür ~65%, Aufsatz ~98%, Vorsatz ~80%, Insektenschutz ~85%) |
+| **Calculations (engine logic)** | **~92%** | 10 of 12 product types have calculations (Smart-Slide ~60% NEW, Raffstore ~90%, Haustüren ~95%, Aufsatz ~97%, Vorsatz ~85%, Insektenschutz ~90%) |
+| **Catalog data (EUR prices)** | **~28%** | 12 of ~40 manufacturer/material combos (Smart-Slide Gealan ~40% NEW, Raffstore ~85%, Holz Haustür ~65%, Aufsatz ~98%, Vorsatz ~80%, Insektenschutz ~85%) |
 
 **Key:** Calculations = HOW prices are computed (from website analysis). Catalog data = ACTUAL prices (from manufacturer catalogs).
 Once a calculation is complete, adding a new manufacturer = just providing catalog data.
@@ -346,10 +351,25 @@ Once a calculation is complete, adding a new manufacturer = just providing catal
   - [ ] Need to analyze from fenstermaxx24.com
   - [ ] Then need catalog data from manufacturer
 
-- [ ] **Smart-Slide** — 0% complete
-  - [ ] No data extracted yet
-  - [ ] May be variant of HST
-  - [ ] Need to analyze from fenstermaxx24.com
+- [x] **Smart-Slide (Schiebetür)** — ~60% complete ✅ NEW (was 0%)
+  - [x] Architecture confirmed: FORMULA-BASED (B) — same as PSK, server-side `/ajax/berechnen/`
+  - [x] Manufacturer: Gealan (h7) — GEALAN-SMOOVIO profile (p1)
+  - [x] Material: PVC/Kunststoff
+  - [x] Types: 2-Flügel (typ1) and 4-Flügel (typ3)
+  - [x] Dimension limits: 1550-4000mm W × 800-2500mm H
+  - [x] Discount factor confirmed (0.60)
+  - [x] Base price data: 4 data points at various W×H
+  - [x] Height-dominant pricing: ~€123/100mm H vs ~€70/100mm W (ratio ~1.75:1)
+  - [x] Color surcharges: SIZE-DEPENDENT (scale with element area, not fixed EUR)
+  - [x] Glass surcharges: SIZE-DEPENDENT (scale with glass area m²)
+  - [x] Full API endpoints documented (same `/ajax/berechnen/` as Fenster/PSK)
+  - [x] Configuration object (obj_konfig) structure documented
+  - [x] Extensive color options identified (Standard, RAL, Holzdekore, Metalleffektfolien)
+  - [ ] Need more W×H data points (have 4, need 15-20+ for formula derivation)
+  - [ ] 4-Flügel (typ3) pricing not yet tested
+  - [ ] Complete surcharge catalog (only 2 tested: glass + 1 color)
+  - [ ] Color surcharge scaling formula not yet derived
+  - [ ] Second manufacturer data (only have Gealan so far)
 
 - [x] **Vorsatzrollladen (Surface Mount Shutters)** — ~85% complete ✅ NEW
   - [x] ADDITIVE architecture confirmed (same as Aufsatzrollladen)
@@ -413,6 +433,7 @@ Once a calculation is complete, adding a new manufacturer = just providing catal
 | 8 | Haustür | Drutex | Holz (Wood) | ⚠️ **~65%** — base prices + 9 surcharges; missing colors, glass, handles (see `HOLZ_HAUSTUER_ANALYSIS.md`) |
 | 9 | Rollladen (Vorsatz) | Aluprof | Generic | ⚠️ **~80%** — 6 models, 9 drives, 12 colors, calculators. Need full W×H matrix. See `VORSATZROLLLADEN_ANALYSIS.md` |
 | 10 | Insektenschutz Plissee | Drutex | Aluminium | ⚠️ **~85%** — 2 types, 5 colors (all €0), height-dominant pricing, calculators. Color list may be incomplete. See `INSEKTENSCHUTZ_ANALYSIS.md` |
+| 11 | Smart-Slide | Gealan | PVC/Kunststoff | ⚠️ **~40%** 🆕 — 4 price data points, base config + 2 surcharges tested. Architecture confirmed FORMULA-BASED. See `SMART_SLIDE_ANALYSIS.md` |
 
 ### What We DON'T Have ❌
 
@@ -451,7 +472,8 @@ Once a calculation is complete, adding a new manufacturer = just providing catal
 | PSK — Drutex PVC | ⚠️ PARTIAL — need full surcharge catalog |
 | PSK — Other manufacturers | ❌ NEED |
 | HST — All manufacturers | ❌ NEED |
-| Smart-Slide — All manufacturers | ❌ NEED |
+| Smart-Slide — Gealan PVC | ⚠️ **~40%** 🆕 — Architecture confirmed, need more data points |
+| Smart-Slide — Other manufacturers | ❌ NEED |
 | Falt-Schiebe-Tür — All manufacturers | ❌ NEED (have Alu ranges only) |
 
 **Rollladen / Sonnenschutz / Insektenschutz — separate categories:**
@@ -577,13 +599,36 @@ Per manufacturer catalog checklist:
 - [ ] Extract sample prices for validation
 - [ ] Then: gather manufacturer catalog data (same format as PSK)
 
-### 4G. Smart-Slide — Calculation ❌ 0% COMPLETE
+### 4G. Smart-Slide (Schiebetür) — Calculation ⚠️ ~60% COMPLETE 🆕 (was 0%)
 
-- [ ] Analyze Smart-Slide configurator on fenstermaxx24.com
-- [ ] Determine if variant of HST or unique architecture
-- [ ] Document pricing logic
-- [ ] Extract sample prices for validation
-- [ ] Then: gather manufacturer catalog data
+> **UPDATE (March 13, 2026):** CEO uploaded Smart-Slide dataset (6 files) from Datasets branch.
+> Architecture confirmed: FORMULA-BASED (B), same as PSK. Server-side `/ajax/berechnen/`.
+> Manufacturer: Gealan (h7) — GEALAN-SMOOVIO profile (p1), PVC/Kunststoff.
+> Key finding: NOT an HST variant — it's a standard PVC sliding door.
+> Full analysis in `SMART_SLIDE_ANALYSIS.md`.
+
+**FORMULA-BASED architecture (Architecture B) — confirmed. Same pattern as PSK.**
+
+Per manufacturer catalog checklist:
+- [x] Architecture confirmed (FORMULA-BASED, server-side AJAX)
+- [x] API endpoints documented (`/ajax/berechnen/`, `/ajax/minmax/`)
+- [x] Configuration object structure (obj_konfig) documented
+- [x] Base price at reference size: €1,675.32 old / €1,005.19 after discount (1550×800)
+- [x] 4 W×H price data points
+- [x] Height/width price impact ratio determined (~1.75:1)
+- [x] Discount factor confirmed (0.60)
+- [x] Dimension limits: 1550-4000mm W × 800-2500mm H
+- [x] Door types: 2-Flügel (typ1) and 4-Flügel (typ3)
+- [x] Color surcharges are SIZE-DEPENDENT (not fixed EUR)
+- [x] Glass surcharges are SIZE-DEPENDENT (scale with area)
+- [x] Extensive color options documented (Standard, RAL, Holzdekore, etc.)
+- [ ] Systematic W×H price grid (have 4 points, need 15-20+ for formula)
+- [ ] 4-Flügel (typ3) pricing data
+- [ ] Complete surcharge catalog (glass types, security, sound, muntins, etc.)
+- [ ] Color surcharge scaling formula
+- [ ] Opening direction surcharges (if any beyond left/right)
+- [ ] Rollladen integration surcharges
+- [ ] Additional manufacturer catalogs
 
 ### 4H. Falt-Schiebe-Tür (Folding Doors) — Calculation ⚠️ ~75% COMPLETE
 
@@ -720,7 +765,7 @@ Per manufacturer catalog checklist:
 ### Priority 2 — Analyze Missing Calculations (From fenstermaxx24.com)
 
 - [ ] **HST** — Analyze configurator, determine pricing architecture
-- [ ] **Smart-Slide** — Analyze configurator, check if HST variant
+- [ ] **Smart-Slide** — ⚠️ PARTIALLY ANALYZED (~60%): FORMULA-BASED architecture confirmed (same as PSK). Need more W×H data points. See `SMART_SLIDE_ANALYSIS.md`
 - [x] **Vorsatzrollladen** — ✅ ANALYZED: ADDITIVE architecture confirmed (same as Aufsatz), 6 models, shared surcharges. See `VORSATZROLLLADEN_ANALYSIS.md`
 - [x] **Insektenschutz Plissee** — ✅ ANALYZED: ADDITIVE architecture confirmed, 2 types, 5 colors (all free), width significant (+€259), height ceiling at 2300mm. See `INSEKTENSCHUTZ_ANALYSIS.md`
 - [x] **Raffstore** — ✅ ANALYZED: ADDITIVE architecture confirmed (server-side, same as Rollladen), 9-point W×H matrix, 12 surcharges, full JS rules. See `RAFFSTORE_ANALYSIS.md`
@@ -760,7 +805,10 @@ Per manufacturer catalog checklist:
 - [ ] Raffstore — Aufsatz (typ1) separate base price matrix
 - [ ] Raffstore — Missing option surcharges: Fernbedienung, Windschutz, Kastendeckel, Adapter
 - [ ] Raffstore catalog data — Second manufacturer for verification
-- [ ] Smart-Slide catalog data — After calculation is analyzed
+- [ ] Smart-Slide full W×H matrix — Need systematic price grid (have 4 data points, need 15-20+)
+- [ ] Smart-Slide 4-Flügel pricing — Currently only 2-Flügel tested
+- [ ] Smart-Slide complete surcharges — Only glass + 1 color tested so far
+- [ ] Smart-Slide catalog data — Additional manufacturers (currently only Gealan PVC)
 
 ### Open Question for CEO 🔑
 
@@ -884,9 +932,14 @@ Per manufacturer catalog checklist:
 | Product | Priority | Notes |
 |:--------|:---------|:------|
 | **HST (Hebe-Schiebe-Tür)** | HIGH | Likely FORMULA-based like PSK — need to analyze from fenstermaxx24.com |
-| **Smart-Slide** | MEDIUM | May be HST variant — analyze from fenstermaxx24.com |
 | **Insektenschutz (other types)** | LOW | Spannrahmen, Drehrahmen — check if they exist in configurator |
 | **Fensterbänke** | LOW | Likely simple length × price_per_meter |
+
+#### ⚠️ Partially Analyzed (architecture known, need more data) 🆕
+
+| Product | Status | Notes |
+|:--------|:-------|:------|
+| **Smart-Slide** | ~60% | FORMULA-BASED confirmed (same as PSK). Gealan PVC. 4 data points. See `SMART_SLIDE_ANALYSIS.md` |
 
 ### Summary: What's Truly Needed Now
 
@@ -902,8 +955,8 @@ Per manufacturer catalog checklist:
 **Products where calculations still need work:**
 1. ⚠️ **PSK** (~85%) — Most gaps resolved, need glass catalog + PVC base pricing
 2. ⚠️ **Falt-Schiebe-Tür** (~75%) — Need exact EUR + color method verification
-3. ❌ **HST** (0%) — Need to analyze from scratch
-4. ❌ **Smart-Slide** (0%) — Need to analyze from scratch
+3. ⚠️ **Smart-Slide** (~60% 🆕 was 0%) — Architecture confirmed FORMULA-BASED. Need more W×H data points
+4. ❌ **HST** (0%) — Need to analyze from scratch
 5. ❌ **Fensterbänke** (0%) — Need to analyze
 
 ---
@@ -974,7 +1027,7 @@ When providing catalog data for any new manufacturer, we need:
 | Falt-Schiebe-Tür | ⚠️ 75% | ⚠️ Ranges | Verify color method + get exact EUR |
 | PSK | ⚠️ **85%** ⬆️ | ⚠️ Partial | Color surcharges resolved, height limit confirmed. Need glass + PVC base pricing. See `PSK_DATASET_ANALYSIS.md` |
 | HST | ❌ 0% | ❌ None | Analyze fenstermaxx24.com first |
-| Smart-Slide | ❌ 0% | ❌ None | Analyze fenstermaxx24.com first |
+| Smart-Slide | ⚠️ **60%** 🆕 | ⚠️ **~40%** 🆕 | FORMULA-BASED confirmed (same as PSK). Need more W×H data. See `SMART_SLIDE_ANALYSIS.md` |
 | Raffstore | ✅ **~90%** 🆕 | ⚠️ **~85%** 🆕 | ADDITIVE architecture. 9-pt matrix, 12 surcharges, 12 colors, full rules. Need more W×H points. See `RAFFSTORE_ANALYSIS.md` |
 | Insektenschutz Plissee | ✅ **~95%** ⬆️ | ⚠️ **~85%** | Width significant, height ceiling at 2300mm. Need full W×H matrix + verify colors. See `INSEKTENSCHUTZ_ANALYSIS.md` |
 | Fensterbänke | ❌ 0% | ❌ None | Analyze pricing |
