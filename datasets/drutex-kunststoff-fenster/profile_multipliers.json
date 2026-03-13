@@ -1,0 +1,26 @@
+{
+  "p1": {
+    "name": "Iglo 5 Classic",
+    "multiplier": 1
+  },
+  "p2": {
+    "name": "Iglo 5",
+    "multiplier": 1
+  },
+  "p3": {
+    "name": "Iglo Energy Classic",
+    "multiplier": 1.2601
+  },
+  "p4": {
+    "name": "Iglo Energy",
+    "multiplier": 1.2601
+  },
+  "p5": {
+    "name": "Iglo Light",
+    "multiplier": 0.9532
+  },
+  "p7": {
+    "name": "Iglo EXT",
+    "multiplier": 1.2886
+  }
+}
